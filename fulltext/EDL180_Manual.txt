@@ -1,0 +1,219 @@
+ 2021-2024 SATEC Ltd. | satec@satec-global.com | www.satec-global.com | BG0647 REV.A2 | August 2024
+EDL180
+PORTABLE EVENT & DATA LOGGER
+INSTALLATION & OPERATION MANUAL
+2
+Limited Warranty
+The manufacturer offers the customer functional warranty for 36 months from the date of production.
+This warranty is on a return to factory basis.
+The manufacturer does not accept liability for any damage caused by instrument malfunction. The
+manufacturer accepts no responsibility for the suitability of the instrument to the application for
+which it was purchased.
+Failure to install, set up or operate the instrument according to the instructions herein will void
+the warranty.
+Only a duly authorized representative of the manufacturer may open your instrument. The unit
+should only be opened in a fully anti-static environment. Failure to do so may damage the electronic
+components and will void the warranty.
+Note:
+The greatest care has been taken to manufacture and calibrate your instrument. However, these
+instructions do not cover all possible contingencies that may arise during installation, operation or
+maintenance, and not all details and variations of this equipment are covered by these instructions.
+For additional information regarding installation, operation or maintenance of this instrument,
+contact the manufacturer or your local representative or distributor.
+For more details concerning technical assistance & support visit manufacturer's
+web site: www.satec-global.com.
+Supplementary Instructions:
+This manual provides instructions for using the EDL180. For instructions and information on using the
+PM180, refer to the PM180 Installation and Operation Manual; for instructions and information on
+using the PAS software package, refer to the PAS User Manual included in the accompanying CD for
+the PM180 Series.
+3
+EDL180
+Contents
+1. Portable Event & Data Logger ............................................................................................................... 4
+1.1 The EDL180 Portable Event & Data Logger .............................................................................. 4
+1.2 Internal UPS for independent power supply............................................................................ 4
+2. Physically supplied content .................................................................................................................... 4
+3. Front Panel Components ......................................................................................................................... 5
+4. Installation / wiring .................................................................................................................................... 6
+4.1 Location .................................................................................................................................................... 6
+4.2 Power Supply and UPS Charging .................................................................................................. 6
+4.3 LED Charging Indicators.................................................................................................................... 6
+4.4 Voltage Probes Connection.............................................................................................................. 6
+4.5 Current Sensors Connection ........................................................................................................... 6
+4.6 Standard FLEX Current Sensors ..................................................................................................... 6
+4.7 Configuring Wiring Mode and CT Ratings ............................................................................... 7
+4.8 Internal Uninterrupted Power Supply......................................................................................... 8
+5. Specification .................................................................................................................................................. 8
+4
+1. Portable Event & Data Logger
+1.1 The EDL180 Portable Event & Data Logger
+The device records and analyzes events and data of electrical network parameters. Being
+mobile, it enhances efficiency by enabling onsite identification of power quality problems.
+The EDL180 meets the requirements of a wide range of applications, from event analysis
+to energy auditing and load profile recording over a set time period.
+The EDL180 parameters include all the measurement and logging capabilities of the
+PM180 power quality analyzer in a convenient, portable case. The manufacturer's
+PAS software suite, available online, provides graphic data display and power quality
+analysis capabilities.
+TheEDL180issuitablefordirectmeasurementofvoltagesupto828VAC(orgreaterwhenusing
+a Potential Transformer). The EDL180 is provided with standard current clamps featuring
+a range of options between 30-3,000A AC nominal current with nominal 2V AC
+or 3V AC outputs.
+1.2 Internal UPS for independent power supply
+The EDL180 has an internal UPS providing over 4 hours of power supply during loss of
+external power, such as during a general power failure.
+Note:
+Device configuration and complementary technical specifications are identical to those of the PM180.
+See the PM180 Installation and Operation Manuals for full connection drawings and instructions.
+2. Physically supplied content
+1. EDL180 analyzer
+2. Carry bag
+3. Power cable (EU plug)
+4. Voltage probe set: 4 colored cables (yellow, blue, red and black) with crocodile connectors
+5. Flex current sensors: 4 units according to ordered model:
+I. 30/300/3,000A model: requires battery (not supplied)
+II. 200A model: does not require battery
+6. USB cable: type A to type A
+5
+EDL180
+3. Front Panel Components
+The manufacturer offers the customer functional warranty for 36 months from the date
+of production. This warranty is on a return to factory basis.
+Figure 1: Front panel components, inputs and outputs
+1 AC Power Supply Socket
+2 Fuse
+3 Power-on switch
+4 RGM display module
+5 ETH port
+6 Current-clamp inputs
+7 Voltage inputs
+8 USB-A port
+9 Screen
+10 Energy pulse LED
+11 IR port
+12 USB-A port
+13 LED battery level indicators
+14 Battery charging status LED
+2
+1
+3
+5
+4
+6
+7
+9
+10 11 12
+14 13
+8
+282mm
+(11.10")
+190mm
+(7.48")
+6
+4. Installation / wiring
+Read this section carefully before connecting the EDL180 to the circuits
+being tested/analyzed.
+4.1 Location
+The distance between the EDL180 and the current lines must be at least half a meter (1.6
+feet) for current lines carrying up to 600A, and at least one meter (3.3 feet) for currents
+between 600A and 3,000A.
+4.2 Power Supply and UPS Charging
+ConnecttheEDL180toACpowersupplyusingthePowerSupplyCordprovided.Turnthepower
+switch (No. 3) ON.
+Once the unit is connected to an external power supply, the UPS battery automatically
+starts charging, regardless of whether the unit is powered on or not.
+4.3 LED Charging Indicators
+The unit features 4 LEDs: 3 indicating battery level (13) and one indicating charging status (14):
+red = charging; blue = full.
+4.4 Connecting Voltage Probes
+For voltage readings use the supplied voltage probes. Connect the voltage probe
+outputs to the EDL180 through the voltage 4mm sockets marked V1/V2/V3/VN.
+Connect the probes to the power line conductors according to the power system
+configuration / wiring mode (See figure 2 below).
+For alternative line configurations please consult the PM180 installation manual.
+WARNING: the voltage between phases (V1, V2, V3) must not exceed 828V.
+4.5 Connecting Current Sensors
+Connect the current sensors' outputs first to the EDL180 and then to the measured circuits,
+by either wrapping the probe around the line or via clamp, in accordance with
+ordered/supplied model.
+4.6 Standard FLEX Current Sensors
+The EDL180 can work with all FLEX and clamp current sensors featuring a voltage
+output up to 6V AC. However, for locally sourced sensors, make sure to contact the
+manufacturer for confirmation of compliance and instructions.
+7
+EDL180
+4.7 Configuring Wiring Mode
+The wiring mode of the EDL180 is the same as for the PM180. See standard example below
+(figure 2). For alternative line configurations please refer to the PM180 Installation and
+PM180 Operation manuals (separate documents).
+4.8 Configuring CT values
+For the coil ranging 30-3,000A AC, featuring CT ratio output of 1kA/1V AC, nominal current is
+determinedoncoilintegratorbyscaleswitch(image3below)andmustbesetinunitaccording
+to selection.
+For the permanently rated 200A clamp, featuring
+CT ratio of 1.5kA/1V AC nominal current, nominal
+current must be adjusted and set at 300A and NOT
+at the presumed 200A.
+Nominal current is set in the device either via
+RGM screen or via PAS as described in the manuals
+mentioned below.
+Figure 2: Four wire WYE Direct connection, using 3 CTs (3-element) wiring mode
+Figure 3: Rated-current Switch
+8
+Configuration using the RGM180 front Panel
+For configuration of the wiring mode and CT values via the RGM180 front panel, refer
+to the Wiring Setup instructions in the RGM180 QuickStart Manual.
+Configuration using PAS software
+For configuration via Power Analysis Software (PAS) please refer to the above
+PM180 manuals.
+4.8 Internal Uninterrupted Power Supply
+The EDL180 includes a rechargeable UPS. When fully charged, the UPS allows the EDL180
+to work for over 4 hours at maximum consumption. It is recommended to switch off the
+unit when not in use to prevent discharge. However, discharge has not been reported to
+harm the UPS battery.
+5. Specifications
+Power supply: 90-264V AC @ 50-60Hz
+UPS Battery Pack: rechargeable; 3.7V * 15,000mAh DC. Tested for over 4 hours of power
+of full consumption/burden (unit + RGM screen).
+UPS characteristics:
+ Battery output voltage 3.7V *3 = 11.1V
+ Over charge protection
+ Over discharge protection
+ Over current protection
+ Short protection
+Accuracy: The EDL180 accuracy is set by the combined accuracies of the PM180, current clamps
+and the PT, if used. The common factors are the unit accuracy and that of the current clamps,
+which are the dominant factor.
+Operation temperature: 0-60C
+Humidity: 0 to 95% non-condensing
+Dimensions (facing front panel)
+Height: 190 mm, (7.5"),
+Width: 324 mm, (12.7")
+Depth (incl. RGM screen): 325 mm, (12.8")
+Unit Weight: 4.6 KG (10.2 lbs)
+Unit with carry bag, voltage probes and power cord: 6.9 KG (15.2 lbs)
+9
+EDL180
+2
+1
+3
+5
+4 190mm
+(7.48")
+282mm
+(11.10")
+325mm
+(12.8")
+323.4mm
+(12.73")
+190mm
+(7.48")
+Figure 4: Device Dimensions
+ 2021-2024 SATEC Ltd. | satec@satec-global.com | www.satec-global.com | BG0647 REV.A2 | August 2024
+220mm
+430mm
+DIMENSIONS OF THE SUITCASE
+330mm
+Figure 5: Bag Dimensions
+

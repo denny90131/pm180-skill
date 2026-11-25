@@ -1,0 +1,879 @@
+expertmeterTM PM180
+PM180 Series
+SUBSTATION AUTOMATION UNIT
+Bay Controller Unit
+BCU Application Note
+BG0531 Rev. A2
+2
+Every effort has been made to ensure that the material herein is complete and
+accurate. However, the manufacturer is not responsible for any mistakes in printing
+or faulty instructions contained in this book. Notification of any errors or misprints
+will be received with appreciation.
+For further information regarding a particular installation, operation or maintenance
+of equipment, contact the manufacturer or your local representative or distributor.
+REVISION HISTORY
+A1 Oct 2012 Initial release
+A2 Oct 2013 Word styling corrected
+3
+Table of Contents
+1 General...............................................................................................................4
+2 Bay Controller Operation..................................................................................5
+2.1 Switch Position Monitoring............................................................................. 5
+2.2 Interlocking Logic ........................................................................................... 6
+2.3 Controls........................................................................................................... 6
+2.3.1 Control Parameters ...................................................................................................6
+2.3.2 Control Command Execution ......................................................................................7
+2.4 Operation Counters......................................................................................... 8
+2.5 Using Control Logic ......................................................................................... 9
+2.6 Switching Permissions.................................................................................... 9
+2.6.1 Local/Remote Control.............................................................................................. 10
+2.6.2 Restricting Control Ports .......................................................................................... 10
+3 Bay Controller Communications ...................................................................11
+3.1 IEC 61850 Communications ......................................................................... 11
+3.1.1 Bay Control Nodes and Objects................................................................................. 11
+3.1.2 Switch Control Model............................................................................................... 12
+3.2 Modbus Communications.............................................................................. 12
+3.2.1 Bay Control Registers.............................................................................................. 12
+3.2.2 Switch Control Model............................................................................................... 15
+4 Configuring the Bay Controller......................................................................16
+4.1 Configuring Switching Devices ..................................................................... 16
+4.2 Configuring Control Ports ............................................................................. 18
+4
+1 General
+This application note describes functions, operation and configuring of the bay control unit
+integrated in the expertmeterTM PM180. For detailed information on operating the
+expertmeterTM PM180 and communication settings refer to the expertmeterTM PM180
+Operation Manual.
+The bay control unit provides fully automated control of substation switching devices.
+After switches are configured in the device, no additional logic is normally required for
+controller operation, except of interlocking logic.
+Bay control solutions can be customized via control logic using a variety of expertmeterTM
+PM180 digital I/O and analog measurement capabilities for the circuit switch/breaker
+position indication, interlocking and control.
+General bay controller features:
+
+Monitoring and control capabilities for as many as two circuit breakers and 14
+circuit switches
+
+One-pole and tree-pole switch position monitoring using two or six contacts
+
+One control output for switch closing
+
+Two synchronous control outputs for switch opening for devices with one and two
+opening coils
+
+Select-close control output for secure switch closing operations
+
+Two select-open control outputs for secure switch opening operations
+
+Configurable command pulse duration
+
+Option for adaptive pulses controlled via setpoint control logic
+
+Supervision of command execution and reporting on operation termination
+
+Interlocking logic
+
+Secure timed-out interlocking bypass logic
+
+Switch position substitution option
+
+Indication of non-controllable breaker trips
+
+Counting of breaker and switch operations
+
+Logging close/open operations and switch position changes
+
+Local switch control via setpoint control logic
+
+Remote switch control and monitoring via Modbus and IEC 61850 protocols
+
+Inter-device IEC 61850 GOOSE communications for remote interlocking
+
+The bay control unit functionality is available with firmware versions 20.XX.07 and
+higher.
+5
+2 Bay Controller Operation
+The bay control unit provides control of up to two circuit breakers and 14 circuit switches
+depending on the selected configuration.
+The switching devices can be operated either remotely via communication ports, or locally
+via setpoint control equations. Remote control permissions can be restricted by enabling
+control commands for specific control ports or clients depending on the device control
+mode.
+See Section 4.1 for information on configuring switching devices via PAS.
+See Sections 3.1 and 3.2 for information on monitoring and control of switching devices
+via IEC 61850 and via Modbus communications.
+2.1 Switch Position Monitoring
+Position Indication
+The bay controller can monitor signals from three-phase switches with general two-
+contact or per-phase six-contact position indication. Phase A contact inputs should be
+used in case of general switch position indication using two contacts.
+Positions of switch poles can be indicated via the device digital inputs, control logic
+equations, controllable event flags, or via remote indication from other substation
+controllers using inter-device IEC 61850 GOOSE communications.
+The position of each pair of the N.O. and N.C. contacts is allowed to be signaled by one of
+the contacts. In this case its complementary status is taken for the opposite contact.
+In case of three-pole position monitoring with six contacts, the general position of a
+switch is evaluated in the following way:
+1. In the event all poles have same position, it is taken as a general switch position.
+2. In the event one of the poles is in the bad position (both contacts are closed), the
+general position is indicated as bad.
+3. In other cases, the switch position is indicated as intermediate.
+A position change is normally detected in a half cycle time.
+Any switch position change is automatically logged to the device Event log with the time
+of change.
+Position Substitution
+A switch position can be manually substituted via communications in case that the actual
+position cannot be directly obtained by the controller, for example, when a switch is not
+accessible or not operational, while it blocks operation of controllable switches.
+Switches with a substituted position are not allowed to be operated.
+Indication of Breaker Trips
+Uncontrollable breaker pole position changes from the closed to open state are indicated
+as breaker trips and are reported via the Modbus fault disconnect alarm registers and via
+the IEC 61850 switch controller data object AlmFlt.
+The breaker trip indication is automatically reset in 5 seconds.
+6
+2.2 Interlocking Logic
+Interlocking Control
+Interlocking control logic blocks any switch control commands until predefined conditions
+are met. Interlocking logic is defined via setpoint control equations that must be
+evaluated to TRUE for the switch control commands to be executed.
+If interlocking is not applicable to the switch, set the interlocking control setting to TRUE
+to allow unconditional command execution.
+Interlocking Bypass Logic
+The interlocking bypass option allows to temporary override interlocking logic. This is a
+one-shot action that is activated for a limited time and is controlled by an interlocking
+bypass timeout.
+Interlocking bypass is enabled via a setpoint control equation, which normally monitors
+the status of an external "Interlocking OFF" switch, but can also track the status of a
+memorized event flag controlled via communications.
+Interlocking bypass is active until the first control command is executed or until the
+bypass timeout expires.
+The bypass control logic equation must be reset to FALSE in order to recharge this option
+before next use.
+2.3 Controls
+2.3.1 Control Parameters
+See Section 4.1 for more information on configuring switching devices via PAS and for the
+full list of configurable options. The following gives explanations of control options and
+how they affect the switch operation.
+Control Outputs
+The bay controller provides control of up to 6 control outputs: one close command output,
+one or two open command outputs, one select-close output, and one or two select-open
+outputs.
+Any of the 64 relay outputs available in the device or none of them can be selected as a
+switch control output.
+Control outputs are not normally allowed to reuse same output relays. The only exception
+is made for the select-close and select-open outputs that may use the same relay for
+securing both closing and opening commands.
+Control outputs are optional. When none of them is defined, the full switch functionality is
+still available, including position monitoring, interlocking and modeling control operations.
+Such a switch is seen as "virtual" that is not controllable, but which position indication
+may be used in interlocking equations of controllable switches.
+When switch operation is enabled, the relay outputs are automatically put in unlatched
+mode with normal polarity, which will not be allowed to change. Relay outputs found
+under control of the bay controller are not available for direct control via communications
+or via control logic.
+Command Duration
+This parameter specifies the default duration of the output pulse for commands received
+via Modbus communications and from setpoint control equations.
+In IEC 61850 Operate requests, the pulse duration can be set via the IEC 61850 CSWI
+switch controller node configuration by a non-zero CSWI$CF$pulsConfig$onDur data
+attribute. When it is zero, the default command pulse duration is used instead.
+The pulse duration is supervised by the immobility and command termination timeouts. In
+case that either of them expires while the pulse continues, the relay outputs are
+7
+deactivated and the operation is abnormally terminated. If the pulse is shorter than it will
+take for a switch to change its position, set the start moving timeout to more time than
+the expected duration of the pulse.
+Pulse Duration Control Logic
+A close/open command pulse is normally removed after the configured pulse duration
+expires. The bay controller allows a command pulse to be extended over the configured
+duration until a specific condition is met. The reason may be keeping the output pulse
+active until the new correct end position is reached, or until the line voltage is removed,
+or probably other binary or analog trigger reaches the expected value.
+It is called an adaptive pulse and is handled by a setpoint logic equation that controls the
+pulse duration.
+If a control equation is used, the output pulse will remain active until the logic equation is
+reset to FALSE. Operation of control logic is supervised by the immobility and command
+termination timeouts. In case that either of them expires while the pulse continues, the
+relay outputs are deactivated and the operation is abnormally terminated.
+In all cases, the actual pulse duration is never less than the configured pulse duration. If
+you use the control logic, set the command pulse duration to a smallest reasonable value.
+Start Moving Timeout
+This parameter controls command execution supervision. It specifies the switch
+immobility timeout - the time that takes for a switch to start moving after command
+execution.
+The parameter is optional. If you set it to zero, command execution is not supervised. In
+this case a control operation is immediately terminated after deactivating control outputs
+as the command pulse ends.
+When the immobility timeout is used, command execution is supervised and a control
+operation is terminated and reported after the last of the two events happens: the
+command pulse ends and the switch position changes to either the intermediate, or a new
+end position. The immobility timer is reset and no more supervised as the switch position
+changes.
+In case that the immobility timeout is used and the switch position does not change
+before the timeout expires, the active control outputs are deactivated and the operation is
+abnormally terminated by timeout.
+Command Termination Timeout
+This parameter defines the total operation supervision time since the command is taken
+for execution.
+A control operation has to be terminated before the timeout expires. If the operation has
+not been completed before the command termination timer expires, the active control
+outputs are deactivated and the operation is abnormally terminated by timeout.
+2.3.2 Control Command Execution
+Control operations can be activated either via setpoint control equations, or via
+communications by commands sent via Modbus switch control registers or via the IEC
+61850 CSWI switch controller nodes.
+The IEC 61850 switch control interface supports direct control commands with enhanced
+security.
+A control command is refused when one of the following conditions is encountered:
+1. The communication client is not permitted to issue control commands because of
+unacceptable switching authority: either a client control port is disabled or blocked, or the
+device is in local control mode (actual for IEC 61850 clients only).
+2. The switch is not controllable because of improper configuration.
+3. A control command is already in execution.
+4. The requested switch position has been reached.
+8
+5. The switch is in an invalid position.
+6. Switch position is indicated by a substituted value.
+7. Control commands for the switch are blocked by interlocking logic.
+8. One of the control outputs is blocked by control logic.
+When a remote control command is rejected, the cause is reported via a Modbus
+command termination status register, and via an IEC 61850 reporting service by the
+LastApplError variable in case of the IEC 61850 Operate request.
+When a control command is accepted, the control operation is executed according to the
+following integrated logic:
+1. If the control relay outputs are configured, they are all activated together and the
+pulse duration timer is started.
+2. The command termination timer is started.
+3. If the start moving timeout is defined, the switch immobility timer is started.
+4. If the pulse duration timer expires while the pulse duration control logic is not used or
+is evaluated to FALSE, the control outputs are deactivated.
+5. If the pulse duration control logic is defined and is evaluated to FALSE, while the pulse
+duration timer has just expired, the control outputs are deactivated.
+6. If the control outputs are deactivated and the immobility timer is not running, the
+control operation is terminated.
+7. If the immobility timer is running and the switch position changes to an intermediate
+state, or reaches the target position, the immobility timer is reset and, if the control
+outputs are not active, the control operation is terminated.
+8. If the immobility timer expires, active control outputs are deactivated and the control
+operation is terminated by timeout.
+9. If the command termination timer expires, active control outputs are deactivated and
+the control operation is terminated by timeout.
+The operation activation and termination events are automatically logged with the
+timestamp to the device Event log.
+Termination of a remote command with the cause is reported via a Modbus command
+termination status register, and via an IEC 61850 Operate response service. In case of
+abnormal termination of an IEC 61850 Operate request, the cause is also reported via an
+IEC 61850 reporting service by a LastApplError variable.
+2.4 Operation Counters
+The expertmeterTM PM180 provides operation counters that count the total number of
+switch operations. When a close-to-open position change is detected, the switch operation
+counter is incremented.
+Switch operation counters can be reset via Modbus communications and via PAS from the
+Monitor/Reset dialog.
+9
+2.5 Using Control Logic
+Monitoring Switch Operations
+The expertmeterTM PM180 provides internal variables related to switch operation for use
+in interlocking logic and in switch control equations. The following table lists parameters
+that can be used for monitoring of the switch position and command execution in setpoint
+control equations.
+Input Parameter Range Description
+XCBRn_Pos, XSWIn_Pos Intermediate, OFF
+ON, Bad
+Switch position indication
+XCBRn_OpCls, XSWIn_OpCls ON=operation in
+execution,
+OFF=operation
+terminated
+Switch operation "Close" indication
+XCBRn_OpOpn, XSWIn_OpOpn ON=operation in
+execution,
+OFF=operation
+terminated
+Switch operation "Open" indication
+XCBRn_OpCnt, XSWIn_OpCnt 0-9999 Switch operation counter
+ExtInd1...ExtInd128 OFF, ON Single-point external indication
+ExtInd1:2...ExtInd127:128 Intermediate, OFF,
+ON, Bad
+Double-point external indication
+ExtiVal1...ExtiVal32 External integer measured values
+ExtfVal1...ExtfVal32 External floating-point measured values
+REMOTE CONTROL OFF, ON Internal flag available for control via setpoint control logic.
+Defaulted to OFF.
+All of the listed parameters are also available for monitoring via Modbus communications.
+See Section 3.2 for details.
+Control Commands
+The following table lists commands that are activated via setpoint control equations and
+may be used for local switch control and for control of the switching authority.
+Control Action Target Description
+CLOSE SWITCH XCBR1-XCBR2,
+XSWI1-XSWI14
+Activates breaker/switch close operation when a control
+equation evaluates to TRUE
+OPEN SWITCH XCBR1-XCBR2,
+XSWI1-XSWI14
+Activates breaker/switch open operation when a control
+equation evaluates to TRUE
+REMOTE CONTROL Puts REMOTE CONTROL to ON while a control equation
+evaluates to TRUE. Tracks the output of control logic.
+UNBLOCK CONTROL PORT ALL, COM1, COM2,
+COM3, COM4, COM5,
+USB, Ethernet
+Enables control operations via blocked control ports while
+a control equation evaluates to TRUE. Tracks the output
+of control logic.
+2.6 Switching Permissions
+Secure switching operations require that only one source is allowed to issue control
+commands at a time. Two mechanisms are provided in the device for restriction of the
+switching authority for users: a general permission based on the device local/remote
+control mode, and individual permissions based on the client connection ports and
+network addresses.
+10
+2.6.1 Local/Remote Control
+The expertmeterTM PM180 has the internal REMOTE CONTROL flag (found within the
+STATIC EVENTS data group) that is handled via setpoint control logic. The control
+equation normally tracks the status of an external "Local/Remote" switch via a digital
+input and puts the device in remote mode with the REMOTE CONTROL action when the
+switch is in the "remote" position.
+While the status of REMOTE CONTROL is OFF, control commands from IEC 61850 clients,
+commonly at station level, are denied. The Loc attribute in IEC 61850 logical nodes
+containing controls indicates the complementary status of the REMOTE CONTROL flag.
+Since REMOTE CONTROL is defaulted to FALSE, it must be set to ON via a control
+equation to allow control operations via IEC 61850.
+Modbus communications is not directly affected by the status of the REMOTE CONTROL
+flag and may be used for local control via a local terminal station, which can be connected
+to the expertmeterTM PM180 via any available port, including serial ports, USB and
+Ethernet.
+In cases when a local terminal station operates via IEC 61850, or remote Modbus
+communications is available for multiple users, or multiple clients may have access to the
+device via either protocol in REMOTE mode, per-client control permissions must be used.
+2.6.2 Restricting Control Ports
+Remote connection points via which direct control commands can be received are called
+direct control ports. For local ports, a connection point is identified by a physical port,
+while for Ethernet users a remote connection point is identified by the client IP address.
+See Section 4.2 for more information on configuring direct control ports via PAS.
+Control permissions may be permanently allowed or disabled, or be controllable via
+setpoint control logic for any of the ports.
+To use controllable permissions, the control ports should be marked as "Blocked". The
+control permissions are given to a blocked port via setpoint control equations that
+normally monitor the status of the REMOTE CONTROL flag and unblock the port to which
+the switching authority is currently granted.
+11
+3 Bay Controller Communications
+3.1 IEC 61850 Communications
+See the expertmeterTM PM180 IEC 61850 reference guide for more information on
+implementing IEC 61850 communications in the expertmeterTM PM180. The reference
+guide also provides instructions on configuring IED names and setting up inter-device
+GOOSE communications.
+3.1.1 Bay Control Nodes and Objects
+The expertmeterTM PM180 provides the dedicated CTRL logical device linked to the bay
+control unit. The table below shows mapping of data nodes and data objects associated
+with supervision, monitoring and control of switching devices.
+The following designation are used:
+XCBRn, n=1-2: circuit breaker nodes XCBR1...XCBR2
+XSWIn, n=1-14: circuit switch nodes XSWI1...XSWI14
+CILOn, n=1-2: interlocking indication nodes for XCBR1...XCBR2, n=3-16: interlocking
+indication nodes for XSWI1...XSWI14
+CSWIn, n=1-2: switch controller nodes for XCBR1...XCBR2, n=3-16: switch controller
+nodes for XSWI1...XSWI14
+The breaker and switch names are normally preceded with prefixes (not shown in the
+table) that designate the type and location of the switch and can be configured for each
+apparatus via the expertmeterTM PM180 Switching Device Setup (see Section 4.1).
+Data Object and Attribute Range Description Mapping
+Circuit breaker nodes
+XCBRn$ST$Loc$stVal OFF, ON Local control behavior Complement of REMOTE
+CONTROL
+XCBRn$ST$Pos$stVal Intermediate,
+OFF, ON, bad
+General position indication XCBRn_Pos
+XCBRn$ST$BlkOpn$stVal OFF=enabled,
+ON=blocked
+Block opening indication Complement of the
+interlocking logic output
+XCBRn$ST$BlkCls$stVal OFF=enabled,
+ON=blocked
+Block closing indication Complement of the
+interlocking logic output
+XCBRn$ST$OpCnt$stVal 0-9999 Operation counter XCBRn_OpCnt
+XCBRn$ST$AlmFlt$stVal OFF, ON=alarm
+indication
+Fault disconnect alarm Fault disconnect alarm
+indication
+Circuit switch nodes
+XSWIn$ST$Loc$stVal OFF, ON Local control behavior Complement of REMOTE
+CONTROL
+XSWIn$ST$Pos$stVal Intermediate,
+OFF, ON, bad
+General position indication XSWIn_Pos
+XSWIn$ST$BlkOpn$stVal OFF=enabled,
+ON=blocked
+Block opening indication Complement of the
+interlocking logic output
+XSWIn$ST$BlkCls$stVal OFF=enabled,
+ON=blocked
+Block closing indication Complement of the
+interlocking logic output
+XSWIn$ST$OpCnt$stVal 0-9999 Operation counter XSWIn_OpCnt
+Switch interlocking indication nodes
+CILOn$ST$EnaOpn$stVal OFF=blocked,
+ON=enabled
+Enable Open indication Open interlocking logic
+output
+CILOn$ST$EnaCls$stVal OFF=blocked,
+ON=enabled
+Enable Close indication Close interlocking logic
+output
+CILOn$SV$EnaOpn$subEna OFF=disabled,
+ON=enabled
+Substitution enable for EnaOpn Interlocking bypass logic
+output
+CILOn$SV$EnaOpn$subVal OFF=blocked,
+ON=enabled
+Substitution value for EnaOpn Interlocking bypass logic
+output
+12
+Data Object and Attribute Range Description Mapping
+CILOn$SV$EnaCls$subEna OFF=disabled,
+ON=enabled
+Substitution enable for EnaCls Interlocking bypass logic
+output
+CILOn$SV$EnaCls$subVal OFF=blocked,
+ON=enabled
+Substitution value for EnaCls Interlocking bypass logic
+output
+Switch controller nodes
+CSWIn$CO$Pos$ctlVal OFF=operation
+Open,
+ON=operation
+Close
+General switch control command XCBRn_OpOpn,
+XSWIn_OpOpn,
+XCBRn_OpCls,
+XSWIn_OpCls
+CSWIn$ST$Loc$stVal OFF, ON Local control behavior Complement of REMOTE
+CONTROL
+CSWIn$ST$Pos$stVal Intermediate,
+OFF, ON, bad
+General position indication XCBRn_Pos/XSWIn_Pos
+CSWIn$SV$Pos$subEna OFF=disabled,
+ON=enabled
+Substitution enable for Pos Writeable
+CSWIn$SV$Pos$subVal Intermediate,
+OFF, ON, bad
+Substitution value for Pos Writeable
+CSWIn$CF$Pos$pulseConfig onDur=0-60000 Command pulse configuration Replaces default pulse
+duration
+3.1.2 Switch Control Model
+The direct-with-enhanced-security control model is used for apparatus control operations.
+The command execution is supervised and is reported via the CommandTermination
+service as the operation completes. If the Start Moving Timeout is defined in the
+switching device setup, the switching operations are supervised for switch position change
+before reporting on operation termination.
+In case of an unsuccessful command execution, the command termination report is
+extended by a LastApplError variable indicating the reason in the AddCause attribute. The
+supported AddCause values are listed in the following table.
+Value Description
+1 Not-supported
+2 Blocked-by-switching-hierarchy
+4 Invalid-position
+5 Position-reached
+8 Blocked-by-Mode
+9 Blocked-by-process
+10 Blocked-by-interlocking
+12 Command-already-in-execution
+13 Blocked-by-health
+16 Time-limit-over
+3.2 Modbus Communications
+See the expertmeterTM PM180 MODBUS reference guide for more information on
+operating the expertmeterTM PM180 via Modbus.
+3.2.1 Bay Control Registers
+The following table shows locations of Modbus registers associated with monitoring and
+control of switching devices and with inter-device GOOSE communications.
+The following designations are used:
+R  read only
+W  write only
+R/W  read and write
+TRG  for use as a trigger in setpoint control equations
+13
+Address Point ID Description Options/Range Type R/W
+Switch Position Indication
+29440-29471 0x8A00 Switch position (Pos) 00=intermediate, 01=OFF,
+10=ON, 11=bad-state
+UINT32 R
++0,1 0x8A00 XCBR1_Pos 00/01/10/11 TRG
++2,3 0x8A01 XCBR2_Pos 00/01/10/11 TRG
++4,5 0x8A02 XSWI1_Pos 00/01/10/11 TRG
+... ...
++30,31 0x8A0F XSWI14_Pos 00/01/10/11 TRG
+Operation-Open Indication
+29568-29569 0x8B00 Operation Open activation indication:
+Bit 0: XCBR1_OpOpn
+Bit 1: XCBR2_OpOpn
+Bit 2: XSWI1_OpOpn
+...
+Bit 15: XSWI14_OpOpn
+0x00000000 - 0x0000FFFF
+Bit value: 0=not active,
+1=activated
+UINT32 R
+0x8B00 XCBR1_OpOpn 0/1 TRG
+0x8B01 XCBR2_OpOpn 0/1 TRG
+0x8B02 XSWI1_OpOpn 0/1 TRG
+...
+0x8B0F XSWI14_OpOpn 0/1 TRG
+Operation-Close Indication
+29632-29633 0x8B80 Operation Close activation indication:
+Bit 0: XCBR1_OpCls
+Bit 1: XCBR2_OpCls
+Bit 2: XSWI1_OpCls
+...
+Bit 15: XSWI14_OpCls
+0x00000000 - 0x0000FFFF
+Bit value: 0=not active,
+1=activated
+UINT32 R
+0x8B80 XCBR1_OpCls 0/1 TRG
+0x8B81 XCBR2_OpCls 0/1 TRG
+0x8B82 XSWI1_OpCls 0/1 TRG
+...
+0x8B8F XSWI14_OpCls 0/1 TRG
+29696-29727 Operation Counters (resettable)
++0,1 0x8C00 XCBR1_OpCnt 0-9999 UINT32 R/W
++2,3 0x8C01 XCBR2_OpCnt 0-9999 UINT32 R/W
++4,5 0x8C02 XSWI1_OpCnt 0-9999 UINT32 R/W
+... ...
++30,31 0x8C0F XSWI14_OpCnt 0-9999 UINT32 R/W
+Switch Remote Control Registers
+44458-44459 Switch ON/Close command register:
+Bit 0: XCBR1
+Bit 1: XCBR2
+Bit 2: XSWI1
+...
+Bit 15: XSWI14
+0x00000000 - 0x0000FFFF
+Bit value: 0=no effect,
+1=ON
+UINT32 W
+44460-44461 Switch OFF/Open command register:
+Bit 0: XCBR1
+Bit 1: XCBR2
+Bit 2: XSWI1
+...
+Bit 15: XSWI14
+0x00000000 - 0x0000FFFF
+Bit value: 0=no effect,
+1=OFF
+UINT32 W
+44462-44463 Position substitution enable command
+register (subEna):
+Bit 0: XCBR1
+Bit 1: XCBR2
+Bit 2: XSWI1
+...
+Bit 15: XSWI14
+0x00000000 - 0x0000FFFF
+Bit value: 0=no effect,
+1=enable
+UINT32 W
+44464-44465 Position substitution disable command
+register (~subEna):
+0x00000000 - 0x0000FFFF
+Bit value: 0=no effect,
+UINT32 W
+14
+Address Point ID Description Options/Range Type R/W
+Bit 0: XCBR1
+Bit 1: XCBR2
+Bit 2: XSWI1
+...
+Bit 15: XSWI14
+1=disable
+44466-44481 Position substitution value registers (subVal) 00=intermediate, 01=OFF,
+10=ON, 11=bad-state
++0 XCBR1 position substitution value UINT16 W
++1 XCBR2 position substitution value UINT16 W
++2 XSWI1 position substitution value UINT16 W
+... ...
++15 XSWI14 position substitution value UINT16 W
+Switch Status Registers
+44514-44515 Operation Open activation indication (alias):
+Bit 0: XCBR1_OpOpn
+Bit 1: XCBR2_OpOpn
+Bit 2: XSWI1_OpOpn
+...
+Bit 15: XSWI14_OpOpn
+0x00000000 - 0x0000FFFF
+Bit value: 0=not active,
+1=activated
+UINT32 R
+44516-44517 Operation Close activation indication (alias):
+Bit 0: XCBR1_OpCls
+Bit 1: XCBR2_OpCls
+Bit 2: XSWI1_OpCls
+...
+Bit 15: XSWI14_OpCls
+0x00000000 - 0x0000FFFF
+Bit value: 0=not active,
+1=activated
+UINT32 R
+44518-44519 Enable Opening status (EnaOpn):
+Bit 0: XCBR1
+Bit 1: XCBR2
+Bit 2: XSWI1
+...
+Bit 15: XSWI14
+0x00000000 - 0x0000FFFF
+Bit value: 0= blocked,
+1=enabled
+UINT32 R
+44520-44521 Enable Closing status (EnaCls):
+Bit 0: XCBR1
+Bit 1: XCBR2
+Bit 2: XSWI1
+...
+Bit 15: XSWI14
+0x00000000 - 0x0000FFFF
+Bit value: 0= blocked,
+1=enabled
+UINT32 R
+44522-44523 Position substitution enable status
+(subEna):
+Bit 0: XCBR1
+Bit 1: XCBR2
+Bit 2: XSWI1
+...
+Bit 15: XSWI14
+0x00000000 - 0x0000FFFF
+Bit value: 0=actual position,
+1=substituted position
+UINT32 R
+44524-44525 Fault disconnect alarm status (AlmFlt):
+Bit 0: XCBR1
+Bit 1: XCBR2
+Bit 2: XSWI1
+...
+Bit 15: XSWI14
+0x00000000 - 0x0000FFFF
+Bit value: 0=no alarm,
+1=alarm
+UINT32 R
+44526-44541 Command termination status 0=Success,
+1=Not-supported,
+2=Blocked-by-switching-
+hierarchy,
+4=Invalid-position,
+5=Position-reached,
+8=Blocked-by-Mode,
+9=Blocked-by-process,
+10=Blocked-by-interlocking,
+12=Command-already-in-
+execution,
+13=Blocked-by-health,
+16=Time-limit-over
+UINT16 R
++0 XCBR1 command termination status UINT16 R
+15
+Address Point ID Description Options/Range Type R/W
++1 XCBR2 command termination status UINT16 R
++2 XSWI1 command termination status UINT16 R
+... ...
++15 XSWI14 command termination status UINT16 R
+28160-28223 External Integer Measured Values
++0,1 0x8000 ExtiVal1 INT32 R
++2,3 0x8001 ExtiVal2 INT32 R
+... ... INT32 R
++62,63 0x801F ExtiVal32 INT32 R
+28288-28321 External Float Measured Values
++0,1 0x8100 ExtfVal1 FLOAT32 R
++2,3 0x8101 ExtfVal2 FLOAT32 R
+... ... FLOAT32 R
++62,63 0x801F ExtfVal32 FLOAT32 R
+External Indication
+28416-28417 0x8200 ExtInd1:32
+Bit 0: ExtInd1
+...
+Bit 32: ExtInd32
+0x00000000-0xFFFFFFFF
+Bit value: 0=OFF, 1=ON
+UINT32 R
+28480-28481 0x8220 ExtInd33:64
+Bit 0: ExtInd33
+...
+Bit 32: ExtInd64
+0x00000000-0xFFFFFFFF
+Bit value: 0=OFF, 1=ON
+UINT32 R
+28544-28545 0x8240 ExtInd65:96
+Bit 0: ExtInd65
+...
+Bit 32: ExtInd96
+0x00000000-0xFFFFFFFF
+Bit value: 0=OFF, 1=ON
+UINT32 R
+28608-28609 0x8260 ExtInd97:128
+Bit 0: ExtInd97
+...
+Bit 32: ExtInd128
+0x00000000-0xFFFFFFFF
+Bit value: 0=OFF, 1=ON
+UINT32 R
+0x8200 ExtInd1 0/1 UINT32 TRG
+0x8201 ExtInd2 0/1 UINT32 TRG
+... ...
+0x827F ExtInd128 0/1 UINT32 TRG
+3.2.2 Switch Control Model
+The direct-with-enhanced-security control model is used for apparatus control operations
+as described in Section 3.1.2 above. The command execution is supervised and is
+reported via the command termination status registers 44526-44541 as the control
+operation is terminated. The Operation-Open and Operation-Close indication registers can
+be monitored to follow the termination of the activated operation.
+16
+4 Configuring the Bay Controller
+4.1 Configuring Switching Devices
+To configure the switching devices for monitoring and control via the expertmeterTM
+PM180 bay control unit:
+1. Select Bay Control Setup from the Meter Setup menu.
+2. Choose a switching device to configure in the Switch Name box and setup
+required switch attributes, position indication inputs and control outputs. See the
+table below for available options. See Section 2 for the explanations and
+configuration guidelines.
+3. Select Enabled in the Switch Enabled box to activate switch monitoring.
+4. Repeat the setup for other switches you wish to configure, and then send your
+setup to the device and save to the device database. Notice that switch name
+prefixes will not be available in PAS indications unless you saved the switch setup
+in the device database on your PC.
+Parameter Options Default Description
+General
+Switch Name XCBR1-XCBR2,
+XSWI1-XSWI14
+Identification name of a switching device
+IEC 61850 Name Prefix 1-5 ASCII
+characters
+Name prefix to be displayed as a part of a switch
+name in IEC 61850 and in PAS.
+Switch Type Load break switch,
+Disconnector,
+Earthing switch,
+IEC 61850 switch type. Not changeable for
+breakers.
+17
+Parameter Options Default Description
+High speed earthing
+switch, Breaker
+Switch Enabled Disabled, Enabled Disabled Enables switch monitoring and control
+Position Indication
+Phase A N.O. Contact Indication None, DI1-DI48,
+SP1-SP64,
+FLAG1-FLAG64
+ExtInd1-ExtInd128
+Normally open contact input of phase A and for
+general switch position indication in case of two-
+contact position monitoring
+Phase A N.C. Contact Indication None, DI1-DI48,
+SP1-SP64,
+FLAG1-FLAG64
+ExtInd1-ExtInd128
+Normally closed contact input of phase A and for
+general switch position indication in case of two-
+contact position monitoring
+Phase B N.O. Contact Indication None, DI1-DI48,
+SP1-SP64,
+FLAG1-FLAG64
+ExtInd1-ExtInd128
+Normally open contact input of phase B
+Phase B N.C. contact Indication None, DI1-DI48,
+SP1-SP64,
+FLAG1-FLAG64
+ExtInd1-ExtInd128
+Normally closed contact input of phase B
+Phase C N.O. Contact Indication None, DI1-DI48,
+SP1-SP64,
+FLAG1-FLAG64
+ExtInd1-ExtInd128
+Normally open contact input of phase C
+Phase C N.C. contact indication None, DI1-DI48,
+SP1-SP64,
+FLAG1-FLAG64
+ExtInd1-ExtInd128
+Normally closed contact input of phase C
+Interlocking
+Enable close logic equation None, SP1-SP64,
+TRUE
+Setpoint control equation enabling switch close
+commands.
+None = unconditionally blocked,
+TRUE = unconditionally enabled.
+Enable open logic equation None, SP1-SP64,
+TRUE
+Setpoint control equation enabling switch open
+commands.
+None = unconditionally blocked,
+TRUE = unconditionally enabled.
+Interlocking Bypass Logic
+Equation
+None, SP1-SP64 Setpoint control equation overriding interlocking
+logic. Active within the bypass timeout interval.
+None = not used.
+Interlocking Bypass Timeout, s 1-600 s 30 Interlocking bypass activity timeout
+Control
+Close control output None, RO1-RO24 Command output for switch close commands
+Open control output None, RO1-RO24 Command output for switch open commands
+Open-2 control output None, RO1-RO24 Second command output for switch open
+commands for devices with two opening coils
+Select-Close control output None, RO1-RO24 Pre-select control output for switch close
+commands
+Select-Open control output None, RO1-RO24 Pre-select control output for switch open
+commands
+Select-Open-2 control output None, RO1-RO24 Second pre-select control output for switch open
+commands for devices with two opening coils
+Close Duration Control Logic
+Equation
+None, SP1-SP64 Setpoint control equation controlling the close
+pulse duration for adaptive pulses
+Open Duration Control Logic
+Equation
+None, SP1-SP64 Setpoint control equation controlling the open
+pulse duration for adaptive pulses
+Close Command Duration, ms 100-60000 ms 2000 Default close command pulse duration
+Open Command Duration, ms 100-60000 ms 2000 Default open command pulse duration
+Close Start Moving Timeout, ms 0-60000 ms 5000 Switch immobility timeout for close command
+execution supervision.
+18
+Parameter Options Default Description
+0=not supervised
+Open Start Moving Timeout, ms 0-60000 ms 5000 Switch immobility timeout for open command
+execution supervision.
+0=not supervised
+Close Command Termination
+Timeout, ms
+1-120000 ms 10000 Total close operation supervision timeout
+Open Command Termination
+Timeout, ms
+1-120000 ms 10000 Total open operation supervision timeout
+4.2 Configuring Control Ports
+This setup allows configuring individual control permissions for user ports. To restrict
+control operations for users:
+1. Select Communication Setup from the Meter Setup menu and then click on the
+Direct Control Ports tab.
+2. Configure control permissions for user ports. The following table lists available
+options:
+Direct Control Status Description
+Enabled Control commands from the port are allowed
+Disabled Control commands from the port are denied
+Blocked Control commands from the port are denied until the port is unblocked via
+setpoint control logic
+The following rules are applied:
+a) Control commands from serial ports and from the USB port not listed in the
+setup are allowed by default. Those for which direct control must be disabled or
+blocked should be listed in the setup.
+b) Control commands for Ethernet users are allowed for all clients by default if no
+Ethernet ports are listed in the setup. If one of the records points to an Ethernet
+19
+port, control commands are denied for all Ethernet clients except of listed in the
+setup. A record with a zero IP address applies to all Ethernet clients except of
+directly listed in the setup.
+c) The order of listing of ports in the setup does not matter.
+3. Send your setup to the device.
+

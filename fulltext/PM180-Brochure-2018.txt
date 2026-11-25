@@ -1,0 +1,1077 @@
+PM180
+eXpertMeterTM
+MULTI-PURPOSE DEVICE FOR MANY
+APPLICATIONS, INCLUDING:
+ HIGH PERFORMANCE
+POWER QUALITY ANALYZER (PQA)
+ INDUSTRIAL & SUBSTATION
+AUTOMATION CONTROLLER
+WITH IEC 61850 PROTOCOL
+ SEQUENCE OF EVENTS (SOE)
+ DIGITAL FAULT RECORDER (DFR)
+ REVENUE GRADE CHECK METER
+ PHASOR MEASUREMENT UNIT (PMU)
+ MOTORS AND LARGE LOAD
+MONITORING
+Standard communication:
+Ethernet, RS-485, USB & IRIG-B
+Wide range of control and
+alarm options: digital & analog
+I/O, GPS time sync. and more
+Four galvanically isolated
+current channels up to
+20xIn (standard)
+Four galvanically
+isolated voltage
+channels (standard)
+Auxiliary PS
+for redundancy
+50-290V AC,
+90-290V DC
+power supply
+Option for Phasor
+Measurement Unit (PMU)
+Add-on communication options: serial,
+fiber optic & 2G/3G cellular modules
+Option for fast transient
+recording (16Sec)
+Accurate distance
+to fault calculation
+DIN rail, 4" round
+or 92x92 mm
+cutout mounting
+SATEC eXpertMeterTM PM180 is a high performance analyzer that
+allows versatile uses. The high performance of the PM180, together
+with the unique flexible design of the expansion cards and the
+versatile installation on DIN rail, 4" round or 92x92mm cutout,
+enables its use in a large variety of applications, in which it can
+substitute several other devices--saving costs, space and complexity.
+PM180
+eXpertMeterTM
+
+2
+IR port &
+front USB port
+5.7" Graphic color
+touchscreen
+Controls up to
+36 devices
+Multilingual
+user interface
+TFT technology
+with LED backlight
+Wide range
+operating
+temperature:
+4F to +158F
+20C to +70C
+RGM180
+Local & Remote Displays
+3-row bright red
+LED display module
+RDM180
+Multi-window bright
+red LED display module
+RDM312
+The PM180 can be connected to a local display, plus up to two remote displays (via RS-485), at the same time.
+The selection of displays includes LCD or LED display in various configurations.
+RGM180-G1
+RS-485 with 12V DC power supply for
+direct connection to a single PM180
+RGM180-G3
+RS-485 with 12V DC power supply
+& Ethernet with PoE supply
+(can be connected simultaneously)
+
+3
+Modular Field-Installable
+Design
+The unique modular design of the PM180 ensures its adaptation to
+changing needs, through a selection of numerous plug-in options
+for multiple customer applications. The PM180 can have up to 3
+expansions modules.
+Digital I/O
+16 DIGITAL INPUTS
+Max. 48 DI.
+Optically isolated dry/wet contact
+Scan time: 1ms @ 60Hz, 1.25ms @ 50Hz
+24/125/250V DC
+8 RELAY OUTPUTS
+Max. 24 RO, rated at 8A/250V AC,
+5A/24V DC, 0.25A/250V DC
+8DI and 8RO
+ 8 inputs bipolar capabilities,
+optically isolated (dry/wet)
+ 4 relays:
+option EMR as 8RO, or option SSR
+Redundant P.S.
+AUXILIARY POWER SUPPLY
+ 50-290V AC and 40-290V DC, 20W
+ 9.6-35 V DC, 20W
+(max. one aux. power supply per PM180)
+Analog I/O
+Accuracy Class 0.2S FS
+Scan/update time: 2 cycles
+4AI & 4AO (Max. 12AI / 12AO)
+Ranges: 1mA, 0-20mA, 0-1mA, 4-20mA
+4AI (Max. 12AI)
+Range: 10V
+Communication
+IRIG-B MODULE
+ Optically isolated IRIG-B port
+ Second RS-422/485 COM port
+TXFX MODULE
+ Redundant Ethernet port
+ 10/100 Mbit with RJ45 connector
+ 100Base FX with SC connector
+2G/3G CELLULAR MODEM
+ Antenna connection: SMA
+ Supports UMTS/HSPA+ bands:
+800/850/900/AWS/1900/2100
+Measurement /
+Fault Channels
+FAULT RECORDER MODULE
+Additional current input offers separated
+metering & protection CT connection,
+records current faults of up to 200A
+(40*In)
+TRANSIENT RECORDER MODULE
+Records voltage transients of up to 2kV
+(L-G) at 1024 samples/cycle per channel
+PMU + TRANSIENT MODULE
+Phasor measurement and monitoring
+class P
+3 slots for
+add-on modules
+4
+EN50160 COMPLIANCE REPORT
+HARMONIC SPECTRUM
+ITI (CBEMA) CURVE
+WAVEFORM ANALYSIS
+High Performance
+Power Quality Analyzer (PQA)
+The PM180 is the most advanced power quality analyzer
+and recorder on the market. The instrument is a product of
+SATEC's 25 years of experience in the creation of power quality
+instruments. The PM180 is designed to fully comply with the
+most demanding industry standard, IEC 61000-4-30 Class A.
+It provides power quality reports and statistics according to
+IEEE 1159, EN50160, GOST 13109 or GOST 54149, complimented
+by comprehensive power quality event/data log with waveforms
+available for detailed Power Quality event analysis. Redundant
+power supply allows full readiness for any power quality event,
+including major dips and interruptions. The individual harmonics
+and inter-harmonics are analyzed according to IEC 61000-4-7. The
+instrument also supports directional power harmonics analysis.
+Flicker is measured and analyzed according to IEC 61000-4-15.
+ Power quality analysis and reading according to
+IEC 61000-4-30 Class A
+ Sags/swells (dips/overvoltages), interruptions, frequency
+variations, voltage variations
+ Flicker, voltage unbalance, harmonic and interharmonic
+voltages and currents
+ Programmable thresholds and hysteresis
+ Built-in IEEE 1159, EN50160, GOST 13109 or GOST 54149
+statistics and reports (market dependant)
+ Redundant auxiliary power supply for recording major dips
+and interruptions
+ Harmonics and interharmonics according to IEC 61000-4-7
+ Directional power harmonics
+ Voltage and current THD coefficients
+ Currents TDD coefficients and K-Factors
+ Waveform, power factor and phasor data recorder
+ Symmetrical components
+ Flicker measurement according to IEC 61000-4-15
+ Waveform recording
+ Selectable sampling rate up to 256/1024 samples/cycle
+ Power quality event recorder
+ Event recorder for logging internal diagnostic events, control
+events and I/O operations
+Cutting Edge Power Quality Analyzer & Recorder
+5
+SATEC's PM180 is a cost effective solution
+for electrical substation automation. It
+can be used either as a bay controller or
+as a Power Meter with IEC 61850 support.
+PM180 as a Bay
+Controller Unit (BCU)
+PM180 provides fully automated control
+of substation switching devices. After the
+switches are configured in the device,
+typically no additional logic is required
+for controller operation, except for inter-
+locking logic. Bay control solutions are
+customized via control logic and a variety
+of digital I/O and analog measurements.
+PM180 as Power Meter
+By adding a single PM180 device to each
+feeder, ALL the information required
+for substation automation is provided.
+The PM180 extends the life expectancy
+of electromechanical relays by providing
+information lacking in electromechanical
+devices without interfering in the
+protection scheme.
+Industrial & Substation
+Automation Controller with IEC 61850 Protocol
+ Monitoring and control capabilities
+for 2 circuit breakers and 14 circuit
+switches
+ One-pole and three-pole switch
+position monitoring using two or six
+contacts
+ One control output for switch closing
+ Two synchronous control outputs for
+switch opening for devices with one
+and two opening coils
+ Select-close control output for secure
+switch closing operations
+ Two select-open control outputs for
+secure switch opening operations
+ Configurable command pulse duration
+ Option for adaptive pulses controlled
+via setpoint control logic
+ Supervision of command execution &
+reporting on operation termination
+ Interlocking logic
+ Secure timed-out interlocking bypass
+logic
+ Indication of non-controllable breaker
+trips
+ Switch position substitution option
+ Counting of breaker and switch
+operations
+ Logging close/open operations and
+switch position changes
+ Local switch control via setpoint
+control logic
+ Remote switch control and monitoring
+via Modbus and IEC 61850 protocols
+ Inter-device IEC 61850 GOOSE
+communications for remote
+interlocking
+ Supported IEC 61850 sections
+(completely or partially): -1, -2, -3, -4,
+-5, -6, -7-2, -7-3, -7-4, -8, -10
+ Configuration of IEC 61850: IEC 61850
+IED Properties, IEC 61850 Datasets,
+IEC 61850 Reports, GOOSE Publisher
+Setup, GOOSE Subscriber Setup and
+Report Deadbands
+ Configuration tools: PLC configurator
+based on IEC 61131-3 protocol - using
+Functional Block Diagram (FBD) or
+Ladder Diagram (LD)
+Features
+6
+Sequence of Events (SoE)
+SEQUENCE OF EVENTS LOG
+SOE / WAVEFORM COMBINATION
+Designed for an electrical utility
+substation or industrial environment to
+record contact openings and closings of
+field devices, such as electromechanical
+and microprocessor controlled relays.
+It includes up to three 16 digital input
+modules, with up to a total of 48 digital
+inputs (wet or dry type) with a 1 mSec
+time resolution between events.
+The Sequence of Events (SoE) recorder
+can log four types of events: digital input
+events, relay output events, fault events
+and setpoint events.
+When displaying the SoE Log reports, PAS
+establishes links between the event and
+other database records where it finds a
+relationship between the recorded data
+and the event.
+Configuring SoE can be done using the
+PAS software, or a PLC configurator
+based on IEC 61131-3 protocol, a standard
+protocol language to configure the
+PM180 using Functional Block Diagram
+(FBD) or Ladder Diagram (LD).
+IEC 61850, RING LAN, 100BASE-FX (OR 100BASE-TX)
+PROTECTION RELAYS
+BAY CONTROLLERS
+DC PANEL
+OPERATOR
+WORKSTATION
+REMOTE
+CONTROL CENTER
+IEC 60870-5-101
+OR -104
+STATION
+COMPUTER
+GPS
+RECEIVER
+POWER METERS
+7
+Digital Fault Recording (DFR)
+PAS FAULT LOG REPORT
+Viewing the Fault Log
+Fault log files are displayed in a tabular
+view, one evernt per row. PAS loads the
+entire database table to a window so
+that you can scroll through the entire log
+to view its contents or a particular event
+loaded from the PM180 separately (for
+fast loading fault).
+ IRIG-B/SNTP/DI time synchronization
+ 256 MB memory
+ Programmable fault thresholds and
+hysteresis
+ Up to 200 Amps fault currents (40xIn)
+ Separate measurement and
+protection CT connection (option)
+ Zero-sequence currents and voltages
+ Current and voltage unbalance
+ Under-voltage, neutral current
+ Ready-for-use fault reports--fault
+currents magnitude and duration,
+coincident volts magnitude, fault
+waveforms and RMS trace
+ Distance to fault calculation
+ Waveforms from multiple separate
+locations (via PAS)
+SATEC PM180 includes true Digital Fault
+Recording and Disturbance Recording.
+The standard device includes four current
+channels for up to 20xIn (100A @ In=5A)
+of fault currents. Adding the DFR module
+(page 4) allows for separated connection
+of measurement CTs and protection CTs
+of up to 40xIn (200A). Three AC voltage
+channels and one AC/
+DC measurement
+input channels are also included. Multiple
+PM180 devices can cross trigger for up
+to 20 cycles of pre-fault information for
+distributed recording. Fault information
+can be exported to PQDIF/COMTRADE
+format via PAS software.
+The fault recorder provides 4 measured
+and recorded currents (including
+measured neutral current). The event log
+is complemented by waveform recording.
+PAS FAULT RECORDER SETUP
+PAS POWER QUALITY SETUP
+The Fault Recorder can be triggered
+by the embedded fault detector or
+externally through any digital input.
+External triggers are automatically
+enabled for the Fault Recorder.
+When the Fault Recorder is enabled,
+it automatically records all internally
+detected and externally triggered fault
+events to the Fault Log file and to the
+Sequence Of Events Log (see pg. 7).
+The Fault Recorder setup allows you
+to adjust thresholds and hysteresis for
+different fault triggers, and to define
+the waveform and data log options for
+recording fault events.
+Features
+8
+SINGLE PHASE SHORT CIRCUIT FAULT
+INFORMATION (PAS)
+DISTANCE TO FAULT CALCULATION (PAS)
+Distance to Fault
+Accurate fault location reduces repair costs by avoiding lengthy tours by car or
+helicopter and the considerable petrol expenses involved and expedites repairs and
+restoration of the power; thus increasing availability time and customer satisfaction.
+The PM180 includes a high accuracy distance to fault calculation algorithm, based on
+the measuring of 3 or 4 voltages, 3 or 4 currents and the currents of parallel lines when
+present, at the upstream side of the fault. The algorithm includes compensation for CT
+and PT errors and results with an average accuracy of 0.5% (depending on PT, CT and
+time synchronization accuracy).
+Supported line configurations:
+ Single line
+ Parallel lines
+ Partially parallel lines
+ A line with a branch
+Required parameters:
+ Configuration of the line/s
+ Parameters of the line/s (impedance,
+length, etc.)
+ Compensation parameters for CT & PT
+Detected faults:
+ Three-phase short circuit
+ Two-phase short circuit
+ Two-phase short circuit to ground
+ Single-phase short circuit to ground
+ Single-phase open wire
+Fault detection information:
+ Fault classification (type and phase/s)
+ Distance to fault (km or miles)
+ Duration of fault
+Designed for Revenue Grade metering,
+the PM180 provides a high accuracy
+energy measurement that can be used to
+check the utility meter, as well as adding
+power quality and control functions.
+For high performance revenue metering,
+the PM180 includes:
+ Exceeding Revenue 0.2S Class Accuracy
+(IEC 62053-22)
+ Built-in Time Of Use (TOU) with a 10
+year calendar, 16 types of days and up
+to 8 tariff changes per day for each
+daily profile
+The precise measurement class of
+accuracy ensures that the energy readings
+are better than the utility meter's
+readings, which makes it trusty when
+there is a discrepancy between the utility
+and the PM180 reading.
+The TOU allows for configuring practically
+any utility tariff scheme, while the on-
+board storage makes it independent of
+any communication failures.
+The SATEC ExpertPowerTM billing module
+is designed to produce a utility-like bill,
+based on the PM180 stored information.
+It has a dynamic tariff definition,
+including prices, usage, seasons, peak
+demand and any various charges that a
+utility bill may contain. This allows for
+accurate cost calculation and reliable
+comparison with the utility bill, which is a
+key factor in any billing dispute.
+These applications encourage efficient
+energy consumption, by creating energy
+saving plans, providing indication of
+excess or unnecessary energy usage
+and validating the correctness of future
+electric bills, thus enabling an all around
+supervision and control of electric
+expenses and leading to considerable
+reduction in electric costs.
+Revenue Grade Check Meter
+9
+The PM180 Phasor Measurement Unit (PMU) module provides
+synchrophasor and frequency measurements compliant with
+the IEEE C37.118.1 P performance class, as well as real-time cyclic
+exchange of synchronized phasor data with the substation
+phasor data concentrator (PDC) based on the IEC 61850-9-2
+Sampled Value (SV) service.
+Phasor Measurement Unit
+(PMU)
+ IEEE C37.118.1 P class performance compliance
+ IEEE C37.118.1 three-phase voltage and current phasor
+measurements synchronized to a common UTC time
+reference, e.g. GPS, connected through the onboard IRIG-B
+time code signal decoder
+ IEEE C37.118.1 synchronous frequency and Rate of Change of
+Frequency (ROCOF) measurements
+ Expected total vector error (TVE) less than 0.5%
+ Streaming of phasor data over Ethernet using the
+IEC 61850-9-2 multicast sampled value (SV) service
+ Streaming rate from 1 to 50 or 60 frames/s
+at 50 or 60Hz, respectively
+ IEEE C37.118.2 compliant mapping of synchrophasor data to
+IEC 61850 sampled values APDU upon IEC 61850-9-2 and
+IEC 61850-90-5 guidelines
+Features
+10
+Monitoring
+Large motors
+Electrical motors and other large loads
+are an important part of the electrical
+equipment and are dominant in the
+overall consumption. As a result, they
+significantly affect the energy efficiency
+and site reliability. Monitoring main
+motors includes observing their energy
+consumption, tracking their health and
+examining their efficiency.
+Energy Consumption
+Electric motors consume about 50%
+of the world's energy. It is therefore
+very important to track their energy
+consumption. While a basic power meter
+can do this job, for large motors it is
+recommended to use a higher accuracy
+device, with power quality and control
+functions.
+Motors & Large Load
+Monitoring
+PM180
+PT
+CT
+Tachometer
+Analog 4-20 mA
+Converter
+Analog 4-20 mA
+Tachometer Pulses
+Pressure
+Flow
+Motor
+Pump
+Feeder
+Motor Reliability & Troubleshooting
+Monitoring the power quality of the motor, particularly the
+harmonics, inter- and sub-harmonics, is a good practice for pro-
+active maintenance. Typically, internal motor damages cause a high
+level of harmonics, inter- and/or sub-harmonics. Monitoring power
+quality allows for maintaining motors during a planned shutdown,
+rather than very expensive unscheduled shutdowns.
+Large motor startup may take minutes, while most digital motor
+protection devices can record for a few seconds only. SATEC PM180
+provides continuous logging of up to 3.5 minute waveforms
+(including up to 20xIn high current), which allows for analyzing
+failures and for monitoring the motor health, thus improving the
+facility's reliability.
+Real-Time Pumps
+Efficiency Monitoring Application
+Using the PM180 to measure the electricity
+consumption, the digital pulse input to read
+the speed of the motor and the analog inputs
+to read the flow and pressure allows creating
+an advanced real-time pump efficiency
+monitoring.
+The pump's efficiency can be calculated
+(Efficiency%=Ppump/PE*100%) and the
+system notifies when the efficiency is too low,
+which helps in increasing energy efficiency, as
+well as alerting on potential failures.
+Features
+ Accurate efficiency monitoring
+ A single PM180 device performs all data
+logging, time synchronized
+ Improved reliability
+ Allows additional control functions using
+relay outputs, digital inputs and analog I/O
+11
+Features
+Fast Data Logging Recorder
+ From  cycle RMS to 2-hour envelopes
+ Programmable post fault on any
+internal and/or external trigger
+condition
+Waveform Capture
+ Provides simultaneous capture for all
+voltage and current channels with
+choice of sample rate, up to 256 (1024
+with Transient Module). Selectable
+pre-fault / post-fault recording length.
+Disturbance capture recording up to
+several minutes
+ Transient capture (>78/65s--50/60Hz)
+Harmonic Analyzer
+ Total Harmonic Distortion for Voltage
+and Current and up to the 63rd
+individual harmonic for V, I, P, Q
+ Including directional power harmonics
+(Load or Source)
+ V-I angle, TDD and K factors
+Multi-Function Power
+& Energy Meter
+ Real time cycle-by-cycle measurement
+of high accuracy, true RMS voltage,
+current, power, demand and energy
+ Revenue accurate meter
+ Exceeding Class 0.2S (IEC 62053-22 /
+ANSII C12.20)
+ Advanced Time Of Use (TOU) feature
+(16 Energy sources include external
+digital pulses, up to 4 seasons, 4 daily
+profiles, 8 Tariffs, flexible automatic
+calendar) for any complex billing
+scheme
+ KYZ or KY output and LED indication
+for calibration and test (via optional
+display)
+ Vector diagram and symmetrical
+components
+Real-Time Clock & Synchronization
+ Real-Time Clock with maximum 5
+seconds drift per month @ 25C
+ Provides 1 msec time resolution via
+IRIG-B time code input or satellite
+clock for common time base (requires
+IRIG-B module)
+ As an SNTP client, it can accept
+periodic synchronization of the meter
+clock from an SNTP server
+ Time sync from digital input with 1ms
+accuracy
+Wide Range Voltage Inputs
+ Three impulse galvanic isolated AC
+voltage inputs
+ Impulse dielectric withstand 6kV
+ Wide range application up to 828V
+ AC/DC voltage input: station battery
+monitoring (up to 300V DC)
+Wide Range Current Inputs
+ 4 dual purpose current inputs (3-phase
++ Neutral)--1A/5A for measurement
+CTs with Class 0.2S revenue grade
+accuracy to 10A/20A and 50A/100A
+(5A/HACS) for protection CTs (10/20x)
+Communication Platforms
+ 3 independent built-in Ports plus 3
+optional:
+ IRIG-B and RS-422/485 port
+ TXFX (fiber optic)
+ 2G/3G cellular modem
+ Communication Protocols:
+Modbus RTU, ASCII, DNP 3.0,
+Modbus/TCP, DNP3/TCP, IEC 61850
+(option), IEC 60870-5-101/104
+Digital & Analog I/O Options
+3 expansion slots for a wide range of
+plug-in modules:
+ 16 high speed digital inputs, total up
+to 48 DIs
+ 8 dry contact relay outputs, total up to
+24 ROs
+ Mixed 4 analog inputs and 4 outputs,
+total up to 12 AI/12AO
+Logging, Recording & Programming
+ Standard onboard memory: 256 MB
+ Programmable controller: up to 64
+control setpoints, up to 8 conditions
+OR, AND, arithmetical functions logic,
+extensive triggers, programmable
+thresholds and delays, relay control,
+event-driven data recording
+ 8 fast waveform recorders:
+simultaneous 8-channel AC, one DC:
+up to 48 digital inputs in a single plot
+ Waveform sampling rate 32, 64, 128
+or 256 samples per cycle; up to 20 pre-
+fault cycles (2 cycles of 1024 samples
+per cycle or 4 cycles with 512 samples
+per cycle with Transient Module)
+ Up to 3.5 min. of continuous waveform
+recording
+ 1-ms resolution for digital inputs
+ 16 fast Data Recorders
+(16 parameters on each data log):
+From  cycle RMS to 2 hour RMS
+envelopes; up to 20 pre/post-fault
+cycles; programmable data logs on
+a periodic basis and on internal or
+external trigger
+ 32 digital internal counters
+ 16 internal programmable timers
+( cycle to 24 hours)
+12
+Technical Specifications
+INPUT RATINGS
+3 Voltage Inputs: V1, V2, V3
+ Direct input and input via PT up to
+828V AC line-to-line, up to 480V AC
+line-to-neutral
+ Burden for 480V: <0.35 VA
+ Burden for 120V: <0.03 VA
+ Overvoltage withstand: 1000V AC
+continuous, 2500V AC for 1 sec.
+ Galvanic isolation: 4kV AC / 1 min.
+ Impulse dielectic withstand 6kV
+Current Inputs: I1, I2, I3, I4
+ Selectable 5A or 1A (upon order)
+ Operating range: continuous 4xIn ANSI
+(20A/4A) or 2xIn IEC (10A/2A)
+ Fault currents: up to 20xIn (100A @
+HACS , 50A @ 5A, 10A @ 1A ), max 1 sec.
+ Burden for 5A: <0.15 VA;
+Burden for 1A: <0.02 VA
+ Overload withstand: 4xIn RMS
+continuous (20A/4A)
+ Max. wire size: 10 AWG/6mm2
+ Terminals pitch: 13mm
+ Galvanic isolation: 4kV AC / 1 min.
+ Impulse dielectic withstand 6kV
+AC/DC Voltage Input: V4, Vref
+ Operating Range: 400V AC
+ Direct input and input via PT (up to
+480V AC) or Battery input
+ Input Impedance: > 10MOhm
+ Burden for 400V: << 0.01 VA
+ Burden for 120V: << 0.01 VA
+ Overvoltage Withstand: 1000V AC
+continuous, 2500V AC for 1 second
+ Resistive Isolation, Insulation
+withstand: 4kV AC @ 1mn
+ Wire Size: 10 AWG (up to 6 mm2)
+ Terminals Pitch: 7.5 mm
+Power Supplies
+ Two redundant galvanically isolated
+power supplies
+ Selection of power supplies:
+ 50-290V AC and 40-290V DC
+ 9.6-35V DC
+COMMUNICATION
+COM1
+ Optically isolated RS-232/485
+ Insulation withstand: 4kV AC @ 1 min.
+ Connector: removable, captured-wire,
+4 terminals
+ Max. wire size: 12 AWG / 2.5 mm2
+ Max. baud rate: 115,200 bps
+ Protocols: MODBUS RTU, MODBUS
+ASCII, DNP 3.0, IEC 61850 (option),
+IEC 60870-5-101/104 (option)
+COM2
+ Optically isolated RS-422/485
+ Insulation withstand: 4kV AC @ 1 min.
+ Connector: removable, captured-wire,
+5 terminals
+ Max. wire size: 12 AWG / 2.5 mm2
+ Max. baud rate: 115,200 bps
+ Protocols: MODBUS RTU, MODBUS
+ASCII, DNP 3.0
+COM3 (Display)
+ Optically isolated RS-485 port for the
+remote display
+ Insulation withstand: 2.5kV AC @ 1 min
+ Connector: DB15
+ Max. baud rate: 115,200 bps.
+ Protocols: MODBUS RTU, MODBUS
+ASCII, DNP 3.0
+USB Port
+ Isolated USB port
+ Insulation withstand: 4kV AC @ 1 min.
+ Connector: Type A male
+ Supported protocols: MODBUS RTU
+Ethernet Port
+ Transformer-isolated 10/100 Base-T port
+ Insulation withstand: 4kV AC @ 1 min
+ Connector: Modular RJ45
+ Protocols: MODBUS TCP (Port 502),
+DNP 3.0/TCP (Port 20000), IEC 61850
+(option)
+ Number of simultaneous connections
+(sockets): 5
+IRIG-B Port (Option)
+ Optically isolated IRIG-B Port
+ Time code signal: unmodulated
+(pulse-width coded)
+ Level: unbalanced 5V
+ Connector type: BNC
+ Recommended cable: 51Ohm low loss:
+RG58A/U (Belden 8219 or equivalent),
+TNC connector
+TX/FX Port (Option)
+ Transformer-isolated 10/100Base-T
+port
+ TX Connector: Modular RJ45
+ Optical-isolated 100Base FX
+ FX Connector: SC
+ Supported protocols: MODBUS TCP
+(Port 502), DNP 3.0/TCP (Port 20000),
+IEC 61850 (option)
+ Number of simultaneous connections
+(sockets): 5
+ENVIRONMENTAL
+CONDITIONS
+ Operating temperature:
+-22F to 158F / -30C to 70C
+ Storage temperature:
+-40F to 185F / -40C to 85C
+ Relative humidity:
+0-95% non-condensing
+DIMENSIONS
+ HxWxD
+PM180 6x8.6x8.3" / 152x220x210 mm
+RGM180 7.18.7x1.9" / 18122148 mm
+RDM180 4.5x4.5x0.8" / 11411420 mm
+RDM312 6.1x12.3x1" / 155x313x26 mm
+ Weight
+PM180 2.5 kg / 5.5 lb
+RGM180 0.7 kg / 1.54 lbs
+13
+Standards Compliance
+ Directive complied with EMC:
+89/336/EEC as amended by 92/31/EEC
+and 93/68/EEC
+ LVD: 72/23/EEC as amended by
+93/68/EEC and 93/465/EEC
+ Harmonized standards to which
+conformity is declared: EN55011:1991;
+EN50082 1:1992; EN61010-1:1993;
+A2/1995
+ ANSI C37.90.1 Surge Withstand
+Capability (SWC)
+ EN50081-2 Generic Emission Standard:
+Industrial Environment
+ EN50082-2 Generic Immunity Standard:
+Industrial Environment
+ EN55022: Class A
+ IEC 61000-6-2
+ IEC 61000-6-4
+ IEC 60255-5
+ IEC 60255-22
+Accuracy
+ Active Energy, IEC/AS 62053-22,
+class 0.2S1
+ Reactive Energy, class 0.5S (under
+conditions as per IEC 62053-22:2003 @
+0  |PF|  0.9)
+Power Quality
+ EN50160: Power Quality in European
+Electricity Supply Networks
+ IEEE 1159:
+Power Quality Recorder in US
+ GOST 13109: Electric energy,
+Electromagnetic compatibility of
+technical equipment, Power quality
+limits in public electrical systems
+ GOST 54149: 2010: Electric energy,
+Electromagnetic compatibility of
+technical equipment, Power quality
+limits in public electrical systems
+ IEC 61000-4-7, Harmonics and inter-
+harmonics measurement
+ IEC 61000-4-15, Flicker measurement
+ IEC 61000-4-30 class A, Power quality
+measurement methods
+ IEC 62054-21: Real time clock backup,
+RTC accuracy  2ppm @ 23C
+EMC Immunity
+ IEC 61000-4-2, IEC 60255-22-2:
+Electrostatic discharge, 15kV/8kV  air/
+contact
+ IEC 61000-4-3, IEC 60255-22-3:
+Radiated Immunity, 10V/m and 30V/m
+@ 80 MHz  1000 MHz
+ IEC 61000-4-4, IEC 60255-22-4:
+Fast Transients burst, 4KV on current
+and voltage circuits and 2 KV for
+auxiliary circuits
+ IEC 61000-4-5, IEC 60255-22-5: Surge
+6KV on current, voltage circuits and
+power supply
+ IEEE C62.41.2-2002: high voltage line
+surges
+ 100 kHz ring wave  6kV @ 0.5kA
+ 1.2/50 microsecond  8/20
+microsecond Combination Wave
+6kV @ 3kA
+ IEC 61000-4-6, IEC 62052-11:
+Conducted Radio-frequency, 10V @
+0.15 MHz  80MHz
+ IEC 61000-4-8: Magnetic Field
+ IEC 61000-4-12, IEC 62052-11, IEEE
+C37.90.1: 2002: Oscillatory waves, CMM
+2.5KV & DFM 1KV @ 100KHz and 1MHz
+Emission (radiated/conducted)
+EN55022, IEC 60255-22: Class A
+Construction
+Safety
+IEC/UL 61010-1
+Insulation
+ IEC 62052-11: Insulation impulse
+6KV/500 @ 1.2/50 s
+ IEC 62052-11, IEC 61010-1: AC voltage
+tests related to ground, 4 kV AC @ 1mn
+Atmospheric Environment
+ Operational ambient temperature
+range: 30C to +70C
+ Long-term damp heat withstand
+according to IEC 68-2-3 <95%, +40C
+ Transport and storage temperature
+range: 40C to +85C
+Vibration
+ IEC 60255-21-1: Vibration Response,
+Table I, Class-2
+ IEC 60255-21-1: Vibration Endurance,
+Table II, Class-1
+Mechanical Shock
+ IEC 60255-21-2: Shock, Table II, Class-1
+ IEC 60255-21-2: Bump, Table III, Class-1
+Seismic Vibration
+IEC 60255-21-3: Bump, Table III, Class-1
+Panel Display protection
+IEC 60529: IP54 (NEMA type 13)
+Instrument protection
+IEC 60529: IP30 (NEMA type 13)
+1. Only for PM180-5A and PM180-1A models
+(internal CT), PM180-DFR model accuracy
+meets class 1
+14
+Measurement Specifications
+PARAMETER FULL SCALE@
+INPUT RANGE
+ACCURACY RANGE
+% READING % FS CONDITIONS
+Voltage V1-V3 120V x PT ratio @ 120V
+400V x PT ratio @ 690V
+0.05 0.01 10% to 120% FS 0 to 999,000 V
+Line current I1-I4 CT
+0.05
+0.05
+0.05
+0.01
+0.01
+ANSI C12.20:
+1%-120% FS
+120%-400% FS
+IEC 62053-22: 1%-200% FS
+0 to 120,000 A
+Fault current I1- I4 CT 2.0 400%-2000% FS 0 to 120,000 A
+AC/DC Voltage 125V / 220V 0.3 10%-120% FS 0 to 290V DC
+Active power 0.36 x PT x CT @ 120V
+1.2 x PT x CT @ 690V
+0.2
+0.2
+0.002
+0.002
+|PF|  0.5 and  -10,000 to +10,000 MW
+Reactive power 0.36 x PT x CT @ 120V
+1.2 x PT x CT @ 690V
+0.3
+0.3
+0.002
+0.002
+|PF|  0.9 and  -10,000 to +10,000 Mvar
+Apparent power 0.36 x PT x CT @ 120V
+1.2 x PT x CT @ 690V
+0.2
+0.2
+0.002
+0.002
+|PF|  0.5 and  0 to 10,000 MVA
+Power factor 1.000 0.35 |PF|  0.5, I  2% FSI -0.999 to +1.000
+Frequency 50 Hz
+60 Hz
+0.002
+0.002
+40.000 Hz to 64.999 Hz
+45.100 Hz to 70.000 Hz
+Total Harmonic Distortion,
+THD V(I), %Vf (%If)
+100 1.5 0.2 THD  1% FS,
+V (I)  10% FSV (FSI)
+0 to 999.99
+Total Demand Distortion,
+TDD, %
+100 1.5 TDD 1% FS,
+I  10% FSI
+0 to 100
+Active Energy
+Import & Export
+Class 0.2 ANSI C12.20, Current class 20
+Class 0.2S (IEC 62053-22)
+0 to 999,999.999 MWh
+Reactive Energy
+Import & Export
+Class 0.2 under conditions as per ANSI C12.20
+Class 0.2 under conditions as per IEC 62053-22
+0 to 999,999.999 Mvarh
+Apparent Energy Class 0.2 under conditions as per ANSI C12.20
+Class 0.2 under conditions as per IEC 62053-22
+0 to 999,999.999 MVAh
+Volt-Hours Class 0.2 20%-120% FS 0 to 999,999.999 kVh
+Ampere-Hours Class 0.2 10%-200% FS 0 to 999,999.999 kAh
+Symmetrical Components Voltage FS 1 10%-120% FS
+Current FS 1 10%-200% FS
+Current FS 3 200%-300% FS
+Phasor angles 1 degree
+Key:
+PT External potential transformer ratio
+CT Primary current rating of external current
+transformer
+FSV Voltage full scale
+FSI Current full scale
+Vf Fundamental voltage
+If Fundamental current
+ @ 80% to 120% of voltage FS and 1% to
+200% of current FS
+Notes:
+1. Accuracy is expressed as  (percentage of reading + percentage of full scale)  1 digit. This does not
+include inaccuracies introduced by the user's potential and current transformers. Accuracy calculated
+at 1 second average.
+2. Specifications assume: voltage and current waveforms with THD  5% for kvar, kVA and PF; reference
+operating temperature: 20C-26C.
+3. Measurement errror is typically less than the maximum error indicated here.
+15
+PM180 ORDER STRING
+OPTIONS
+DISPLAY
+Transducer version--no display X
+Graphic color display--5.7" touchscreen G
+Graphic color display - 5.7" touchscreen + DIN rail mounting kit & 3m/10ft remote cable G-DIN
+3 line ultra bright LED display D
+3 line ultra bright LED display, DIN rail mounting kit & 3m/10ft remote cable D-DIN
+Multi window ultra bright LED display with 12 values + 1 text window M
+VOLTAGE INPUTS
+690V AC Nominal Voltage Input -
+120V AC Nominal Voltage Input U
+CURRENT INPUTS
+50A, calibrated to 5A (Class 0.2S Accuracy) 5
+10A, calibrated to 1A (Class 0.2S Accuracy) 1
+100A Split Core HACS, Calibrated to 5A (Class 1 Accuracy) CS1S
+100A Split Core Handheld Clamp HACS, 13mm opening, 5A (Class 1 Accuracy) CS1H
+Use of any High Accuracy Current Sensors (HACS), without overcurrent. HACS
+Use of 3VAC current clamps (should be purchased locally) FLEX
+FREQUENCY - 50 / 60 HZ 50Hz/60Hz
+ACCURACY AND POWER QUALITY STANDARD
+ANSI C12.20--USA Standard IEEE1159 Full Power Quality A
+IEC 62053-22--European Standard EN50160 Full Power Quality E
+GOST 13109 / GOST 54149--Russian Standard G
+COMMUNICATION STANDARD
+Default: Modbus RTU, Modbus TCP, DNP 3.0, DNP/TCP, IEC 60870-5-101 & -104 -
+Default communication plus IEC 61850 (SISCO) 850
+TESTING AND CERTIFICATE
+Full functional test, calibration at various work loads & detailed test report -
+Full functional test, calibration at various work loads & detailed test report
+plus ISO 17025 and ILAC certified calibration certificate
+CC
+OPTIONAL PLUG-IN MODULES
+Maximum 3 modules per instrument
+OPTIONS
+MEASUREMENT / FAULT CHANNELS (MAX. 1 MODULE FROM EACH TYPE)
+Transient Recorder Module (4 volt. channels, up to 2kV & 1024 samples per cycle per channel) TRM
+PMU (Phase Monitoring Unit), plus transient module PMU
+Fault Recorder Module (4 current channels, up to 200A), incl. 4  CS2 / CS2S / CS2SL HACS DFR-CS2/CS2S/CS2SL
+16 DIGITAL INPUTS (MAX. 48 DIGITAL INPUTS) DI16
+Dry Contacts (DRC) / 24V DC / 125V DC / 250V DC DRC/24V/ 125V/250V
+8 RELAY OUTPUTS (MAX. 24 RELAY OUTPUTS) RLY8
+8 DI / 8 RO DI8 RO8
+COMMUNICATION
+IRIG-B and RS-422/485 port IRIG
+Fiber Optic Ethernet (TXFX), reduntant Ethernet & 2nd RS-422/485 port TXFX
+2G/3G GSM Modem (850/870 protocol not supported) & 2nd RS-422/485 port T3G
+2G/3G CDMA Modem (850/870 protocol not supported) & 2nd RS-422/485 port T3C
+4 ANALOG INPUT / 4 ANALOG OUTPUT MODULE (MAX. 12AI/12AO)
+ 1mA (x=1) / 0-20 mA (x=2) / 0-1 mA (x=3) / 4-20 mA (x=4) 4AIOx
+4 ANALOG INPUT (MAX 12AI),  10V 4AIV
+AUXILIARY POWER SUPPLY (MAX. 1 MODULE PER INSTRUMENT)
+AUX. P.S. 85-265V AC and 40-300V DC BACDC
+AUX. P.S. 9.5-36 V DC B21DC
+Specifications are subject to change without notice. Copyright  2014-2018 SATEC LTD. BB0160 REV.A3
+www.satec-global.com
+HEADQUARTERS
+SATEC INC.
+North & South America
+10 Milltown Court
+Union, NJ 07083, USA
+Tel. 1-888-OK-SATEC
+Local 908-686-9510
+Fax. 908-686-9520
+sales@satec-global.com
+SATEC LTD.
+Europe & Africa
+P.O. Box 45022
+Jerusalem 9145001, Israel
+Tel. 972-2-541-1000
+Fax. 972-2-581-2371
+satec@satec-global.com
+SATEC CHINA
+Asia
+No. 25 Ganluyuan Nanli
+Beijing, China 100123
+Tel. +86-10-8559-0609
+Fax. +86-10-8559-0609
+china@satec-global.com
+SATEC (AUSTRALIA) PTY LTD
+Oceania
+P.O. Box 82
+Mulgoa, NSW 2745, Australia
+Tel. 61-2-4774-2959
+Fax. 61-2-4774-0249
+sales@satec-global.com.au
+

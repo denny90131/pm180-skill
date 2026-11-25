@@ -1,0 +1,483 @@
+expertmeterTM
+High Performance Analyzer
+PM180
+Phasor Measurement Unit
+Application Note
+BG0637 REV.A4
+2
+REVISION HISTORY
+A1 May 2021 Release
+A2 Oct 2021 Added M performance class and unit specifications
+A3 June 2022 Added positive sequence phasors, CFG-3 frame and spontaneous transmission of CFG
+frames
+A4 Oct 2024 Added configurable channel names and second commanded TCP/UDP and spontaneous
+UDP data streams.
+3
+Table of Contents
+1 General...........................................................................................................................................4
+2 PMU Installation .............................................................................................................................6
+3 Measuring Techniques...................................................................................................................7
+3.1 Synchrophasor Estimation.....................................................................................................7
+3.2 Frequency and ROCOF Estimation.......................................................................................7
+3.3 Reporting Rates.....................................................................................................................7
+4 Time Synchronization.....................................................................................................................8
+4.1 IRIG-B Time Synchronization................................................................................................8
+4.2 PTPv2 Time Synchronization ................................................................................................8
+5 PMU Communications..................................................................................................................10
+5.1 IEEE C37.118.2 Communications.......................................................................................10
+5.1.1 Commanded Unicast UDP and TCP Data Transmission....................................................10
+5.1.2 Spontaneous UDP Data Transmission................................................................................10
+5.1.3 IEEE C37.118.2 Message Frames......................................................................................10
+5.2 IEC 61850 Communications................................................................................................12
+5.2.1 PMU Data Model .................................................................................................................12
+5.2.2 Encoding Phasor Data in Multicast SV APDU.....................................................................12
+5.2.3 IEC 61850 SV Publisher......................................................................................................13
+5.3 Modbus Communications....................................................................................................13
+6 Measurement Specifications ........................................................................................................16
+4
+1 General
+This document describes the operation of the PM180 phasor measurement unit (PMU). For
+details on setting up the PMU and its communication options, see the product documentation
+listed below. Use the supplied PAS software tool to configure the PMU options in your device.
+The PM180 phasor measurement unit provides synchrophasor and frequency measurements
+compliant with the IEEE C37.118.1/1a and IEC/IEEE 60255-118-1:2018 P and M
+performance classes, and real-time cyclic exchange of synchrophasor data with the
+substation phasor data concentrator (PDC) based on the IEEE C37.118.2 synchrophasor data
+transfer protocol or via the IEC 61850-9-2 sampled values (SV) service.
+PMU features:
+ IEEE C37.118.1-2011, IEEE C37.118.1a-2014 and IEC/IEEE 60255-118-1:2018 P
+and M class performance compliance
+ IEEE C37.118.1 three-phase voltage and current phasor measurements
+synchronized to a common UTC time reference, e.g. GPS
+ IEEE C37.118.1 synchronous frequency and rate of change of frequency (ROCOF)
+measurements
+ Clock synchronization to a common UTC time reference using an IRIG-B timecode
+source or an IEEE 1588 PTPv2 master clock source
+ IEEE C37.118.2 commanded client-server UDP and TCP data transmission and
+spontaneous UDP data transmission over IP protocol
+ Optional IEEE C37.118.2 frame extensions with analog data (total active, reactive
+and apparent power, power factor, and voltage and current THD) and digital status
+data (up to 32 inputs)
+ Streaming of phasor data over Ethernet using the IEC 61850-9-2 multicast
+sampled value (SV) service with IEEE C37.118.2 compliant mapping of
+synchrophasor data upon IEC 61850-9-2 and IEC 61850-90-5 guidelines
+Reference documents:
+IEEE Std C37.118.1-2011, IEEE Standard for Synchrophasor Measurements for Power
+Systems
+IEEE Std C37.118.1a-2014, IEEE Standard for Synchrophasor Measurements for Power
+Systems, Amendment 1: Modification of Selected Performance Requirements
+IEEE Std C37.118.2-2011, IEEE Standard for Synchrophasor Data Transfer for Power
+Systems
+IEC/IEEE 60255-118-1:2018, Measuring relays and protection equipment  Part 118-1:
+Synchrophasor for power systems  Measurements
+IEC/TR 61850-90-5:2012, Communication networks and systems for power utility
+automation  Part 90-5: Use of IEC 61850 to transmit synchrophasor information
+according to IEEE C37.118
+Product documentation:
+BG0521 PM180 Installation Manual
+BG0525 PM180 Operation Manual
+BG0627 PM180 IEEE C37.118.2 Reference Guide
+BG0523 PM180 IEC 61850 Reference Guide
+BG0527 PM180 Modbus Reference Guide
+5
+Definitions and acronyms:
+Phasor - a complex equivalent of a sinusoidal wave quantity such that the complex
+modulus is the cosine wave amplitude, and the complex angle (in polar form) is the
+cosine wave phase angle
+Synchrophasor - a phasor calculated from data samples using a standard time signal as
+the reference for the measurement
+APDU - application protocol data unit
+APPID - application identifier
+ASDU - application service data unit
+ASN.1 - Abstract syntax notation number one
+BER - ASN.1 basic encoding rules
+PDC  phasor data concentrator
+PMU  phasor measurement unit
+SV - sampled value
+6
+2 PMU Installation
+The PMU is implemented as an add-on card integrated in one assembly with the fast
+transient recorder module.
+The PMU module may be located in any of the PM180 expansion slots.
+Input voltages must be connected to the module terminals V1, V2, V3 and VN. Current
+signals are delivered from the common AC inputs via the PM180 backplane. Follow common
+grounding rules in the PM180 Installation Manual.
+NOTE: Make sure you have the correct ABC phase sequence as frequency
+measurements are based on positive sequence signals. If you are using reverse
+CBA phase order, make the appropriate adjustment in the PM180 Basic Setup,
+otherwise the unit will not be able to measure frequency.
+If an IRIG-B time source is used for UTC time synchronization, connect the IRIG-B signal
+wires to the 1pps/CM terminals on the PM180 CPU module.
+In case the IEEE 1588 master clock is used as UTC source, connect the network cable
+directly to the PMU IEEE 1588 Ethernet port.
+NOTE: The IEEE 1588 PMU port must be connected to an IEEE 1588 grandmaster
+clock through a PTPv2 peer-to-peer transparent clock switch compliant with IEEE
+Std 1588-2008.
+PMU operation is indicated by the "PMU OK" LED on the front of the PMU, which flashes
+yellow ones a second when the PMU clock is not in sync with the UTC/IRIG-B clock, and
+flashes green when synchronized.
+7
+3 Measuring Techniques
+3.1 Synchrophasor Estimation
+The PMU calculates and reports synchrophasor estimates as defined and described in IEEE
+C37.118.1 Clause 4.
+The estimates include three-phase voltage and current synchrophasors calculated from the
+input signal waveforms synchronized to an absolute time reference, followed by complex
+multiplication with the nominal frequency carrier, i.e., multiplication of the input by the
+quadrature oscillator (sine and cosine).
+All measurements are made on a common time base and related to the system nominal
+frequency, so the phase angle measurements are directly comparable. Differences in the
+actual frequency are included in the phase angle estimation. A precise time reference clock is
+used to provide the UTC time to determine the phase angle.
+3.2 Frequency and ROCOF Estimation
+The frequency is computed as the first derivative of the synchrophasor phase angle, and
+ROCOF is computed as the second derivative of the same phase angle.
+The frequency and ROCOF estimates are based on positive sequence synchrophasors
+calculated using the symmetrical components transformation. Since phase angle changes
+relative to the difference between the actual frequency and the nominal frequency, this
+approach yields the offset from nominal.
+3.3 Reporting Rates
+The PMU supports data reporting at submultiples of the nominal system frequency. The
+actual reporting rate is user selectable.
+The available rates are listed in the following table.
+Table 3-1 PMU reporting rates
+System frequency 50 Hz 60 Hz
+Reporting rates (frames/s) 1 2 5 10 25 50 1 2 3 4 5 6 10 12 15 20 30 60
+8
+4 Time Synchronization
+The PMU must be connected to a reliable and accurate GPS time source, that can provide
+time traceable to UTC so all measurements are synchronized to UTC time with accuracy
+sufficient to meet the requirements of IEEE C37.118.1.
+The PMU clock can be synchronized to UTC using an IRIG-B timecode source or an IEEE 1588
+PTPv2 master clock source.
+4.1 IRIG-B Time Synchronization
+When using an external IRIG-B time source, connect the IRIG-B signal wires to the 1pps/CM
+terminals on the PM180 CPU module.
+The PM180 IRIG-B port uses an unmodulated (pulse-width coded) timecode signal
+(unbalanced 5V level) according to the IRIG 200-04 standard. It supports B000/B001 and
+B004/B005 timecode formats with time code extentions specified for the IRIG-B profle in
+Annex D of IEEE Std C37.118.1-2011.
+The PMU IRIG-B port can synchronize to the IRIG-B timecode source with sub-microsecond
+accuracy.
+To enable the IRIG-B port as a UTC source, select the IRIG-B time synchronization option in
+the IEEE C37.118.2 setup (see the PM180 IEEE C37.118.2 Reference Guide for details).
+NOTE: The "PMU OK" LED on the PMU module flashes yellow ones a second when the PMU
+clock is not in sync with the UTC/IRIG-B clock, and flashes green when synchronized.
+4.2 PTPv2 Time Synchronization
+To use the IEEE 1588 master clock as UTC source, your PMU must be provided with the IEEE
+1588 Ethernet port.
+The IEEE 1588 PMU port must be connected to an IEEE 1588 grandmaster clock
+through a PTPv2 peer-to-peer transparent clock switch compliant with IEEE Std
+1588-2008.
+The IEEE 1588 PMU port implements an ordinary PTPv2 clock complying with IEEE Std 1588-
+2008 and uses the IEEE C37.238 power profile per IEEE C37.238-2011 and IEC/IEEE 61850-
+9-3 as follows:
+1. PTP version 2.
+2. PTP transport over Layer 2 Ethernet (IEEE 802.3), IEEE 1588-2008, Annex F.
+3. Multicast addressing.
+4. Peer-to-peer (P2P) path delay measurement mechanism.
+5. Announce interval = 1 s
+6. Sync interval = 1 s
+7. Capable of working with one-step and two-step master clocks.
+8. Responds to peer path delay requests with two-step peer delay responses (Pdelay_Resp,
+Pdelay_Resp_Follow_Up messages).
+The IEEE 1588 PMU port can synchronize to the PTP grandmaster clock with sub-microsecond
+accuracy, which can be degraded by network topology, PTP switch accuracy, or transmission
+media asymmetry.
+To enable the IEEE 1588 port as UTC source, select the IEEE 1588 time synchronization
+option in the IEEE C37.118.2 setup, and configure the port network addresses (see the
+PM180 IEEE C37.118.2 Reference Guide for details).
+NOTE: The "PMU OK" LED on the PMU module flashes yellow ones a second when the PMU
+clock is not in sync with the IEEE 1588 grandmaster clock, and flashes green when
+synchronized.
+9
+The PMU comes with a Telnet server that can be used to check the PMU clock status and
+time accuracy. Connect with a Windows Telnet client to the PMU using the IP address of the
+IEEE 1588 PMU port, login with the password "1588" and enter "ptp". Figure 4-1 shows an
+example of the PMU clock status printout.
+Figure 4-1 PMU PTP clock status information
+10
+5 PMU Communications
+5.1 IEEE C37.118.2 Communications
+The PMU IEEE C37.118.2 protocol implementation is user configurable, making it easy to
+adapt for use in different installations. See the PM180 IEEE C37.118.2 Reference Guide for
+more details on operating and configuring IEEE C37.118.2.
+To keep maximum interoperability with phasor data concentrators (PDC) and controlling
+stations, the PM180 supports all standard frame types for synchrophasor data interrogation
+and streaming.
+The PM180 PMU provides commanded unicast client-server UDP and TCP data transmission
+and spontaneous multicast or unicast UDP data transmission using two data streams with
+programmable data rates. The data stream ID number uniquely identifies each data stream.
+The synchrophasor measurement data reporting rate can be configured in submultiples of
+the nominal power line frequency from 1 to 60 frames per second.
+Each data stream can be individually configured to any data rate that is submultiple of the
+PMU reporting rate.
+5.1.1 Commanded Unicast UDP and TCP Data Transmission
+Commanded unicast data transfer is controlled by commands sent by the client over a
+unicast TCP or UDP connection to the PMU's local TCP or UDP port, respectively.
+Configuration and header frames are always sent to the IP address and port from which the
+corresponding command was received, while data frames are sent to the IP address and port
+from which the start command was sent. This does not necessarily have to be the same port.
+The PMU provides up to 5 simultaneous unicast TCP and/or UDP connections for streaming
+synchrophasor data at a user-programmable data rate using one of two commanded data
+streams. The transmission start command should indicate the selected stream identifier.
+5.1.2 Spontaneous UDP Data Transmission
+Unlike commanded data transfer, spontaneous data frames are sent to a user-configured IP
+address and destination port. The PMU provides two data streams for simultaneous
+transmission of synchrophasor data frames to two different destinations at user-
+programmable data rates.
+Spontaneous data transfer must be enabled or disabled explicitly by the user through the
+IEEE C37.118.2 settings or over an alternate client-server TCP or UDP connection to a local
+PMU TCP or UDP port, respectively, by referring to the appropriate spontaneous data stream
+identifier. Regardless of how the data stream is enabled, its state is stored in non-volatile
+memory, so that if it is enabled, data transfer is automatically started after the device
+reboots.
+Configuration and header frames can be requested and received over an alternative TCP or
+UDP connection by referencing the appropriate data stream identifier, as in a regular client-
+server connection. Configuration frames can also be sent spontaneously to a user-configured
+destination port without an explicit command, like spontaneous data frames are sent (see
+Configuration Frames below).
+Spontaneous UDP data transmission can operate in unicast, multicast or broadcast mode
+depending on the destination IP address the user specified.
+5.1.3 IEEE C37.118.2 Message Frames
+Data Frames
+Synchrophasor data frames transmit a time stamped set of measurements that include
+phasor estimates, frequency deviation from the nominal power line frequency and the rate of
+change of frequency. In addition, the data frame can be expanded to contain analog data
+(total active, reactive and apparent power, power factor, voltage and current THD) and
+digital input status information (up to 32 inputs can be included).
+11
+The phasor data can represent single phase phasors (tree phase voltage and tree phase
+currents) or 3-phase positive sequence voltage and current, or both in a single frame.
+The complex phasor values can be sent in a rectangular coordinates format (real and
+imaginary) or in polar coordinates (magnitude and angle). The phasor and frequency data
+can be represented in 32-bit IEEE floating-point format or as 16-bit scaled integer numbers.
+In case of using integer format, the data conversion factors are provided via the IEEE
+C37.118.2 configuration frames.
+Configuration Frames
+IEEE C37.118.2 configuration frames provide information about the synchrophasor data
+stream in binary format. The PM180 PMU supports CFG-1, CFG-2 and CFG3 configuration
+frames. The configuration frame contents correspond to the specification given by IEEE
+C37.118.2.
+In spontaneous UDP data transmission mode, configuration frames CFG-2 or CFG-3 can be
+sent spontaneously without the explicit user command. If enabled, the configuration frame is
+sent periodically every 30 seconds.
+The names of the phasor, analog data and digital status channels are user configurable. The
+default channel names are listed in Table 5-1.
+Table 5-1 Phasor, analog and digital status channel names
+Channel name Description
+VA V1 phase phasor
+VB V2 phase phasor
+VC V3 phase phasor
+IA I1 phase phasor
+IB I2 phase phasor
+IC I3 phase phasor
+V1 Positive sequence voltage phasor
+I1 Positive sequence current phasor
+P Active power analog channel
+Q Reactive power analog channel
+S Apparent power analog channel
+PF Power factor analog channel
+VTHDA V1 phase THD analog channel
+VTHDB V2 phase THD analog channel
+VTHDC V3 phase THD analog channel
+ITHDA I1 phase THD analog channel
+ITHDB I2 phase THD analog channel
+ITHDC I3 phase THD analog channel
+DI1 Digital status channel 1
+DI2 Digital status channel 2
+...
+DI32 Digital status channel 32
+Header Frame
+A header frame gives information about the synchrophasor data stream in human-readable
+format.
+12
+5.2 IEC 61850 Communications
+5.2.1 PMU Data Model
+Synchrophasor data transfer in the context of IEC 61850 uses IEEE C37.118 to IEC 61850
+mapping mechanism defined in IEC 61850-90-5.
+PMU is modeled as a dedicated logical device within the PM180 IED. The detailed PMU data
+model is shown as a part of the ICD definition file provided with your device.
+The PMU logical device is responsible for the publishing of the synchrophasor measurements
+as defined in IEEE C37.118.2. It includes:
+a) MMXU measurement logical node that represents voltage and current synchrophasor
+data, frequency and ROCOF measurements; the new data object of HzRte is added to the
+MMXU logical node to accommodate the ROCOF data.
+b) LTIM time management logical node that gives indication of the local time
+configuration and status, like offset of local time from UTC and the flag indicating if
+daylight saving time is in effect.
+c) LTMS time master supervision logical node that is used for supervision of the time
+synchronization function; it indicates the current time source and time synchronization
+status according to IEC 61850-9-2.
+5.2.2 Encoding Phasor Data in Multicast SV APDU
+IEEE C37.118.2 synchrophasor data stream is mapped to IEC 61850-9-2 sampled values
+APDU (application protocol data unit). The sampled values dataset is user configurable.
+Encoding of the sampled values APDU frame is shown in Figure 5-1.
+Figure 5-1 Encoding of the SV APDU frame and synchrophasor data
+13
+The APDU contains a single ASDU (application service data unit), which is encoded using
+ISO/IEC 8825-1 ASN.1 basic encoding rules (BER) with context-specific field tag octets listed
+in IEC 61850-9-2, Table 14.
+Unlike other APDU attributes, a sequence of sampled phasor data is encoded as a compact
+block without ASN.1 tag triplets. The dataset members are encoded in their basic forms
+using fixed-length basic data type encoding rules listed in IEC 61850-9-2 Table 15.
+The following picture shows an example of the multicast sampled values frame that carries a
+synchrophasor data stream over an Ethernet LAN.
+Figure 5-2 Captured synchrophasor multicast sampled values frame
+5.2.3 IEC 61850 SV Publisher
+The PM180 multicast SV publisher is responsible for publishing of the synchrophasor data
+over Ethernet. The SV publisher options and the sampled values dataset can be configured
+using the supplied PAS configuration software tool as described in the PM180 IEC 61850
+Reference Guide.
+5.3 Modbus Communications
+Modbus communications is used to configure PMU parameters and monitor synchrophasor
+data measurements using the PAS configuration software tool or client software application.
+The PM180 provides a dedicated synchrophasor data set listed in Table 5-2. For convenience
+of monitoring and verification, synchrophasor data is given in both polar format (magnitude
+and angle in arc-degree) and rectangular format (real and imaginary parts of a complex
+magnitude).
+The bitmapped PMU time quality and frame status attributes are detailed in Table 5-3 and
+Table 5-4.
+14
+Table 5-2 Modbus synchrophasor dataset
+Label Description
+FrmNo Frame number
+Tm Frame timestamp, UTC seconds since 1/1/1970
+Tmmcs Frame timestamp, fractional second
+TmQual Time quality, bitmap
+IDCode Data source/stream ID number
+Stat Frame status, bitmap
+FREQ Actual frequency or frequency deviation from nominal, Hz
+DFREQ Rate of change of frequency (ROCOF), Hz/s
+V1 mag V1 phasor magnitude
+V1 ang V1 phasor angle
+V2 mag V2 phasor magnitude
+V2 ang V2 phasor angle
+V3 mag V3 phasor magnitude
+V3 ang V3 phasor angle
+I1 mag I1 phasor magnitude
+I1 ang I1 phasor angle
+I2 mag I2 phasor magnitude
+I2 ang I2 phasor angle
+I3 mag I3 phasor magnitude
+I3 ang I3 phasor angle
+V1 Re V1 phasor, Real
+V1 Im V1 phasor, Imaginary
+V2 Re V2 phasor, Real
+V2 Im V2 phasor, Imaginary
+V3 Re V3 phasor, Real
+V3 Im V3 phasor, Imaginary
+I1 Re I1 phasor, Real
+I1 Im I1 phasor, Imaginary
+I2 Re I2 phasor, Real
+I2 Im I2 phasor, Imaginary
+I3 Re I3 phasor, Real
+I3 Im I3 phasor, Imaginary
+V1seq mag Positive sequence voltage phasor magnitude
+V1seq ang Positive sequence voltage phasor angle
+I1seq mag Positive sequence current phasor magnitude
+I1seq ang Positive sequence current phasor angle
+V1seq Re Positive sequence voltage phasor, Real
+V1seq Im Positive sequence voltage phasor, Imaginary
+I1seq Re Positive sequence current phasor, Real
+I1seq Im Positive sequence current phasor, Imaginary
+15
+Table 5-3 PMU time quality
+Bits Description
+0:3 0xF = clock failure, time not reliable
+0xB = time within 10 s
+0xA = time within 1 s
+0x9 = time within 100 ms
+0x8 = time within 10 ms
+0x7 = time within 1 ms
+0x6 = time within 100 s
+0x5 = time within 10 s
+0x4 = time within 1 s
+0x3 = time within 100 ns
+0x2 = time within 10 ns
+0x1 = time within 1 ns
+0x0 = locked to UTC traceable source
+4 Leap second pending
+5 Leap second occurred
+6 Leap second direction, 0 = add, 1=delete
+Table 5-4 PMU frame status
+Bits Description
+0:3 Trigger reason
+4:5 Unlocked time:
+0 = sync locked or unlocked time < 10 s (best quality)
+1 = unlocked time < 100 s
+2 = unlocked time <= 1000 s
+3 = unlocked time > 1000 s
+6:8 PMU time quality (see F39)
+9 1 = data modified by post processing, 0 = otherwise
+10 Configuration change, set to 1 for 1 min to advise configuration
+will change, and cleared to 0 when change effected
+11 1 = PMU trigger detected, 0 = no trigger
+12 Data sorting, 0 = by timestamp, 1 = by arrival
+13 0 = PMU in sync with a UTC traceable time source
+14-15 Data error:
+0 = good measurement data
+1 = PMU error (no information about data)
+2 = PMU in test mode or absent data tags inserted (do not use
+values)
+3 = PMU error (do not use values)
+See the PM180 Modbus Reference Guide for the location of the synchrophasor data registers.
+Refer to the PM180 Operation Manual for more information on configuring datasets for
+monitoring with the PAS configuration tool.
+16
+6 Measurement Specifications
+Table 6-1 Input ratings
+Inputs Parameter Value
+Voltage Rated voltage 100-120 V phase-to-phase/57.7-69.3 V phase-to-neutral
+Measurement range 1-480 V phase-to-neutral
+Current Rated current 1 A or 5 A (upon order)
+Measurement range 0.1-400 % (4x) rated current
+Table 6-2 Measured frequency range
+Performance
+class
+Nominal
+frequency
+Data reporting rate (Fs), frames/s Frequency range
+P 50 Hz 1, 2, 5, 10, 25, 50 50 +/-2 Hz
+60 Hz 1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60 60 +/-2 Hz
+M 50 Hz 1, 2, 5, 10 50 +/-2 Hz
+25, 50 50 +/-5 Hz
+60 Hz 1, 2, 3, 4, 5, 6, 10 60 +/-2 Hz
+12 60 +/-2.4 Hz
+15 60 +/-3 Hz
+20 60 +/-4 Hz
+30, 60 60 +/-5 Hz
+Table 6-3 P class accuracy, under steady-state conditions (80% to 120% rated voltage,
+10% to 200% rated current, at 23 C)
+Parameter Conditions Value
+Frequency Over frequency range < 0.0005 Hz
+Over temperature range 0-50 C 0.001 Hz
+TVE, voltage At nominal frequency 0.05%
+Over frequency range 0.1%
+Over temperature range 0-50 C 0.2%
+TVE, current At nominal frequency, > 40% rated current 0.05%
+Over frequency range 0.1%
+Over temperature range 0-50 C 0.2%
+Phase At nominal frequency 0.025 degree
+Over frequency range 0.05 degree
+Over temperature range 0-50 C 0.1 degree
+Table 6-4 M class accuracy, under steady-state conditions (10% to 120% rated voltage,
+10% to 200% rated current, at 23 C)
+Parameter Conditions Value
+Frequency At nominal frequency, > 40% rated voltage < 0.0005 Hz
+Over frequency range 0.001 Hz
+Over temperature range 0-50 C 0.001 Hz
+TVE, voltage At nominal frequency, > 60%/50Hz, > 40%/60Hz rated
+voltage
+0.05%
+Over frequency range 0.1%
+Over temperature range 0-50 C 0.2%
+TVE, current At nominal frequency, > 40% rated current 0.05%
+Over frequency range 0.1%
+Over temperature range 0-50 C 0.2%
+17
+Parameter Conditions Value
+Phase At nominal frequency 0.025 degree
+Over frequency range 0.05 degree
+Over temperature range 0-50 C 0.1 degree
+

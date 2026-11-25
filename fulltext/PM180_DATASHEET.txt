@@ -1,0 +1,758 @@
+CLASS A
+MULTI-PURPOSE ANALYZER
+The PM180 is a high performance power
+quality analyzer which can simultaneously
+host several applications.
+Versatile functionality is enabled by
+a unique modular design, allowing the
+hot-swap of a variety of add-on cards.
+Thus, the analyzer combines and
+substitutes multiple other devices,
+saving cost and space and
+mitigating complexity.
+HIGHLIGHTS
+ Accuracy:
+Class 0.2 / 0.2S per ANSI / IEC 62053-22
+ Communication
+ IEC 61850; IEC 60870-5-101/104;
+DNP3; Modbus
+ Interfaces: RS485; ETH
+ Optional ports: IRIG-B; 2nd ETH;
+Fiber Optic ETH (TXFX)
+ Fast Transient Sampling
+Transient Recorder: 1024 samples/cycle
+ Control
+I/O: Up to 48 digital and analog I/O
+APPLICATIONS
+ Class A (Ed. 3) power quality analyzer
+ IEC 61850 for the digital substation
+ Fault Recorder (In
+X 40)
+ Phasor Measurement Unit per IEEE
+C37.118.1, P-Class and M-Class
+ Disturbance Direction Detection
+ Bay Controller
+ Sequence of Events
+ Class 0.2S revenue grade check meter
+DATASHEET
+PM180
+ 2021-2024 SATEC Ltd. | satec@satec-global.com | www.satec-global.com | PM180 Datasheet | July 2024
+2
+Auxiliary PS
+Wide range of
+digital & analog I/Os
+Four galvanically isolated current
+channels up to 40 x In
+Standard communication:
+Ethernet, RS-485, USB & IRIG-B
+Four galvanically isolated
+voltage channels
+APPLICATIONS
+PM180 + RGM180 PM180 + RDM180
+CLASS A, ED. 3
+FAULT
+RECORDER PMU/WAMS
+SUBSTATION
+AUTOMATION
+INDUSTRIAL
+MONITORING
+SCADA
+READY
+RENEWABLE
+ENERGY
+3
+PM180
+Multi-Function Power
+& Energy Meter
+ Real-time cycle-by-cycle measurement of true
+RMS voltage, current, power, power factor,
+demand & energy
+ Exceeding Class 0.2S/0.2 accuracy for energy
+metering (kWh, per
+IEC 62053-22 / ANSII C12.20)
+ Advanced Time of Use (TOU) feature: 16
+Energy sources, including external digital
+pulses, up to 4 seasons, 4 daily profiles and
+8 Tariffs changes per day; flexible automatic
+10-year calendar; suitable for complex
+billing schemes
+ KYZ or KY output
+ LED indicator for calibration and testing (via
+optional display)
+ IRIG-B / SNTP / DI time synchronization
+ 256 MB memory for data-logging
+Power Quality
+ Power quality analysis in full compliance with
+IEC 61000-4-30 Class A, Edition 3 (2015)
+ Sags/Swells (dips / overvoltage), interruptions,
+frequency variations, voltage variations
+ Flicker (according to IEC 61000-4-15)
+ Voltage unbalance
+ Voltage and current individual harmonics
+(according to IEC 61000-4-7), interharmonics
+and directional power harmonics (load/source)
+up to the 63rd harmonic
+ Voltage and current THD coefficients
+ 3 decimal resolution for frequency readings
+ Vector diagram and symmetrical components
+ Programmable thresholds and hysteresis
+ Built-in statistics and reports per IEEE 1159,
+EN50160, GOST 13109 or GOST 32144
+(market dependent)
+ Redundant auxiliary power supply for recording
+major dips and interruptions
+ V-I angle, current TDD coefficients
+and K-Factors
+ Waveform and data recording; phasor display
+ Power quality event recorder
+ Event recorder for logging internal diagnostic
+events, control events and I/O operations
+ Selectable sampling rate up to 256 / 1024
+(fast transients >78/65s @ 50/60Hz )
+ Disturbance Direction Detection: indicating
+upstream or downstream direction of sags
+and swells
+IEC 61850
+ IEC 61850 implemented per Edition 2
+ Remote switch control and monitoring via
+IEC 61850 protocol
+ Inter-device GOOSE communications for
+remote interlocking
+ GOOSE Publisher Setup, GOOSE Subscriber
+Setup and Report Dead-bands
+ Configuration of IEC 61850: IED properties,
+datasets and reports
+FEATURES
+DIGITAL
+IN/OUT
+ACCURACY
+CLASS
+OPEN
+PROTOCOL
+MODBUS
+101/104
+DNP3
+CLASS A, ED. 3 IEC 61850 SUPPORTED
+MV-90
+xi
+CELLULAR
+CONNECTIVITY FIBER OPTIC
+4
+Bay Controller (BCU)
+ Monitoring and control capabilities for 2 circuit
+breakers and 14 circuit switches
+ One-pole and three-pole switch position
+monitoring, using two or six contacts
+ One control output for switch closing
+ Two synchronous control outputs for
+switch opening devices with one and two
+opening coils
+ Select-close control output for secure switch
+closing operations
+ Two select-open control outputs for secure
+switch opening operations
+ Configurable command pulse duration
+ Option for adaptive pulses controlled via
+setpoint control logic
+ Supervision of command execution & reporting
+on operation termination
+ Interlocking logic
+ Secure timed-out interlocking bypass logic
+ Indication of non-controllable breaker trips
+ Switch position substitution option
+ Counting of breaker and switch operations
+ Logging close / open operations and switch
+position changes
+ Local switch control via setpoint control logic
+ Configuration tools: PLC configurator based
+on IEC 61131-3 protocol, using Functional Block
+Diagram (FBD) or Ladder Diagram (LD)
+Digital Fault Recorder
+ Programmable fault threshold and hysteresis
+ Direct reading of fault currents of up to 200
+Amps (40 X In, from CT secondary)
+ Dual current inputs: from measurement CT and
+protection CT connection (optional)
+ Zero-sequence currents and voltages
+ Current and voltage unbalance
+ Under-voltage, neutral current
+ Ready-for-use fault reports--fault currents
+magnitude and duration, coincident volts
+magnitude, fault waveforms and RMS trace
+ Selectable pre-fault / post-fault
+recording length
+ Programmable post fault on any internal and/
+or external trigger condition
+ Disturbance capture recording
+ Distance to fault calculation
+ Waveforms from multiple locations
+ View faults and receive alerts via the
+Expertpower software platform:
+https://www.satec-global.com/ExpertPower
+Distance to Fault Calculation
+Compensation for CT / PT errors, resulting in
+average accuracy of 0.5% (depending on PT, CT
+and time synchronization accuracy)
+ Supported line configurations
+ Single line
+ Parallel lines
+ Partially parallel lines
+ A line with a branch
+ Required parameters
+ Line/s configuration
+ Line/s parameters (impedance, length, etc.)
+ Compensation parameters for CT & PT
+ Detected Faults
+ Three-phase short circuit
+ Two-phase short circuit
+ Two-phase short circuit to ground
+ Single-phase short circuit to ground
+ Single-phase open wire
+ Fault detection information
+ Fault classification (type and phase/s)
+ Distance to fault (km or miles)
+ Duration of fault
+5
+PM180
+Phasor Measurement Unit (PMU)
+ IEEE C37.118.1 M-Class and P-Class
+ IEEE C37.118.1 three-phase voltage and current
+phasor measurements synchronized to a
+common UTC time reference (e.g. GPS), using an
+IRIG-B timecode source or an IEEE 1588 PTPv2
+master clock source
+ IEEE C37.118.1 synchronous frequency and Rate
+of Change of Frequency (ROCOF) measurements
+ Expected steady-state total vector error (TVE):
+less than 0.5%
+ Streaming rate: from 1 to 50 or 60 frames/sec
+@ 50 or 60Hz, respectively
+ IEEE C37.118.2 commanded client-server UDP
+and TCP data transmission and spontaneous
+UDP data transmission over IP protocol
+ Optional IEEE C37.118.2 frame extensions with
+analog data (total active, reactive and apparent
+power and power factor) and digital status data
+(up to 32 inputs)
+ Streaming of phasor data over Ethernet using
+the IEC 61850-9-2 multicast sampled value (SV)
+service with IEEE C37.118.2 compliant mapping
+of synchrophasor data upon IEC 61850-9-2 and
+IEC 61850-90-5 guidelines
+Data Logging, Waveform Recording
+& PLC Programming
+ Programmable controller: up to 64 control
+setpoints, up to 8 conditions OR, AND,
+arithmetical functions logic, extensive
+triggers, programmable thresholds and
+delays, relay control, event-driven
+data recording
+ 8 fast waveform recorders: simultaneous
+8 channel AC, one DC: up to 48 digital inputs
+in a single plot
+ Waveform sampling rate: 32, 64, 128 or 256
+samples per cycle; up to 20 pre-fault cycles
+(2 cycles of 1024 samples per cycle or 4 cycles
+with 512 samples per cycle with
+Transient Module)
+ 3.5 min. of continuous waveform recording
+ 1ms resolution for digital inputs
+ 16 fast Data Recorders (16 parameters on
+each data log): From  cycle RMS to 2 hour
+RMS envelopes; up to 20 pre/post-fault cycles;
+programmable data logs on a periodic basis and
+on internal or external trigger
+ 32 digital internal counters
+ 16 programmable timers ( cycle to 24 hours)
+Wide Range Voltage Inputs
+ Three galvanically isolated AC voltage inputs.
+Impulse dielectric withstand: 6kV
+ Nominal voltage: 100-828V AC (L-L)
+Wide Range Current Inputs
+ 4 dual purpose current inputs (3 phase +
+Neutral current), calibrated to 1A
+or 5A nominal:
+ Class 0.2S revenue grade accuracy:
+up to 4  nominal current (4A and 20A,
+respectively; designed for measurement
+CTs' secondary current)
+ Basic Fault current reading:
+up to 10  nominal current (10A and 50A,
+respectively, designed for protection CTs'
+secondary current)
+ Fault Recorder Modules:
+ Extended Fault Current reading: up to
+40  nominal current (200A, designed for
+protection CTs' secondary current)
+Communication Interfaces
+ Built-in: RS-485 and Ethernet
+ Optional:
+ TXFX (fiber optic)
+ 2nd Ethernet port
+6
+Communication Protocols
+ Modbus RTU, DNP3
+IEC 60870-5-101/104
+ Optional: IEC 61850
+Real-Time Clock & Synchronization
+ Real-Time Clock with maximum 5 second drift
+per month @ 25C
+ 1ms time resolution per IRIG-B time code input
+or satellite clock for common time base
+ Periodic clock synchronization from an SNTP
+server, as SNTP client
+ Time sync from digital input with
+1ms accuracy
+Digital & Analog I/O Modules
+3 expansion slots for a wide range of plug-in
+modules, up to 48 DI / 24 DO / 12 AI / 12 AO or
+various combinations
+ DI16: 16 high-speed digital inputs
+(dry contact or 24/125/250V DC)
+ RLY8: 8
+ 8DIOR: 8 digital inputs (24/125/250V DC) and
+4 digital outputs (Electro Mechanical Relay or
+Solid State Relay)
+ 4AIO: four analog inputs and four analog
+outputs (internal power supply); selection of
+0-20mA, 4-20mA, 0-1mA or 1mA output for
+inputs/outputs;  cycle update time
+7
+PM180
+ATTENTION
+The device may house up
+to 3 additional modules
+of choice from those
+mentioned below.
+TECHNICAL SPECIFICATIONS
+Input Ratings
+VOLTAGE INPUTS
+MODEL WITH AUX. POWER SUPPLY
+Installation Category III
+Nominal voltage
+(L-N/L-L)
+57/100V AC
+277/480V AC
+400/690V AC
+Operating range Direct input / input via PT
+up to 828V AC
+Burden 480V L-N: 0.3VA
+277V L-N: 0.1VA
+120V L-N: 0.02VA
+Over-voltage withstand 1,000V AC continuous,
+2,500V AC @ 1 second
+Galvanic isolation 4kV AC @ 1 min. Impulse
+dielectic withstand 6kV
+Input impedance 1 M
+Wire size up to 10 AWG (up to 6mm)
+Terminal Pitch 7.5 mm
+CURRENT INPUTS
+STANDARD INPUTS FROM CT SECONDARY
+Current ratings  1A input
+ 5A input
+Guaranteed accuracy:
+ per IEC 62053-22
+ per ANSI
+up to 2 X In @ Class 0.2S
+up to 4 X In @ Class 0.2
+Continuous overload up to 10 X In
+CONNECTION VIA SPLIT CORE SENSORS TO CT
+SECONDARY (HACS CS1S)
+Current ratings  1A input
+ 5A input
+Continuous overload up to 20 X In
+Burden < 0.15 VA @ 5A
+< 0.02 VA @ 1A
+HACS SENSORS
+40mA inputs, designated for SATEC's HACS (100-3,000A,
+see HACS product page)
+FLEX CLAMPS
+3V AC inputs for 3rd party flex clamps
+Power Supply
+MAIN POWER SUPPLY
+Withstanding
+insulation
+4kV AC @ 1mn
+AD/DC POWER SUPPLY
+(STANDARD)
+L/+, N/- AND GND
+Rated input 50-290V AC (50/60 Hz)
+90-290V DC
+Max. power 10W (Burden:
+<20VA)
+Wire size up to 12 AWG (2.5mm2)
+Terminal pitch 7.5 mm, three pins
+AUXILIARY POWER SUPPLY (MODULE)
+Withstanding
+insulation
+4kV AC @ 1mn
+AC/DC option L/+, N/- and GND
+Rated input 50-290V AC (50/60 Hz)
+40-290V DC
+Low DC/DC option
+(12/24)
+(+), (-) and GND
+Rated input 9.6-35V DC, Maximum Power
+20W (Burden: <40VA)
+Wire size Up to 12 AWG (2.5 mm2)
+Terminal pitch 7.5 mm, three pins
+Irig-B Time Sync
+PORT ON CPU MODULE
+Optically isolated IRIG-B port for GPS time
+synchronization
+Recommended cable 51 low loss - RG58A/U
+(Belden 8219 or equivalent)
+Recommended GPS
+time code generator
+Masterclock GPS-200A
+Built In Communication
+SERIAL COMMUNICATION (RS-485)
+Max. baud rate 115.2 kb/s
+Optical isolation 4000V AC (L-G) @ 1 min.
+Max. cable length 1000 m
+8
+Protocols  MODBUS RTU/ASCII
+ DNP3
+ IEC 60870 -5-101
+2nd com (RS485) available with GSM / fiber optic
+Connector Type removable, captured-wire, 4
+terminals
+Wire size up to 12 AWG (up to 2.5 mm2)
+ETHERNET PORT
+Transformer-isolated 10/100BaseT Ethernet port
+Withstanding
+insulation
+4kV AC @ 1 mn
+Supported protocols Modbus/TCP (Port 502),
+IEC 60870-5-104 (port 2404),
+IEC 61850, DNP3/TCP (Port
+20000)
+Num. of simultaneous
+connections
+5 (2 Modbus/TCP + 2 DNP3/TCP
++ IEC 61850)
+Connector type RJ45 modular
+USB PORT
+Isolated USB 1.1 port
+Withstanding
+insulation:
+4kV AC @ 1 mn
+Connector type A male, standard USB cable,
+max. Length 2 meters
+Supported protocols MODBUS RTU
+FIBER OPTIC ETH PORT (MODULE)
+Transformer-isolated 10/100BaseT Ethernet port
+Withstanding
+insulation
+4kV AC @ 1 mn
+Supported protocols Modbus/TCP (Port 502),
+IEC 60870-5-104 (port 2404),
+DNP3/TCP (Port 20000), IEC
+61850
+Num. of simultaneous
+connections
+5 (2 Modbus/TCP + 2 DNP3/TCP
++ IEC 61850)
+Connector type RJ45 modular
+INFRA RED COMMUNICATION
+Optional optical IEC/ANSI head, available on-board RGM
+remote display
+Baud rate Up to 15.200 kb/s
+Protocols MODBUS RTU/ASCII, DNP3.0
+SECOND SERIAL COMMUNICATION (RS-485)
+Available on IRIG-B module.
+specs: identical to built-in serial port (above).
+Optional I/O Modules
+8 RELAYS
+Electromechanical; SPST Form A
+Contact ratings 8A @ 250V AC
+5A @ 30V DC
+0.25A @ 250V DC
+5A @ 24V DC
+Galvanic isolation 4kV AC @ 1 min
+Operate time 10ms max
+release time 5ms max
+Update time  cycle
+Wire size 12 AWG (up to 2.5 mm)
+Terminal pitch 3.81mm
+16 DIGITAL INPUTS
+Optically isolated
+Sensitivity open @ input resistance >16k,
+closed @ input resistance <10k
+Galvanic isolation 4kV rms @1 min
+Scan time 1 ms @ 60Hz, 1.25 ms @ 50Hz
+Connector type Removable, 5 pins
+Wire size 12AWG (up to 2.5 mm)
+Terminal pitch 3.81 mm
+WET CONTACT SENSING OPTIONS
+External power supply 24/48/125/250V DC
+DRY CONTACT SENSING OPTION
+Internal power supply 24V DC
+COMBO: 8 DIGITAL INPUTS + 4 RELAY OUTPUTS
+Galvanic isolation 4kV rms @1 min
+Wire size 12AWG (up to 2.5 mm)
+Terminal pitch 3.81 mm
+DIGITAL INPUTS
+Sensitivity open @ input resistance >16k,
+closed @ input resistance <10k
+Scan time 1 ms @ 60Hz
+1.25 ms @ 50Hz
+WET CONTACT SENSING OPTIONS
+External power
+supply
+24/48/125/250V DC
+DRY CONTACT SENSING OPTION
+Internal power supply 24V DC
+RELAY OPTIONS
+EMR (Electro Mechanic Relay) @ 250V/5A
+SSR (Solid State Relay) @ 1500V/20mA
+operate time 10ms max
+release time 5ms max
+9
+PM180
+4 ANALOG INPUTS + 4 ANALOG OUTPUTS
+Optically isolated
+Module rating
+(upon order)
+Identical for inputs/
+outputs
+ 1 mA, max. load 10 k
+(100% overload)
+ 0-20 mA, max. load 510
+ 4-20 mA, max. load 510
+ 0-1 mA, max. load 10 k
+(100% overload)
+Power supply Internal
+Accuracy 0.5% FS
+Update time 2 cycles
+Connector type Removable, 5 pins
+Wire size 12 AWG (up to 2.5 mm)
+Terminal pitch 3.81mm
+Additional Modules
+FAST TRANSIENT RECORDER
+Measuring range Up to 2kV AC
+High impedance input 10 M, withstanding
+insulation: 4kV AC @ 1mn
+Wire size Up to 10 AWG (up to 6 mm2)
+Terminal pitch 7.5 mm
+DIGITAL FAULT RECORDER
+VIA SPLIT CORE SENSORS (HACS CS2S) CLAMPED ON TO
+PROTECTION CT SECONDARY
+Fault currents
+measured
+Up to 200A RMS @ In = 5A
+(40 x In)
+Accuracy Class 1
+Burden < 0.15 VA
+Wire size 10 AWG (2.5 to 6 mm2)
+Terminal pitch 9.5mm
+Overload Continuous: 200A RMS
+1 second: 1000A
+IRIG B
+Optically isolated IRIG-B port for GPS time
+synchronization
+Recommended cable 51 low loss - RG58A/U (Belden
+8219 or equivalent), BNC
+connector
+Recommended GPS
+time code generator
+Masterclock GPS-200A
+Second RS-422/485 COM port included
+PHASOR MEASUREMENT UNIT
+Per IEEE C37.118.1-4
+IMPORTANT NOTE: Should be assembled on unit with
+min. Version No. N3 and min. firmware version No.
+v31.x.38.
+Must be housed next to current module only.
+Other Characteristics
+REAL-TIME CLOCK & SYNCHRONIZATION
+Real-TimecClock with maximum 5 seconds drift
+per month @ 25C
+1ms time resolution per IRIG-B time code
+CONSTRUCTION
+Mounting DIN Rail mount / panel mount /
+19" rack installation.
+Complies with EN50022
+Dimensions [WHD] 220  152  210mm
+Weight 2.5kg (5.51 Lb)
+ENVIRONMENTAL CONDITIONS
+Operational -25C to 60C / -13F to 140F
+Storage -30C to 85C / -22F to 185F
+10
+STANDARDS COMPLIANCE
+ Directive complied with EMC: 89/336/EEC
+as amended by 92/31/EEC and 93/68/EEC
+ Harmonized standards to which conformity
+is declared: EN55011:1991; EN50082 1:1992;
+EN61010-1:1993; A2/1995
+ ANSI C37.90.1 Surge Withstand Capability (SWC)
+ EN50081-2 Generic Emission Standard:
+Industrial Environment
+ EN50082-2 Generic Immunity Standard:
+Industrial Environment
+ EN55022: Class A
+ IEC 61000-6-2
+ IEC 61000-6-4
+ IEC 60255-5
+ IEC 60255-22
+Accuracy
+ Active Energy: Class 0.2S per IEC/AS 62053-22
+ Reactive Energy: Class 0.5S (under conditions
+as per IEC 62053-24:2014 @ 0  |PF|  0.9)
+Power Quality
+ EN50160: Power Quality in European Electricity
+Supply Networks
+ IEEE 1159: Power Quality Recorder in US
+ GOST 13109: Electric energy, Electromagnetic
+compatibility of technical equipment, Power
+quality limits in public electrical systems
+ GOST 54149: 2010: Electric energy,
+Electromagnetic compatibility of
+technical equipment, Power quality limits in
+public electrical systems
+ IEC 61000-4-7, Harmonics and
+inter-harmonics measurement
+ IEC 61000-4-15, Flicker measurement
+ IEC 61000-4-30 class A, Power quality
+measurement methods
+ IEC 62054-21: Real time clock backup, RTC
+accuracy  2ppm @ 23C
+EMC Immunity
+ IEC 61000-4-2, IEC 60255-22-2:
+Electrostatic discharge, 15kV/8kV  air/contact
+ IEC 61000-4-3, IEC 60255-22-3:
+Radiated Immunity, 10V/m and 30V/m @ 80
+MHz  1000 MHz
+ IEC 61000-4-4, IEC 60255-22-4:
+Fast Transients burst, 4KV on current and
+voltage circuits and 2 KV for auxiliary circuits
+ IEC 61000-4-5, IEC 60255-22-5: Surge 6KV
+on current, voltage circuits and power supply
+ IEEE C62.41.2-2002: high voltage line surges
+ 100 kHz ring wave  6kV @ 0.5kA
+ 1.2/50 microsecond  8/20 microsecond
+Combination Wave  6kV @ 3kA
+ IEC 61000-4-6, IEC 62052-11: Conducted Radio-
+frequency, 10V @ 0.15 MHz  80MHz
+ IEC 61000-4-8: Magnetic Field
+ IEC 61000-4-12, IEC 62052-11, IEEE C37.90.1:
+2002: Oscillatory waves, CMM 2.5KV & DFM
+1KV @ 100KHz and 1MHz
+Emission (Radiated / Conducted)
+ EN55022, IEC 60255-22: Class A
+Construction
+Safety
+ Meets IEC/UL 61010-1 and UL94 V-0
+11
+PM180
+Insulation
+ IEC 62052-11:
+Insulation impulse 6KV/500 @ 1.2/50 s
+ IEC 62052-11, IEC 61010-1: AC voltage tests
+related to ground, 4 kV AC @ 1mn
+Atmospheric Environment
+ Operational ambient temperature range:
+30C to +70C
+ Long-term damp heat withstand according to
+IEC 68-2-3 <95%, +40C
+ Transport and storage temperature range:
+40C to +85C
+Vibration
+ IEC 60255-21-1:
+Vibration Response, Table I, Class-2
+ IEC 60255-21-1:
+Vibration Endurance, Table II, Class-1
+Mechanical Shock
+ IEC 60255-21-2: Shock, Table II, Class-1
+ IEC 60255-21-2: Bump, Table III, Class-1
+Seismic Vibration
+ IEC 60255-21-3: Bump, Table III, Class-1
+Panel Display protection
+ IEC 60529: IP54 (NEMA type 13)
+Instrument protection
+ IEC 60529: IP30 (NEMA type 13)
+12
+Options
+DISPLAY
+Transducer version - no display. Includes DIN rail mounting kit X
+Graphic color display - 5.7" touchscreen G
+Graphic color display - 5.7" touchscreen with DIN rail
+mounting kit and 3m/10ft remote cable
+G-DIN
+3 line ultra bright LED display D
+3 line ultra bright LED display with DIN rail mounting kit and
+3m/10ft remote cable
+D-DIN
+VOLTAGE INPUTS
+690V AC Nominal Voltage Input -
+120V AC Nominal Voltage Input U
+CURRENT INPUTS
+50A, calibrated to 5A (Class 0.2S Accuracy) 5
+10A, calibrated to 1A (Class 0.2S Accuracy) 1
+100A Split Core HACS (set of 4), Calibrated to 5A
+(Class 1 Accuracy)
+CS1S
+100A Split Core Handheld Clamp HACS (set of 4), 13mm
+opening, Calibrated to 5A (Class 1 Accuracy)
+CS1H
+Use of any High Accuracy Current Sensors (HACS), without
+overcurrent. Requires ordering of 4 HACS
+HACS
+Use of 3V AC current clamps (should be purchased locally) FLEX
+FREQUENCY
+50 Hz 50Hz
+60 Hz 60Hz
+ACCURACY AND POWER QUALITY STANDARD
+ANSI C12.20 - USA Standard IEEE1159 Full Power Quality A
+IEC 62053-22 - European Standard EN50160 Full Power Quality E
+GOST13109 / GOST54149 - Russian Standard G
+POWER SUPPLY - MAIN
+85-265V AC and 88-290V DC (Default) ACDC
+COMMUNICATION STANDARD
+Default: Modbus RTU, Modbus TCP, DNP 3.0, DNP/TCP, IEC
+60870-5-101 and -104
+-
+Default communication plus IEC 61850 (SISCO) 850
+ORDER STRING
+PM180
+Optional Plug-In Modules
+Maximum 3 additional modules per device
+PHASOR MEASURMENT UNIT (max. 1 module per unit)
+PMU with Transient Recorder including PTP (IEEE 1588) PMU
+TRANSIENT RECORDER MODULE (max. 1 module per unit)
+4 voltage channels, up to 2kV and 1024 samples/cycle TRM-180
+FAULT RECORDER MODULE (max. 1 module per unit)
+4 current channels, up to 200A, via 4 HACS CTs (included) as follows:
+4  solid core CTs ( 23 aperture) DFR-CS2-180
+4  split core CTs ( 23 aperture) DFR-CS2S-180
+4  split core CTs ( 33 aperture) DFR-CS2SL-180
+DIGITAL INPUTS (max. 48 Digital Inputs per unit)
+DI 16 Dry Contacts DI16-DRC-180
+DI 16 24V DC DI16-24V-180
+DI 16 125V DC DI16-125V-180
+DI 16 250V DC DI16-250V-180
+RELAY OUTPUTS (max. 24 Relay Outputs per unit)
+8 Relays RLY8-180
+8DI/4RO EMR DRC 8DIOR-DRC
+8DI/4RO SSR DRC 8DIOS-DRC
+8DI/4RO EMR 24V 8DIOR-24
+8DI/4RO SSR 24V 8DIOS-24
+8DI/4RO EMR 125V 8DIOR-125
+8DI/4RO SSR 125V 8DIOS-125
+8DI/4RO EMR 250V 8DIOR-250
+8DI/4RO SSR 250V 8DIOS-250
+COMMUNICATION
+BNC IRIG-B and 2nd RS-422/485 port IRIG-180
+Fiber Optic Ethernet (TXFX), reduntant Ethernet and 2nd RS-422/485 port TXFX-180
+4 ANALOG INPUT / 4 ANALOG OUTPUT MODULE (max. 12AI/12AO per unit)
++/- 1mA (0+/-1) 4AIO1-180
+0-20 mA (0-10-20) 4AIO2-180
+0-1 mA (0-0.5-1) 4AIO3-180
+4-20 mA (4-12-20) 4AIO4-180
+4 ANALOG INPUT (max. 12AI per unit)
++/- 10V 4AIV-180
+AUXILIARY POWER SUPPLY (max. 1 modules per unit)
+AUX. P.S. 85-265V AC and 40-300V DC BACDC-180
+AUX. P.S. 9.5-36 V DC B21DC-180
+ 2021-2024 SATEC Ltd. | satec@satec-global.com | www.satec-global.com | PM180 Datasheet | July 2024
+

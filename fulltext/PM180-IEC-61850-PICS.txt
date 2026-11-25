@@ -1,0 +1,2913 @@
+expertmeterTM
+HighPerformanceAnalyzer
+PM180
+IEC 61850 Conformance Statement
+(PICS, PIXIT, MICS, TICS)
+BG0632 Rev. A3
+2
+Every effort has been made to ensure that the material herein is complete and accurate. However,
+the manufacturer is not responsible for any mistakes in printing or faulty instructions contained in
+this book. Notification of any errors or misprints will be received with appreciation.
+For further information regarding a particular installation, operation or maintenance of equipment,
+contact the manufacturer or your local representative or distributor.
+REVISION HISTORY
+A1 Oct 2020 Ed1/Ed2 release
+A2 Nov 2023 Revised MICS
+A3 May 2024 Added one-cycle measurements MET1/ocvMMXU1 logical node.
+3
+Table of Contents
+1 General............................................................................................................................. 4
+2 PICS - Protocol Implementation Conformance Statement................................................... 5
+2.1 General..................................................................................................................................5
+2.2 ACSI basic conformance statement ......................................................................................5
+2.3 ACSI models conformance statement ..................................................................................5
+2.4 ACSI service conformance statement...................................................................................7
+3 PIXIT - Protocol Implementation Extra Information for Testing........................................... 10
+3.1 PIXIT for Documentation.......................................................................................................10
+3.2 PIXIT for Association model ..................................................................................................10
+3.3 PIXIT for Server model ..........................................................................................................11
+3.4 PIXIT for Data set model .......................................................................................................12
+3.5 PIXIT for Substitution model.................................................................................................12
+3.6 PIXIT for Reporting model.....................................................................................................12
+3.7 PIXIT for GOOSE publish model ............................................................................................13
+3.8 PIXIT for GOOSE subscribe model.........................................................................................13
+3.9 PIXIT for GOOSE performance ..............................................................................................14
+3.10 PIXIT for Sampled values publish model...............................................................................15
+3.11 PIXIT for Control model.........................................................................................................15
+3.12 PIXIT for Time and time synchronization model...................................................................17
+3.13 PIXIT for File transfer model .................................................................................................18
+4 MICS - Model Implementation Conformance Statement..................................................... 19
+4.1 General..................................................................................................................................19
+4.2 Logical Nodes List..................................................................................................................19
+4.3 Logical Nodes Extensions......................................................................................................22
+4.3.1 Standardized Logical Nodes............................................................................................22
+4.3.2 New Logical Nodes .........................................................................................................30
+4.3.3 Extended Logical Nodes..................................................................................................30
+4.4 Enum Types Extensions.........................................................................................................40
+4.4.1 New Enum Types............................................................................................................40
+4.4.2 Extended Enum Types ....................................................................................................40
+4.5 Common Data Classes...........................................................................................................40
+4.6 Constructed Attribute Classes...............................................................................................46
+5 TICS - TISSUES Implementation Conformance Statement.................................................... 48
+4
+1 General
+This document describes the implementation of the IEC 61850 server with the IEC 61850-8-1 and
+IEC 61850-9-2 interfaces in the PM180 device with firmware version 31.14.XX, 31.15.XX, 31.17.XX,
+or 31.18.XX for IEC 61850 Ed1, and version 31.24.XX, 31.25.XX, 31.27.XX, or 31.28.XX for IEC 61850
+Ed2 release (XX indicates the firmware build revision, which does not affect legally relevant parts).
+The document contains the conformance statements that give the summary of the device data
+object model, protocol implementation and communication capabilities of the PM180 IEC 61850
+server.
+See the PM180 IEC 61850 Reference Guide for information on configuring the IEC 61850 server in
+the device. See the PM180 Bay Control Unit application note for information on configuring and
+operating the bay controller.
+For detailed information on operating the PM180 and communication settings, refer to the PM180
+Operation Manual.
+The device capabilities and data model are described in the template ICD configuration file
+provided with your device (PM180_2003_RevXX.icd for Ed1 or PM180_2007B_RevXX.icd for Ed2).
+5
+2 PICS - Protocol Implementation Conformance Statement
+2.1 General
+The following ACSI conformance statements are used to provide an overview and details about the
+PM180 device:
+-- ACSI basic conformance statement,
+-- ACSI models conformance statement,
+-- ACSI service conformance statement
+The statements specify the communication features mapped to IEC 61850-8-1 and IEC 61850-9-2.
+2.2 ACSI basic conformance statement
+The basic conformance statement is defined in Table A.1.
+Table A.1  Basic conformance statement
+Services Client/
+Subscriber
+Server/
+Publisher
+Value/
+Comments
+Client-Server roles
+B11 Server side (of TWO-PARTY-APPLICATION-
+ASSOCIATION)
+N/A Yes
+B12 Client side of (TWO-PARTY-APPLICATION-
+ASSOCIATION)
+N/A
+SCSMs supported
+B21 SCSM:IEC 61850-8-1 used Yes
+B22 SCSM:IEC 61850-9-1 used N/A N/A Deprecated in Ed2
+B23 SCSM:IEC 61850-9-2 used Y
+B24 SCSM:other
+Generic substation event model (GSE)
+B31 Publisher side N/A Yes
+B32 Subscriber side Yes N/A
+Transmission of sampled value model (SVC)
+B41 Publisher side N/A Yes
+B42 Subscriber side N/A
+N/A = not applicable
+Yes = supported
+No or empty = not supported
+2.3 ACSI models conformance statement
+The ACSI models conformance statement is defined in Table A.2.
+Table A.2  ACSI models conformance statement
+Services Client/
+Subscriber
+Server/
+Publisher
+Value/
+Comments
+If Server side (B11) and/or Client side (B12) supported
+M1 Logical device Yes
+M2 Logical node Yes
+M3 Data Yes
+M4 Data set Yes
+M5 Substitution Yes
+M6 Setting group control
+6
+Services Client/
+Subscriber
+Server/
+Publisher
+Value/
+Comments
+Reporting
+M7 Buffered report control Yes
+M7-1 sequence-number Yes
+M7-2 report-time-stamp Yes
+M7-3 reason-for-inclusion Yes
+M7-4 data-set-name Yes
+M7-5 data-reference Yes
+M7-6 buffer-overflow Yes
+M7-7 entryID Yes
+M7-8 BufTm Yes
+M7-9 IntgPd Yes
+M7-10 GI Yes
+M7-11 conf-revision Yes
+M8 Unbuffered report control Yes
+M8-1 sequence-number Yes
+M8-2 report-time-stamp Yes
+M8-3 reason-for-inclusion Yes
+M8-4 data-set-name Yes
+M8-5 data-reference Yes
+M8-6 BufTm Yes
+M8-7 IntgPd Yes
+M8-8 GI Yes
+M8-9 conf-revision Yes
+Logging
+M9 Log control
+M9-1 IntgPd
+M10 Log
+M11 Control Yes
+M17 File Transfer Yes
+M18 Application association Yes
+M19 GOOSE Control Block Yes
+M20 Sampled Value Control Block Yes
+If GSE (B31/32) is supported
+M12 GOOSE Yes Yes
+M13 GSSE Deprecated in Ed2
+If SVC (B41/42) is supported
+M14 Multicast SVC Yes
+M15 Unicast SVC
+For all IEDs
+M16 Time Yes Time source with
+required accuracy shall
+be available.
+Only Time Master is
+SNTP (Mode 4 response)
+time server.
+All other Client/Server
+devices require SNTP
+(Mode 3 request) clients
+Yes = service is supported
+No or empty = service is not supported
+7
+2.4 ACSI service conformance statement
+The ACSI service conformance statement is defined in Table A.4 (depending on the statements in
+Table A.1 and in Table A.3).
+Table A.4  ACSI service conformance statement
+Ed. Services AA:
+TP/MC
+Client
+(C)
+Server
+(S)
+Comments
+Server: if B11=Y or B12=Y
+S1 1,2 GetServerDirectory (LOGICAL-
+DEVICE)
+TP Yes
+Application association: if B11=Y or B12=Y
+S2 1,2 Associate Yes
+S3 1,2 Abort Yes
+S4 1,2 Release Yes
+Logical device: if M1=Y
+S5 1,2 GetLogicalDeviceDirectory TP Yes
+Logical node: if M2=Y
+S6 1,2 GetLogicalNodeDirectory TP Yes
+S7 1,2 GetAllDataValues TP Yes
+Data: if M3=Y
+S8 1,2 GetDataValues TP Yes
+S9 1,2 SetDataValues TP Yes
+S10 1,2 GetDataDirectory TP Yes
+S11 1,2 GetDataDefinition TP Yes
+Data set: if M4=Y
+S12 1,2 GetDataSetValues TP Yes
+S13 1,2 SetDataSetValues TP
+S14 1,2 CreateDataSet TP Yes
+S15 1,2 DeleteDataSet TP Yes
+S16 1,2 GetDataSetDirectory TP Yes
+Substitution: if M5=Y
+S17 1,2 SetDataValues TP Yes
+Setting group control: if M6=Y
+S18 1,2 SelectActiveSG TP
+S19 1,2 SelectEditSG TP
+S20 1,2 SetEditSGValues TP
+S21 1,2 ConfirmEditSGValues TP
+S22 1,2 GetEditSGValues TP
+S23 1,2 GetSGCBValues TP
+Reporting: If M7=Y or M8=Y
+Buffered report control block (BRCB); If M7=Y
+S24 1,2 Report TP Yes
+S24-1 1,2 data-change (dchg) Yes
+S24-2 1,2 quality-change (qchg) Yes
+S24-3 1,2 data-update (dupd) Yes
+S25 1,2 GetBRCBValues TP Yes
+S26 1,2 SetBRCBValues TP Yes
+Unbuffered report control block (URCB) If M8=Y
+S27 1,2 Report TP Yes
+S27-1 1,2 data-change (dchg) Yes
+S27-2 1,2 quality-change (qchg) Yes
+S27-3 1,2 data-update (dupd) Yes
+S28 1,2 GetURCBValues TP Yes
+8
+Ed. Services AA:
+TP/MC
+Client
+(C)
+Server
+(S)
+Comments
+S29 1,2 SetURCBValues TP Yes
+Logging: If M9=Y or M10=Y
+Log control block; If M9=Y
+S30 1,2 GetLCBValues TP
+S31 1,2 SetLCBValues TP
+Log; If M10=Y
+S32 1,2 QueryLogByTime TP
+S33 1,2 QueryLogAfter TP
+S34 1,2 GetLogStatusValues TP
+Generic substation event model (GSE): If M19=Y
+GOOSE
+S35 1,2 SendGOOSEMessage MC Yes Fixed-length encoding is not
+supported
+GOOSE-CONTROL-BLOCK
+S36 1,2 GetGoReference TP
+S37 1,2 GetGOOSEElementNumber TP
+S38 1,2 GetGoCBValues TP Yes
+S39 1,2 SetGoCBValues TP Yes
+GSSE
+S40 1 SendGSSEMessage MC Deprecated in Edition 2
+GSSE-CONTROL-BLOCK
+S41 1 GetReference TP Deprecated in Edition 2
+S42 1 GetGSSEElementNumber TP Deprecated in Edition 2
+S43 1 GetGsCBValues TP Deprecated in Edition 2
+S44 1 SetGsCBValues TP Deprecated in Edition 2
+Transmission of sampled value model (SVC): If M20=Y
+Multicast SV
+S45 1,2 SendMSVMessage MC Yes
+Multicast Sampled Value Control Block
+S46 1,2 GetMSVCBValues TP Yes
+S47 1,2 SetMSVCBValues TP Yes
+Unicast SV
+S48 1,2 SendUSVMessage TP
+Unicast Sampled Value Control Block
+S49 1,2 GetUSVCBValues TP
+S50 1,2 SetUSVCBValues TP
+Control: If M11=Y
+S51 1,2 Select TP Yes
+S52 1,2 SelectWithValue TP
+S53 1,2 Cancel TP Yes
+S54 1,2 Operate TP Yes
+S55 1,2 CommandTermination TP Yes
+S56 1,2 TimeActivatedOperate TP
+File transfer: If M17=Y
+S57 1,2 GetFile TP Yes
+S58 1,2 SetFile TP
+S59 1,2 DeleteFile TP
+S60 1,2 GetFileAttributeValues TP Yes
+S61 1,2 GetServerDirectory
+(FILE-SYSTEM)
+TP Yes
+Time
+T1 1,2 Time resolution of internal clock 20 Nearest negative power of 2-n in
+9
+Ed. Services AA:
+TP/MC
+Client
+(C)
+Server
+(S)
+Comments
+seconds (number 0 .. 24)
+T2 1,2 Time accuracy of internal clock T1 TL (ms) (low accuracy), T3 < 7
+(only Ed2)
+T0 (ms) (<= 10 ms), 7 <= T3 < 10
+T1 (s) (<= 1 ms), 10<= T3 < 13
+T2 (s) (<= 100 S), 13 <= T3 < 15
+T3 (s) (<= 25 S), 15<= T3 < 18
+T4 (s) (<= 4 S), 18<= T3 <20
+T5 (s) (<= 1 S), T3>= 20
+T3 1,2 Supported TimeStamp resolution - 20 Nearest value of 2-n in seconds
+(number 0..24)
+N/A = not applicable
+Yes = supported
+No or empty = not supported
+AA  APPLICATION-ASSOCIATION; TP  Two-party; MC  Multicast
+10
+3 PIXIT - Protocol Implementation Extra Information for Testing
+This document specifies the protocol implementation extra information for testing (PIXIT) of the
+IEC 61850 interface in the PM180 device.
+Together with the PICS and the MICS the PIXIT forms the basis for a conformance test according to
+IEC 61850-10. The PIXIT entries contain information, which is not available in the PICS, MICS, TICS
+documents or SCL file.
+Each table specifies the PIXIT for applicable ACSI service model as structured in IEC 61850-10. The
+"Ed" column indicates if the entry is applicable for IEC 61850 Edition 1 and/or Edition 2. A hyphen
+("-") in the Ed column indicates the PIXIT entry is not applicable for any version.
+3.1 PIXIT for Documentation
+ID Ed Description Value/Clarification
+Do1 2 How to expose required firmware versions not
+present in the data model
+3.2 PIXIT for Association model
+ID Ed Description Value/Clarification
+As1 1 Maximum number of clients that can set-up an
+association simultaneously
+4 (RFC 1006 ISO Transport on top of
+TCP)
+As2 1,2 TCP_KEEPALIVE value. The recommended range is
+1..20 s
+Keepalive time = 1-60 s, configurable.
+Keepalive probe interval = 2 s,
+5 probes, fixed
+As3 1,2 Lost connection detection time TCP_KEEPALIVE + 5 x probe interval
+time
+As4 - Authentication is not supported yet
+As5 1,2 What association parameters are necessary for
+successful association:
+Called value:
+Calling values:
+Y Transport selector
+Y Session selector
+Y Presentation selector
+N AP Title
+N AE Qualifier
+N Transport selector
+N Session selector
+N Presentation selector
+N AP Title
+N AE Qualifier
+As6 1,2 If association parameters are necessary for
+association, describe the correct
+Called values:
+Calling parameters:
+Transport selector 00000001
+Session selector 0001
+Presentation selector 0001
+AP Title any
+AE Qualifier any
+Any
+As7 1,2 What is the maximum and minimum MMS PDU size Max MMS PDU size 8192 (including
+11
+ID Ed Description Value/Clarification
+22 bytes of ISO 8073, ISO 8327-1 and
+ISO 8823 TPDU headers)
+As8 1,2 What is the maximum startup time after a power
+supply interrupt
+15 seconds
+As9 1,2 Does this device function only as test equipment? N
+3.3 PIXIT for Server model
+ID Ed Description Value/Clarification
+Sr1 1,2 Which analogue value (MX) quality bits are supported
+(can be set by server)
+Validity:
+Y Good,
+Y Invalid,
+N Reserved,
+N Questionable
+DetailQuality:
+N Overflow
+Y OutofRange
+Y BadReference
+N Oscillatory
+Y Failure
+N OldData
+N Inconsistent
+N Inaccurate
+Miscellaneous:
+Source: Y Process, N Substituted
+N Test
+N OperatorBlocked
+Sr2 1,2 Which status value (ST) quality bits are supported
+(can be set by server)
+Validity:
+Y Good,
+Y Invalid,
+N Reserved,
+Y Questionable
+DetailQuality:
+N BadReference
+N Oscillatory
+N Failure
+Y OldData
+N Inconsistent
+N Inaccurate
+Miscellaneous:
+Source: Y Process, Y Substituted
+N Test
+N OperatorBlocked
+Sr3 - What is the maximum number of data object
+references in one GetDataValues request
+Deprecated
+Sr4 - What is the maximum number of data object
+references in one SetDataValues request
+Deprecated
+Sr5 1 Which Mode values are supported Y On
+N On/Blocked
+N Test
+N Test/Blocked
+N Off
+12
+3.4 PIXIT for Data set model
+ID Ed Description Value/Clarification
+Ds1 1 What is the maximum number of data elements in
+one data set (compare ICD setting)
+64
+Ds2 1 How many persistent data sets can be created by one
+or more clients
+16
+Ds3 1 How many non-persistent data sets can be created by
+one or more clients
+N/A - non-persistent datasets are not
+supported
+3.5 PIXIT for Substitution model
+ID Ed Description Value/Clarification
+Sb1 1 Are substituted values stored in volatile memory Y
+3.6 PIXIT for Reporting model
+ID Ed Description Value/Clarification
+Rp1 1 The supported trigger conditions are (compare PICS) Y integrity
+Y data change
+Y quality change
+Y data update (can be set but there is
+no process data to report for this
+condition)
+Y general interrogation
+Rp2 1 The supported optional fields are Y sequence-number
+Y report-time-stamp
+Y reason-for-inclusion
+Y data-set-name
+Y data-reference
+Y buffer-overflow (buffered reports)
+Y entryID (buffered reports)
+Y conf-rev
+Y segmentation
+Rp3 1,2 Can the server send segmented reports (when not
+supported the device shall refuse an association
+request with a smaller than minimum PDU size)
+Y (in case the report exceeds the
+negotiated PDU size)
+Rp4 1,2 Mechanism on second internal data change
+notification of the same analogue data value within
+buffer period (Compare IEC 61850-7-2 14.2.2.9)
+Send report immediately
+Rp5 1 Multi client URCB approach (Compare IEC 61850-7-2
+14.2.1)
+Each URCB is visible to all clients
+Rp6 - What is the format of EntryID First 2 Bytes: Integer
+Last 6 Bytes: BTime6 time stamp
+Deprecated
+Rp7 1,2 What is the buffer size for each BRCB or how many
+reports can be buffered
+64 KBytes per BRCB.
+Rp8 - Pre-configured RCB attributes that cannot be
+changed online when RptEna = FALSE (see also the
+ICD report settings)
+All attributes can be changed online
+when RptEna = FALSE
+Deprecated
+Rp9 1 May the reported data set contain:
+- structured data objects
+- data attributes
+Y
+Y
+Rp10 1,2 What is the scan cycle for binary events? Is this fixed,
+configurable
+10/8 ms @50/60 Hz
+Fixed
+13
+ID Ed Description Value/Clarification
+Rp11 1 Does the device support to pre-assign a RCB to a
+specific client in SCL
+N
+Rp12 2 After restart of the server is the value of ConfRev
+restored from the original configuration or retained
+prior to restart
+Retained prior to restart
+Rp13 1,2 Does the server accept any client to configure/enable
+a BRCB with ResvTms=-1?
+What fields are used to do the identification?
+N/A - BRCB.ResvTms is not exposed
+Rp14 1,2 When BRCB.ResvTms is exposed, what is the default
+value for BRCB.ResvTms if client does not write (must
+be > 0)
+When BRCB.ResvTms is not exposed, what is the
+internal reservation time (must be >= 0)
+N/A
+0 seconds
+3.7 PIXIT for GOOSE publish model
+ID Ed Description Value/Clarification
+Gp1 1,2 Can the test (Ed1)/simulation (Ed2) flag in the
+published GOOSE be turned on/off
+N
+Gp2 1 What is the behavior when the GOOSE publish
+configuration is incorrect
+DUT keeps GoEna=F until the
+minimum required configuration
+(dstAddress, dataSet) is available.
+Gp3 1,2 Published FCD supported common data classes are Any available in the data model.
+Arrays are not supported
+Gp4 1,2 What is the maximum value of TAL (maxTime)
+Is it fixed or configurable
+Configured by ICT (double the
+maximum retransmission time)
+Gp5 1.2 What is the fastest retransmission time 8.3 ms/60Hz, 10 ms/50Hz for the first
+5 messages, then geometric with a
+time multiplier of 2 up to the
+maximum configured retransmission
+time
+Gp6 - Can the GOOSE publish be turned on/off by using
+SetGoCBValues (GoEna)
+Y
+Deprecated (see PICS
+SetGoCBValues)
+Gp7 1,2 What is the initial GOOSE sqNum after restart sqNum = 1
+Gp8 1 May the GOOSE data set contain:
+- structured data objects (FCD)?
+- timestamp data attributes?
+Y
+Y
+Gp9 1,2 Does Server or ICT refuse GOOSE payload dataset
+length greater than SCSM supports?
+N (ICT does not allow more than 64
+data elements in the dataset)
+Additional items
+Simulation mode Not supported
+3.8 PIXIT for GOOSE subscribe model
+ID Ed Description Value/Clarification
+Gs1 1,2 What elements of a subscribed GOOSE message are
+checked to decide the message is valid and the
+allData values are accepted? If yes, describe the
+conditions.
+Notes:
+- the VLAN tag may be removed by an Ethernet
+switch and shall not be checked
+Y destination MAC address
+Y APPID
+N goCBRef
+N timeAllowedtoLive
+Y datSet
+N goID (optional)
+N T
+14
+ID Ed Description Value/Clarification
+- the simulation flag shall always be checked (Ed2) N stNum
+N sqNum
+Y simulation/test (accepted)
+Y confRev
+Y ndsCom
+Y numDatSetEntries (must contain at
+least all subscribed data entries)
+Y out-of-order dataset members
+Gs2 1,2 When is a subscribed GOOSE marked as lost?
+(TAL = time allowed to live value from the last
+received GOOSE message)
+Message does not arrive prior to TAL
+Gs3 1,2 What is the behavior when one or more subscribed
+GOOSE message isn't received or syntactically
+incorrect? (missing GOOSE)
+GOOSE subscriber updates are
+invalidated:
+a) LGOS GOOSE subscription status is
+set to "not active"
+b) quality attributes of the GOOSE-
+mapped bitstring variables in the
+CTRL/extGGIO1 LN are set to
+Questionable and OldData
+c) GOOSE-mapped variable values are
+zeroed
+Gs4 1,2 What is the behavior when a subscribed GOOSE
+message is out-of-order?
+The message is processed
+Gs5 1,2 What is the behavior when a subscribed GOOSE
+message is duplicated?
+The message is processed
+Gs6 1 Does the device subscribe to GOOSE messages
+with/without the VLAN tag?
+Y with the VLAN tag
+Y without the VLAN tag
+Gs7 1 May the GOOSE data set contain:
+- structured data objects?
+- timestamp data attributes?
+Y
+N (will be ignored)
+Gs8 1,2 Subscribed FCD supported common data classes are Any CDC attribute mapped to basic
+attribute types of BOOLEAN, INT,
+FLOAT32, Enum, Dbpos, or Quality.
+Arrays are not supported
+Gs9 1,2 Are subscribed GOOSE with test=T (Ed1) /
+simulation=T (Ed2) accepted in test/simulation mode
+Y
+Gs10 1,2 Max number of dataset members 64 (up to 16 data entries can be
+subscribed)
+Gs11 1 Is Fixed-length encoded GOOSE supported N
+3.9 PIXIT for GOOSE performance
+ID Ed Description Value/Clarification
+Gf1 1,2 Performance class P2/P3
+Gf2 1,2 GOOSE ping-pong processing method Scan cycles based
+Gf3 1,2 Application logic scan 10 ms for 50 Hz, 8.3 ms for 60 Hz
+Gf4 1 Maximum number of data attributes in GOOSE
+dataset (value and quality has to be counted as
+separate attributes)
+64 for GOOSE publisher
+16 for GOOSE subscriber
+15
+3.10 PIXIT for Sampled values publish model
+ID Ed Description Value/Clarification
+Not available yet
+Additional items
+Simulation mode Not supported
+3.11 PIXIT for Control model
+IMPORTANT
+Control commands addressed to the CSWI switch controller nodes and to the boGGIO general
+binary output nodes will be rejected until the remote control mode is enabled in the device. See
+"Impact of the device settings" in the PM180 IEC 61850 reference guide for details.
+ID Ed Description Value/Clarification
+Ct1 1 What control models are supported (compare ICD file
+enums for Ed2 PICS)
+Y DOns (boGGIO and evfGGIO LN)
+Y SBOns (boGGIO and evfGGIO LN)
+Y DOes (CSWI LN)
+N SBOes
+Ct2 1,2 Is the control model fixed, configurable and/or
+dynamic
+Fixed for CSWI LN
+Configurable/dynamic for boGGIO and
+evfGGIO LN
+Ct3 - Is TimeActivatedOperate supported (compare PICS or
+SCL)
+Deprecated
+Ct4 - Is "operate-many" supported (compare sboClass)? Deprecated
+Ct5 1 Will the DUT activate the control output when the
+test attribute is set in the SelectWithValue and/or
+Operate request (when N test procedure Ctl2 is
+applicable)
+Y
+Ct6 - What are the conditions for the time (T) attribute in
+the SelectWithValue and/or Operate request
+Deprecated
+Ct7 - Is pulse configuration supported (compare
+pulseConfig)
+Deprecated
+Ct8 1 What is the behavior of the DUT when the check
+conditions are set
+Is this behavior fixed, configurable, online
+changeable
+N synchrocheck
+N interlock-check
+DUT ignores the check value and
+always performs the interlock check
+where applicable (CSWI LN)
+Fixed
+Ct9 1,2 What additional cause diagnosis are supported Y Blocked-by-switching-hierarchy
+Y Select-failed
+Y Invalid-position
+Y Position-reached
+N Step-limit
+N Blocked-by-Mode
+Y Blocked-by-process
+Y Blocked-by-interlocking
+N Blocked-by-synchrocheck
+Y Command-already-in-execution
+Y Blocked-by-health
+Y 1-of-n-control
+N Abortion-by-cancel
+Y Time-limit-over
+16
+ID Ed Description Value/Clarification
+N Abortion-by-trip
+Y Object-not-selected
+Edition 1 specific values:
+N Parameter-change-in-execution
+(Ed1 semantics)
+Edition 2 specific values:
+Y Object-already-selected
+N No-access-authority
+N Ended-with-overshoot
+N Abortion-due-to-deviation
+N Abortion-by-communication-loss
+N Blocked-by-command
+N None
+N Inconsistent-parameters
+Y Locked-by-other-client
+Ct10 1,2 How to force a "test-not-ok" respond with
+SelectWithValue request
+N/A  SBOes service is not supported
+Ct11 1,2 How to force a "test-not-ok" respond with Select
+request
+a) Local control mode (boGGIO)
+b) Repeated Select request
+Ct12 1,2 How to force a "test-not-ok" respond with Operate
+request
+DOns: Local control mode (boGGIO)
+SBOns: Local control mode (boGGIO),
+not selected or SBO timeout has
+expired
+DOes: Local control mode or a
+repeated Operate request while the
+previous request is in execution
+Ct13 1,2 Which origin categories are supported/accepted Y bay-control
+Y station-control
+Y remote-control
+Y automatic-bay
+Y automatic-station
+Y automatic-remote
+Y maintenance
+Y process
+Ct14 1,2 What happens if the orCat value is not supported Any orCat is accepted
+Ct15 1,2 Does the IED accept a SelectWithValue/Operate with
+the same ctlVal as the current status value?
+N/A  SBOes service is not supported
+Ct16 1 Does the IED accept a Select/Operate on the same
+control object from 2 different clients at the same
+time
+N
+Ct17 1 Does the IED accept a Select/SelectWithValue from
+the same client when the control object is already
+selected (tissue 334)
+N SBOns
+N/A SBOes
+Ct18 1 Deprecated
+Ct19 - Can a control operation be blocked by Mod=Off or
+On-Blocked (Compare PIXIT-Sr5)
+Deprecated
+Ct20 1,2 Does the IED support local/remote operation Y
+Ct21 1,2 Does the IED send an InformationReport with
+LastApplError as part of the Operate response for
+control with normal security
+Y SBOns
+Y DOns
+Ct22 2 How to force a "parameter-change-in-execution" N/A
+Ct23 1,2 How many SBOns/SBOes control objects can be SBOns: 1
+17
+ID Ed Description Value/Clarification
+selected at the same time? SBOes: N/A
+Ct24 1,2 Can a controllable object be forced to keep its old
+state e.g. Internal Controllable Objects may not be
+accessible to force this, whereas a switch like Circuit
+Breaker outside the DUT can?
+Y (CSWI LN, via external contact
+indication)
+Ct25 1,2 When CDC=DPC is supported, is it possible to have
+DPC (Controllable Double Point) go to the
+intermediate state? (00)
+Y (CSWI LN, via external contact
+indication)
+Ct26 1,2 Name an enhanced security point (if any) with a
+finite operate timeout
+specify the timeout (in milliseconds)
+CTRL/QA1CSWI1.Pos.Oper
+DOes: 1-120000 (configurable for
+switch controllers via the Bay Control
+setup)
+SBOes: N/A
+Ct27 2 Does the IED support control objects with external
+signals?
+DOns: Y (boGGIO LN)
+SBOns: Y (boGGIO LN)
+DOes: Y (CSWI LN)
+SBOes: N/A
+Ct28 - Deprecated, kept as placeholder
+3.12 PIXIT for Time and time synchronization model
+ID Ed Description Value/Clarification
+Tm1 1 What time quality bits are supported (may be set by
+the IED)
+N LeapSecondsKnown
+Y ClockFailure
+Y ClockNotSynchronized
+Tm2 1,2 Describe the behaviour when all time server(s) cease
+to respond
+What is the time server lost detection time
+Assert ClockNotSychronized (CNS)
+after lost detection time
+10-minute
+Tm3 1,2 How long does it take to take over the new time from
+time server
+Configurable polling period 60-600 s,
+default 60 s
+Tm4 1,2 When is the time quality bit "ClockFailure" set Set when the device internal clock is
+not reliable
+Tm5 1 When is the time quality bit "ClockNotSynchronized"
+set
+When connection to all time servers is
+lost (see PIXIT-Tm2)
+Tm6 - Is the timestamp of a binary event adjusted to the
+configured scan cycle
+Deprecated
+Tm7 1 Does the device support time zone and daylight
+saving
+Y
+Tm8 1,2 Which attributes of the SNTP response packet are
+validated
+N Leap indicator not equal to 3
+Y Mode is equal to SERVER
+Y OriginateTimestamp is equal to
+value sent by the SNTP client as
+Transmit Timestamp
+Y RX/TX timestamp fields are checked
+for reasonableness
+Y SNTP version 3 and/or 4
+N Other (describe)
+Tm9 1,2 Do the COMTRADE files have local time or UTC time
+and is this configurable
+UTC
+N Configurable
+18
+3.13 PIXIT for File transfer model
+ID Ed Description Value/Clarification
+Ft1 1 What is structure of files and directories
+Where are the COMTRADE files stored
+Are COMTRADE files zipped and what files are
+included in each zip file
+Flat file system with pseudo folders
+(Ed2)
+\COMTRADE\
+Not zipped
+Ft2 1,2 Directory names are separated from the file name by "\"
+Ft3 1 The maximum file name size including path
+(recommended 64 chars)
+64
+Ft4 1,2 Are directory/file name case sensitive Case sensitive
+Ft5 1,2 Maximum file size for SetFile SetFile is not supported
+Ft6 1 Is the requested file path included in the file name of
+the MMS fileDirectory respond
+Y
+Ft7 1 Is the wild char supported MMS fileDirectory request No
+Ft8 1,2 Is it allowed that 2 clients get a file at the same time Y same file
+Y different files
+Ft9 1,2 Which files can be deleted None of them
+19
+4 MICS - Model Implementation Conformance Statement
+4.1 General
+This model implementation conformance statement is applicable for the PM180 device.
+This MICS document specifies the modeling extensions compared to IEC 61850 Edition 2. For the
+exact details on the standardized model please compare the ICD substation configuration file:
+"PM180_2007B_Rev4.icd", version 4. For a version compatible with IEC 61850 Edition 1, see
+"PM180_2003_Rev4.icd", version 4.
+Clause 4.2 contains the list of implemented logical nodes. Clause 4.3 describes the new and
+extended logical nodes.
+4.2 Logical Nodes List
+The following table contains the list of logical nodes implemented in the device.
+Logical Device Logical Nodes
+L: System Logical Nodes
+CTRL LPHD (Physical device information)
+LLN0 (Logical node zero)
+sbsLGOS1 (GOOSE subscription 1)
+sbsLGOS2 (GOOSE subscription 2)
+...
+sbsLGOS64 (GOOSE subscription 64)
+MET1 LPHD (Physical device information)
+LLN0 (Logical node zero)
+PMU LPHD (Physical device information)
+LLN0 (Logical node zero)
+LTIM1 (Time management)
+LTMS1 (Time master supervision)
+C: Logical nodes for control
+CTRL QA1CILO1 (Interlocking  switch controller QA1CSWI1 interlocking status)
+QA2CILO2 (Interlocking  switch controller QA2CSWI2 interlocking status)
+QB1CILO3 (Interlocking  switch controller QB1CSWI3 interlocking status)
+QB2CILO4 (Interlocking  switch controller QB2CSWI4 interlocking status)
+QB3CILO5 (Interlocking  switch controller QB3CSWI5 interlocking status)
+QB4CILO6 (Interlocking  switch controller QB4CSWI6 interlocking status)
+QB5CILO7 (Interlocking  switch controller QB5CSWI7 interlocking status)
+QB6CILO8 (Interlocking  switch controller QB6CSWI8 interlocking status)
+QE1CILO9 (Interlocking  switch controller QE1CSWI9 interlocking status)
+QE2CILO10 (Interlocking  switch controller QE2CSWI10 interlocking status)
+QE3CILO11 (Interlocking  switch controller QE3CSWI11 interlocking status)
+QE4CILO12 (Interlocking  switch controller QE4CSWI12 interlocking status)
+QE5CILO13 (Interlocking  switch controller QE5CSWI13 interlocking status)
+QE6CILO14 (Interlocking  switch controller QE6CSWI14 interlocking status)
+QE7CILO15 (Interlocking  switch controller QE7CSWI15 interlocking status)
+20
+Logical Device Logical Nodes
+QE8CILO16 (Interlocking  switch controller QE8CSWI16 interlocking status)
+QA1CSWI1 (Switch controller)
+QA2CSWI2 (Switch controller)
+QB1CSWI3 (Switch controller)
+QB2CSWI4 (Switch controller)
+QB3CSWI5 (Switch controller)
+QB4CSWI6 (Switch controller)
+QB5CSWI7 (Switch controller)
+QB6CSWI8 (Switch controller)
+QE1CSWI9 (Switch controller)
+QE2CSWI10 (Switch controller)
+QE3CSWI11 (Switch controller)
+QE4CSWI12 (Switch controller)
+QE5CSWI13 (Switch controller)
+QE6CSWI14 (Switch controller)
+QE7CSWI15 (Switch controller)
+QE8CSWI16 (Switch controller)
+MET1 blkCILO1 (Interlocking  relay interlocking status RO1-RO8)
+blkCILO2 (Interlocking  relay interlocking status RO9-RO16)
+blkCILO3 (Interlocking  relay interlocking status RO17-RO24)
+blkCILO4 (Interlocking  relay interlocking status RO25-RO32)
+blkCILO5 (Interlocking  relay interlocking status RO33-RO40)
+blkCILO6 (Interlocking  relay interlocking status RO41-RO48)
+blkCILO7 (Interlocking  relay interlocking status RO49-RO56)
+blkCILO8 (Interlocking  relay interlocking status RO57-RO64)
+G: Logical nodes for generic references
+CTRL extGGIO1 (Generic process I/O  external GOOSE indication Ind1-Ind128)
+MET1 aiGGIO1 (Generic process I/O  analog inputs AI1-AI8)
+aiGGIO2 (Generic process I/O  analog inputs AI9-AI16)
+biGGIO1 (Generic process I/O  digital inputs DI1-DI16)
+biGGIO2 (Generic process I/O  digital inputs DI17-DI32)
+biGGIO3 (Generic process I/O  digital inputs DI33-DI48)
+biGGIO4 (Generic process I/O  digital inputs DI49-DI64)
+biGGIO5 (Generic process I/O  digital inputs DI65-DI80)
+biGGIO6 (Generic process I/O  digital inputs DI81-DI96)
+biGGIO7 (Generic process I/O  digital inputs DI97-DI112)
+biGGIO8 (Generic process I/O  digital inputs DI113-DI128)
+boGGIO1 (Generic process I/O  relay outputs RO1-RO8)
+boGGIO2 (Generic process I/O  relay outputs RO9-RO16)
+boGGIO3 (Generic process I/O  relay outputs RO17-RO24)
+boGGIO4 (Generic process I/O  relay outputs RO25-RO32)
+boGGIO5 (Generic process I/O  relay outputs RO33-RO40)
+boGGIO6 (Generic process I/O  relay outputs RO41-RO48)
+boGGIO7 (Generic process I/O  relay outputs RO49-RO56)
+boGGIO8 (Generic process I/O  relay outputs RO57-RO64)
+evfGGIO1 (Generic process I/O  event flags FLG1-FLG32)
+21
+Logical Device Logical Nodes
+evfGGIO2 (Generic process I/O  event flags FLG33-FLG64)
+spGGIO1 (Generic process I/O  control setpoint status SP1-SP32)
+spGGIO2 (Generic process I/O  control setpoint status SP33-SP64)
+M: Logical nodes for metering and measurement
+MET1 demMHAI1 (Harmonics or interharmonics  harmonic demands)
+hrmMHAI1 (Harmonics or interharmonics  sequence of harmonics)
+ocvMHAI1 (Harmonics or interharmonics  total harmonics)
+osvMHAI1 (Harmonics or interharmonics  3-sec total harmonics)
+engMMTR1 (Metering  energy counters)
+demMMXU1 (Measurement  present demands)
+demMMXU2 (Measurement  sliding power demands)
+demMMXU3 (Measurement  accumulated power demands)
+demMMXU4 (Measurement  predicted power demands)
+hcvMMXU1 (Measurement  half-cycle measurements)
+ocvMMXU1 (Measurement  one-cycle measurements)
+osvMMXU1 (Measurement  one-second measurements)
+phsrMMXU1 (Measurement  phasors)
+hcvMSQI1 (Sequence and imbalance  half-cycle sequence and imbalance)
+seqMSQI1 (Sequence and imbalance  sequence components)
+maxMSTA1 (Metering statistics  maximum/peak measurements)
+ocvMSTA1 (Metering statistics  one-cycle minimum/maximum measurements)
+osvMSTA1 (Metering statistics  one-second minimum/maximum measurements)
+PMU MMXU1 (Measurement  synchrophasor measurements)
+R: Logical nodes for protection related functions
+MET1 drRDRE1 (Disturbance recorder function)
+drRDRE2 (Disturbance recorder function)
+drRDRE3 (Disturbance recorder function)
+drRDRE4 (Disturbance recorder function)
+drRDRE5 (Disturbance recorder function)
+drRDRE6 (Disturbance recorder function)
+drRDRE7 (Disturbance recorder function)
+drRDRE8 (Disturbance recorder function)
+X: Logical nodes for switchgear
+CTRL QA1XCBR1 (Circuit breaker)
+QA2XCBR2 (Circuit breaker)
+QB1XSWI1 (Circuit switch)
+QB2XSWI2 (Circuit switch)
+QB3XSWI3 (Circuit switch)
+QB4XSWI4 (Circuit switch)
+QB5XSWI5 (Circuit switch)
+QB6XSWI6 (Circuit switch)
+QE1XSWI7 (Circuit switch)
+QE1XSWI8 (Circuit switch)
+QE2XSWI9 (Circuit switch)
+QE3XSWI10 (Circuit switch)
+QE4XSWI11 (Circuit switch)
+22
+Logical Device Logical Nodes
+QE5XSWI12 (Circuit switch)
+QE6XSWI13 (Circuit switch)
+QE7XSWI14 (Circuit switch)
+4.3 Logical Nodes Extensions
+The following tables use:
+M: Data is mandatory in the IEC 61850-7-4 Ed.2.
+O: Data is optional in the IEC 61850-7-4 Ed.2 and is used in the device.
+C: Data is conditional in the IEC 61850-7-4 Ed.2 and is used in the device.
+E: Data is an extension to the IEC 61850-7-4 Ed.2.
+NOTE: In the IEC 61850-7-4:2003 Ed1 name space, data objects with enumerated ENS, ENC and
+ENG CDCs are specified by the respective integer INS, INC and ING CDCs, and HWYE and HDEL CDCs
+are defined by Ed1 compatible data classes.
+4.3.1 Standardized Logical Nodes
+LPHD - Physical device information
+LPHD class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+Data Objects
+Descriptions
+PhyNam DPL Physical device name plate M
+Status Information
+PhyHealth ENS Physical device health M
+Proxy SPS Indicates if this LN is a proxy M
+LLN0 - Logical node zero
+LLN0 class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+Data Objects
+Common Logical Node Information
+Mod ENC Mode M
+Beh ENS Behavior M
+Health ENS Health M
+NamePlt LPL Name plate M
+CTRL/CSWI - Switch controllers
+CSWI class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+LNName QA1CSWI1, QA2CSWI2, QB1CSWI3,
+QB2CSWI4, QB3CSWI5, QB4CSWI6,
+QB5CSWI7, QB6CSWI8, QE1CSWI9,
+QE2CSWI10, QE3CSWI11, QE4CSWI12,
+M A configurable prefix can
+be added to a LNName
+via the device Bay
+Control Setup
+23
+CSWI class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+QE5CSWI13, QE6CSWI14, QE7CSWI15,
+QE8CSWI16
+Data Objects
+Common Logical Node Information
+Mod ENC Mode M
+Beh ENS Behavior M
+Health ENS Health M
+NamePlt LPL Name plate M
+Status Information
+Loc SPS Local control behavior O
+Controls
+Pos DPC Switch, general M
+CTRL/CILO - Switch control interlocking status
+CILO class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+LNName QA1CILO1, QA2CILO2, QB1CILO3,
+QB2CILO4, QB3CILO5, QB4CILO6,
+QB5CILO7, QB6CILO8, QE1CILO9,
+QE2CILO10, QE3CILO11, QE4CILO12,
+QE5CILO13, QE6CILO14, QE7CILO15,
+QE8CILO16
+M A configurable prefix can
+be added to a LNName
+via the device Bay
+Control Setup
+Data Objects
+Common Logical Node Information
+Mod ENC Mode M
+Beh ENS Behavior M
+Health ENS Health M
+NamePlt LPL Name plate M
+Status Information
+EnaOpn SPS Enable Open M
+EnaCls SPS Enable Close M
+CTRL/XSWI - Circuit switches
+XSWI class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+LNName QB1XSWI1, QB2XSWI2, QB3XSWI3,
+QB4XSWI4, QB5XSWI5, QB6XSWI6,
+QE1XSWI7, QE2XSWI8, QE3XSWI9,
+QE4XSWI10, QE5XSWI11, QE6XSWI12,
+QE7XSWI13, QE8XSWI14
+M A configurable prefix can
+be added to a LNName
+via the device Bay
+Control Setup
+Data Objects
+Common Logical Node Information
+Mod ENC Mode M
+Beh ENS Behavior M
+24
+XSWI class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+Health ENS Health M
+NamePlt LPL Name plate M
+Status Information
+Loc SPS Local control behavior M
+OpCnt INS Operation counter M
+SwTyp ENS Switch type M
+Controls
+Pos DPC Switch position M ST only
+BlkOpn SPC Block opening M ST only
+BlkCls SPC Block closing M ST only
+CTRL/extGGIO - External (GOOSE) indication status
+GGIO class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+LNName extGGIO1 M
+Data Objects
+Common Logical Node Information
+Mod ENC Mode M
+Beh ENS Behavior M
+Health ENS Health M
+NamePlt LPL Name plate M
+Status Information
+Ind1-Ind128 SPS General indication O
+CTRL/LGOS - GOOSE subscription
+LGOS class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+LNName sbsLGOS1  sbsLGOS64 M
+Data Objects
+Common Logical Node Information
+Mod ENC Mode M
+Beh ENS Behavior M
+Health ENS Health M
+NamePlt LPL Name plate M
+Status Information
+SbsSt SPS Status of the subscription M TRUE = active
+FALSE = not active
+LastStNum INS Last state number received O
+ConfRevNum INS Expected configuration revision number O
+25
+MET1/CILO - Relay control interlocking status
+CILO class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+LNName blkCILO1, blkCILO2, blkCILO3, blkCILO4,
+blkCILO5, blkCILO6, blkCILO7, blkCILO8
+M
+Data Objects
+Common Logical Node Information
+Mod ENC Mode M
+Beh ENS Behavior M
+Health ENS Health M
+NamePlt LPL Name plate M
+Status Information
+EnaOpn1-
+EnaOpn8
+SPS Enable Open, relay outputs RO1-RO8 per
+expansion I/O module
+M Blocking is configurable
+via the Relay setup. A
+relay can only be
+unblocked via control
+setpoint logic.
+EnaCls1-
+EnaCls8
+SPS Enable Close, relay outputs RO1-RO8 per
+expansion I/O module
+M Blocking is configurable
+via the Relay setup. A
+relay can only be
+unblocked via control
+setpoint logic.
+MET1/RDRE - Disturbance recorders
+RDRE class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+LNName drRDRE1-drRDRE8 M
+Data Objects
+Common Logical Node Information
+Mod ENC Mode M
+Beh ENS Behavior M
+Health ENS Health M
+NamePlt LPL Name plate M
+Status Information
+RcdMade SPS Recording made M Set to TRUE when at
+least one disturbance
+waveform is available for
+a read.
+FltNum INS Fault number M Indicates the last
+waveform series number
+available in a
+disturbance recorder.
+26
+MET1/biGGIO - Digital inputs
+GGIO class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+LNName biGGIO1 - biGGIO8 M
+Data Objects
+Common Logical Node Information
+Mod ENC Mode M
+Beh ENS Behavior M
+Health ENS Health M
+NamePlt LPL Name plate M
+Status Information
+Ind1...Ind16 SPS General indication DI1-DI16 per expansion
+I/O module
+O TRUE = closed
+FALSE = open
+MET1/boGGIO - Relay outputs
+GGIO class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+LNName boGGIO1 - boGGIO8 M
+Data Objects
+Common Logical Node Information
+Mod ENC Mode M
+Beh ENS Behavior M
+Health ENS Health M
+NamePlt LPL Name plate M
+Controls
+SPCSO1-
+SPCSO8
+SPC Single point controllable status output:
+relay outputs RO1-RO8 per expansion I/O
+module
+O
+MET1/evfGGIO - Event flags
+class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+LNName evfGGIO1, evfGGIO2 M
+Data Objects
+Common Logical Node Information
+Mod ENC Mode M
+Beh ENS Behavior M
+Health ENS Health M
+NamePlt LPL Name plate M
+Controls
+SPCSO1-
+SPCSO32
+SPC Single point controllable status output:
+event flags FLG1-FLG32 (evfGGIO1), event
+flags FLG33-FLG64 (evfGGIO2)
+O
+27
+MET1/spGGIO - Control setpoint status
+GGIO class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+LNName spGGIO1, spGGIO2 M
+Data Objects
+Common Logical Node Information
+Mod ENC Mode M
+Beh ENS Behavior M
+Health ENS Health M
+NamePlt LPL Name plate M
+Status Information
+Ind1...Ind32 SPS General indication: setpoints SP1-SP32
+(spGGIO1), setpoints SP33-SP64 (spGGIO2)
+O TRUE = setpoint
+operated
+FALSE = setpoint
+released
+MET1/aiGGIO - Analog inputs
+GGIO class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+LNName aiGGIO1, aiGGIO2 M
+Data Objects
+Common Logical Node Information
+Mod ENC Mode M
+Beh ENS Behavior M
+Health ENS Health M
+NamePlt LPL Name plate M
+Measured Values
+AnIn1...AnIn8 MV Scaled analog inputs: analog inputs AI1-
+AI8 (aiGGIO1), analog inputs AI9-AI16
+(aiGGIO2)
+O
+MET1/engMMTR - Energy counters
+MMTR class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+LNName engMMTR1 M
+Data Objects
+Common Logical Node Information
+Mod ENC Mode M
+Beh ENS Behavior M
+Health ENS Health M
+NamePlt LPL Name plate M
+Measured Values
+TotVAh BCR Apparent energy O Total
+TotWh BCR Net real energy O Net
+28
+MMTR class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+TotVArh BCR Net reactive energy O Net
+SupWh BCR Real energy supply O Exported
+SupVArh BCR Reactive energy supply O Exported
+DmdWh BCR Real energy demand O Imported
+DmdVArh BCR Reactive energy demand O Imported
+MET1/hrmMHAI - Sequence of harmonics
+MHAI class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+LNName hrmMHAI1 M
+Data Objects
+Common Logical Node Information
+Mod ENC Mode M
+Beh ENS Behavior M
+Health ENS Health M
+NamePlt LPL Name plate M
+Measured Values
+HA HWYE Sequence of harmonics current O
+HPhV HWYE Sequence of harmonics phase to ground
+voltages
+O In 4LN3, 3LN3 and
+3BLN3 wiring modes
+HPPV HDEL Sequence of harmonics phase to phase
+voltages
+O In 4LL3, 3LL3, 3BLL3,
+3DIR2, 3OP2 and 3OP3
+wiring modes
+Hz MV Basic frequency C
+MET1/ocvMHAI - Total harmonics
+MHAI class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+LNName ocvMHAI1 M
+Data Objects
+Common Logical Node Information
+Mod ENC Mode M
+Beh ENS Behavior M
+Health ENS Health M
+NamePlt LPL Name plate M
+Measured Values
+ThdPhV WYE Voltage THD for phase to ground O In 4LN3, 3LN3 and
+3BLN3 wiring modes
+ThdPPV DEL Voltage THD for phase to phase O In 4LL3, 3LL3, 3BLL3,
+3DIR2, 3OP2 and 3OP3
+wiring modes
+ThdA WYE Current THD O
+HKf WYE K-Factor O
+29
+MHAI class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+TddA WYE Current TDD per IEEE 519 O
+Hz MV Basic frequency C
+MET1/osvMHAI - 3-second total harmonics
+MHAI class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+LNName osvMHAI1 M
+Data Objects
+Common Logical Node Information
+Mod ENC Mode M
+Beh ENS Behavior M
+Health ENS Health M
+NamePlt LPL Name plate M
+Measured Values
+ThdPhV WYE Voltage THD for phase to ground O In 4LN3, 3LN3 and
+3BLN3 wiring modes
+ThdPPV DEL Voltage THD for phase to phase O In 4LL3, 3LL3, 3BLL3,
+3DIR2, 3OP2 and 3OP3
+wiring modes
+ThdA WYE Current THD O
+HKf WYE K-Factor O
+TddA WYE Current TDD per IEEE 519 O
+Hz MV Basic frequency C
+MET1/seqMSQI - Sequence components
+MSQI class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+LNName seqMSQI1 M
+Data Objects
+Common Logical Node Information
+Mod ENC Mode M
+Beh ENS Behavior M
+Health ENS Health M
+NamePlt LPL Name plate M
+Measured Values
+SeqV SEQ Positive, negative and zero sequence
+voltage
+C
+ImbNgV MV Imbalance negative sequence voltage O
+ImbZroV MV Imbalance zero sequence voltage O
+SeqA SEQ Positive, negative and zero sequence
+current
+C
+ImbNgA MV Imbalance negative sequence current O
+ImbZroA MV Imbalance zero sequence current O
+30
+PMU/LTIM - Time management
+LTIM class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+LNName LTIM1 M
+Data Objects
+Common Logical Node Information
+Mod ENC Mode M
+Beh ENS Behavior M
+Health ENS Health M
+NamePlt LPL Name plate M
+Status Information
+TmDT SPS Indicating if daylight saving time is in
+effect
+M TRUE = active
+FALSE = not active
+Settings
+TmOfsTmm ING Offset of local time from UTC in minutes O
+TmUseDT SPG Flag indicating if this location is using
+daylight saving time
+O
+4.3.2 New Logical Nodes
+Newly created logical nodes are listed in this clause, with lnNs attribute in the name plate.
+Not used.
+4.3.3 Extended Logical Nodes
+The following logical nodes have been extended with extra data. All extra data has been highlighted
+in the tables and marked as "E" (Extended).
+NOTE: Vendor-extended data objects are marked by a private namespace ID with dataNs
+"SATEC:2003A".
+CTRL/XCBR - Circuit breakers
+XCBR class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+LNName QA1XCBR1, QA2XCBR2 M
+Data Objects
+Common Logical Node Information
+Mod ENC Mode M
+Beh ENS Behavior M
+Health ENS Health M
+NamePlt LPL Name plate M
+Status Information
+Loc SPS Local control behavior M
+OpCnt INS Operation counter M
+AlmFlt SPS Breaker fault trip alarm (breaker trip E SATEC:2003A
+31
+XCBR class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+indication)
+Controls
+Pos DPC Switch position M ST only
+BlkOpn SPC Block opening M ST only
+BlkCls SPC Block closing M ST only
+MET1/demMHAI - Harmonic demands
+MHAI class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+LNName demMHAI1 M
+Data Objects
+Common Logical Node Information
+Mod ENC Mode M
+Beh ENS Behavior M
+Health ENS Health M
+NamePlt LPL Name plate M
+Measured Values
+ThdPhV WYE Voltage THD demand for phase to ground O In 4LN3, 3LN3 and
+3BLN3 wiring modes
+ThdPPV DEL Voltage THD demand for phase to phase O In 4LL3, 3LL3, 3BLL3,
+3DIR2, 3OP2 and 3OP3
+wiring modes
+ThdA WYE Current THD demand O
+TddA WYE Current TDD demand per IEEE 519 O
+ThdAuxV MV Voltage THD demand for auxiliary voltage
+input V4
+E SATEC:2003A
+ThdAuxA MV Current THD demand for auxiliary current
+input I4
+E SATEC:2003A
+TddAuxA MV Current TDD demand for auxiliary current
+input I4
+E SATEC:2003A
+Hz MV Basic frequency C
+MET1/demMMXU1 - Present demands
+MMXU class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+LNName demMMXU1 M
+Data Objects
+Common Logical Node Information
+Mod ENC Mode M
+Beh ENS Behavior M
+Health ENS Health M
+NamePlt LPL Name plate M
+32
+MMXU class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+Measured Values
+PhV WYE Phase to ground voltage demands O In 4LN3, 3LN3 and
+3BLN3 wiring modes
+PPV DEL Phase to phase voltage demands O In 4LL3, 3LL3, 3BLL3,
+3DIR2, 3OP2 and 3OP3
+wiring modes
+A WYE Phase and neutral current demands O (*) See WYE
+TotkWImp MV Total active power imported block
+demand
+E SATEC:2003A
+TotkWExp MV Total active power exported block demand E SATEC:2003A
+TotkVarImp MV Total reactive power imported block
+demand
+E SATEC:2003A
+TotkVarExp MV Total reactive power exported block
+demand
+E SATEC:2003A
+TotVA MV Total apparent power demand O
+AuxV CMV Auxiliary voltage V4 demand E SATEC:2003A
+AuxA CMV Auxiliary current I4 demand E SATEC:2003A
+MET1/demMMXU2 - Sliding power demands
+MMXU class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+LNName demMMXU2 M
+Data Objects
+Common Logical Node Information
+Mod ENC Mode M
+Beh ENS Behavior M
+Health ENS Health M
+NamePlt LPL Name plate M
+Measured Values
+TotkWImp MV Total active power imported sliding
+window demand
+E SATEC:2003A
+TotkWExp MV Total active power exported sliding
+window demand
+E SATEC:2003A
+TotkVarImp MV Total reactive power imported sliding
+window demand
+E SATEC:2003A
+TotkVarExp MV Total reactive power exported sliding
+window demand
+E SATEC:2003A
+TotVA MV Total apparent power sliding window
+demand
+O
+33
+MET1/demMMXU3 - Accumulated power demands
+MMXU class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+LNName demMMXU3 M
+Data Objects
+Common Logical Node Information
+Mod ENC Mode M
+Beh ENS Behavior M
+Health ENS Health M
+NamePlt LPL Name plate M
+Measured Values
+TotkWImp MV Total active power imported accumulated
+demand
+E SATEC:2003A
+TotkWExp MV Total active power exported accumulated
+demand
+E SATEC:2003A
+TotkVarImp MV Total reactive power imported
+accumulated demand
+E SATEC:2003A
+TotkVarExp MV Total reactive power exported
+accumulated demand
+E SATEC:2003A
+TotVA MV Total apparent power accumulated
+demand
+O
+MET1/demMMXU4 - Predicted power demands
+MMXU class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+LNName demMMXU4 M
+Data Objects
+Common Logical Node Information
+Mod ENC Mode M
+Beh ENS Behavior M
+Health ENS Health M
+NamePlt LPL Name plate M
+Measured Values
+TotkWImp MV Total active power imported predicted
+demand
+E SATEC:2003A
+TotkWExp MV Total active power exported predicted
+demand
+E SATEC:2003A
+TotkVarImp MV Total reactive power imported predicted
+demand
+E SATEC:2003A
+TotkVarExp MV Total reactive power exported predicted
+demand
+E SATEC:2003A
+TotVA MV Total apparent power predicted demand O
+34
+MET1/hcvMMXU - Half-cycle measurements
+MMXU class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+LNName hcvMMXU1 M
+Data Objects
+Common Logical Node Information
+Mod ENC Mode M
+Beh ENS Behavior M
+Health ENS Health M
+NamePlt LPL Name plate M
+Measured Values
+PhV WYE Phase to ground voltages O
+PPV DEL Phase to phase voltages O
+A WYE Phase and neutral currents O (*) See WYE
+AuxV CMV Auxiliary voltage V4 E SATEC:2003A
+AuxA CMV Auxiliary current I4 E SATEC:2003A
+ExtA WYE Phase and neutral currents, extended
+inputs I1x-I3x
+E SATEC:2003A
+(*) See WYE
+ExtAuxA CMV Auxiliary current, extended input I4x E SATEC:2003A
+MET1/ocvMMXU - One-cycle measurements
+MMXU class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+LNName ocvMMXU1 M
+Data Objects
+Common Logical Node Information
+Mod ENC Mode M
+Beh ENS Behavior M
+Health ENS Health M
+NamePlt LPL Name plate M
+Measured Values
+PhV WYE Phase to ground voltages O
+PPV DEL Phase to phase voltages O
+A WYE Phase and neutral currents O (*) See WYE
+W WYE Phase active power O
+VAr WYE Phase reactive power O
+VA WYE Phase apparent power O
+PF WYE Phase power factor O
+TotW MV Total active power O
+TotVAr MV Total reactive power O
+TotVA MV Total apparent power O
+TotPF MV Total power factor O
+TotPFLag MV Total power factor lag E SATEC:2003A
+TotPFLead MV Total power factor lead E SATEC:2003A
+TotkWImp MV Total active power imported E SATEC:2003A
+35
+MMXU class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+TotkWExp MV Total active power exported E SATEC:2003A
+TotkVarImp MV Total reactive power imported E SATEC:2003A
+TotkVarExp MV Total reactive power exported E SATEC:2003A
+AuxV CMV Auxiliary voltage V4 E SATEC:2003A
+AuxA CMV Auxiliary current I4 E SATEC:2003A
+Hz MV Frequency O
+AvPhV MV Average voltage phase to ground E SATEC:2003A
+AvPPV MV Average voltage phase to phase E SATEC:2003A
+AvA MV Average current E SATEC:2003A
+ExtA WYE Phase currents, extended inputs I1x-I3x E SATEC:2003A
+(*) See WYE
+ExtAuxA CMV Auxiliary current, extended input I4x E SATEC:2003A
+AvExtA MV Average current, extended inputs I1x-I3x E SATEC:2003A
+MET1/osvMMXU - One-second measurements
+MMXU class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+LNName osvMMXU1 M
+Data Objects
+Common Logical Node Information
+Mod ENC Mode M
+Beh ENS Behavior M
+Health ENS Health M
+NamePlt LPL Name plate M
+Measured Values
+PhV WYE Phase to ground voltages O
+PPV DEL Phase to phase voltages O
+A WYE Phase and neutral currents O (*) See WYE
+W WYE Phase active power O
+VAr WYE Phase reactive power O
+VA WYE Phase apparent power O
+PF WYE Phase power factor O
+TotW MV Total active power O
+TotVAr MV Total reactive power O
+TotVA MV Total apparent power O
+TotPF MV Total power factor O
+TotPFLag MV Total power factor lag E SATEC:2003A
+TotPFLead MV Total power factor lead E SATEC:2003A
+TotkWImp MV Total active power imported E SATEC:2003A
+TotkWExp MV Total active power exported E SATEC:2003A
+TotkVarImp MV Total reactive power imported E SATEC:2003A
+TotkVarExp MV Total reactive power exported E SATEC:2003A
+AuxV CMV Auxiliary voltage V4 E SATEC:2003A
+AuxA CMV Auxiliary current I4 E SATEC:2003A
+36
+MMXU class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+Hz MV Frequency O
+AvPhV MV Average voltage phase to ground E SATEC:2003A
+AvPPV MV Average voltage phase to phase E SATEC:2003A
+AvA MV Average current E SATEC:2003A
+ExtA WYE Phase currents, extended inputs I1x-I3x E SATEC:2003A
+(*) See WYE
+ExtAuxA CMV Auxiliary current, extended input I4x E SATEC:2003A
+AvExtA MV Average current, extended inputs I1x-I3x E SATEC:2003A
+MET1/phsrMMXU - Phasors
+MMXU class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+LNName phsrMMXU1 M
+Data Objects
+Common Logical Node Information
+Mod ENC Mode M
+Beh ENS Behavior M
+Health ENS Health M
+NamePlt LPL Name plate M
+Measured Values
+PhV WYE Phase to ground voltages (magnitude and
+angle)
+O In 4LN3, 3LN3 and
+3BLN3 wiring modes
+PPV DEL Phase to phase voltages (magnitude and
+angle)
+O In 4LL3, 3LL3, 3BLL3,
+3DIR2, 3OP2 and 3OP3
+wiring modes
+A WYE Phase currents (magnitude and angle) O
+AuxV CMV Auxiliary voltage V4 (magnitude and angle) E SATEC:2003A
+AuxA CMV Auxiliary current I4 (magnitude and angle) E SATEC:2003A
+MET1/hcvMSQI - Half-cycle sequence and imbalance
+MSQI class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+LNName hcvMSQI1 M
+Data Objects
+Common Logical Node Information
+Mod ENC Mode M
+Beh ENS Behavior M
+Health ENS Health M
+NamePlt LPL Name plate M
+Measured Values
+SeqV SEQ Positive, negative and zero sequence
+voltage
+C
+SeqExtA SEQ Positive, negative and zero sequence E SATEC:2003A
+37
+MSQI class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+current, extended inputs Ix
+ImbNgV MV Imbalance negative sequence voltage O
+ImbNgA MV Imbalance negative sequence current O
+ImbNgExtA MV Imbalance negative sequence current,
+extended inputs Ix
+E SATEC:2003A
+MET1/ocvMSTA - One-cycle minimum/maximum
+MSTA class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+LNName ocvMSTA1 (one-cycle
+minimum/maximum on any phase)
+M
+Data Objects
+Common Logical Node Information
+Mod ENC Mode M
+Beh ENS Behavior M
+Health ENS Health M
+NamePlt LPL Name plate M IEC 61850-7-4:2003
+Measured Values
+MinVolts MV Minimum voltage O
+MinPPV MV Minimum voltage phase to phase E SATEC:2003A
+MinAmps MV Minimum current O
+MinW MV Minimum phase real power O
+MinVAr MV Minimum phase reactive power O
+MinVA MV Minimum phase apparent power O
+MinPFLag MV Minimum phase PF lag E SATEC:2003A
+MinPFLead MV Minimum phase PF lead E SATEC:2003A
+MinThdPhV MV Minimum voltage THD phase to ground E SATEC:2003A
+MinThdA MV Minimum current THD E SATEC:2003A
+MinHKf MV Minimum K-Factor E SATEC:2003A
+MinTddA MV Minimum current TDD E SATEC:2003A
+MinIntThdPhV MV Minimum interharmonic voltage THD E SATEC:2003A
+MinIntThdA MV Minimum interharmonic current THD E SATEC:2003A
+MaxVolts MV Maximum voltage O
+MaxPPV MV Maximum voltage phase to phase E SATEC:2003A
+MaxAmps MV Maximum current O
+MaxW MV Maximum phase real power O
+MaxVAr MV Maximum phase reactive power O
+MaxVA MV Maximum phase apparent power O
+MaxPFLag MV Maximum phase PF lag E SATEC:2003A
+MaxPFLead MV Maximum phase PF lead E SATEC:2003A
+MaxThdPhV MV Maximum voltage THD phase to ground E SATEC:2003A
+MaxThdA MV Minimum current THD E SATEC:2003A
+MaxHKf MV Maximum K-Factor E SATEC:2003A
+MaxTddA MV Maximum current TDD E SATEC:2003A
+38
+MSTA class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+MaxIntThdPhV MV Maximum interharmonic voltage THD E SATEC:2003A
+MaxIntThdA MV Maximum interharmonic current THD E SATEC:2003A
+MET1/osvMSTA - One-second minimum/maximum
+MSTA class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+LNName osvMSTA1 (one-second
+minimum/maximum on any phase)
+M
+Data Objects
+Common Logical Node Information
+Mod ENC Mode M
+Beh ENS Behavior M
+Health ENS Health M
+NamePlt LPL Name plate M IEC 61850-7-4:2003
+Measured Values
+MinVolts MV Minimum voltage O
+MinPPV MV Minimum voltage phase to phase E SATEC:2003A
+MinAmps MV Minimum current O
+MinW MV Minimum phase real power O
+MinVAr MV Minimum phase reactive power O
+MinVA MV Minimum phase apparent power O
+MinPFLag MV Minimum phase PF lag E SATEC:2003A
+MinPFLead MV Minimum phase PF lead E SATEC:2003A
+MinThdPhV MV Minimum voltage THD phase to ground E SATEC:2003A
+MinThdA MV Minimum current THD E SATEC:2003A
+MinHKf MV Minimum K-Factor E SATEC:2003A
+MinTddA MV Minimum current TDD E SATEC:2003A
+MinIntThdPhV MV Minimum interharmonic voltage THD E SATEC:2003A
+MinIntThdA MV Minimum interharmonic current THD E SATEC:2003A
+MaxVolts MV Maximum voltage O
+MaxPPV MV Maximum voltage phase to phase E SATEC:2003A
+MaxAmps MV Maximum current O
+MaxW MV Maximum phase real power O
+MaxVAr MV Maximum phase reactive power O
+MaxVA MV Maximum phase apparent power O
+MaxPFLag MV Maximum phase PF lag E SATEC:2003A
+MaxPFLead MV Maximum phase PF lead E SATEC:2003A
+MaxThdPhV MV Maximum voltage THD phase to ground E SATEC:2003A
+MaxThdA MV Minimum current THD E SATEC:2003A
+MaxHKf MV Maximum K-Factor E SATEC:2003A
+MaxTddA MV Maximum current TDD E SATEC:2003A
+MaxIntThdPhV MV Maximum interharmonic voltage THD E SATEC:2003A
+MaxIntThdA MV Maximum interharmonic current THD E SATEC:2003A
+39
+MET1/maxMMXU - Maximum/peak measurements
+MMXU class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+LNName maxMMXU1 M
+Data Objects
+Common Logical Node Information
+Mod ENC Mode M
+Beh ENS Behavior M
+Health ENS Health M
+NamePlt LPL Name plate M
+Measured Values
+PhV WYE Maximum phase to ground voltages O
+PPV DEL Maximum phase to phase voltages O
+A WYE Maximum phase and neutral currents O (*) See WYE
+TotW MV Maximum total active power O
+TotVAr MV Maximum total reactive power O
+TotVA MV Maximum total apparent power O
+TotPF MV Maximum total power factor O Absolute value
+TotPFLag MV Maximum total power factor lag E SATEC:2003A
+TotPFLead MV Maximum total power factor lead E SATEC:2003A
+Settings
+ClcMth ENG Calculation method O MAX
+ClcMod ENG Calculation mode O TOTAL  recorded since
+the last external
+min/max reset
+ClcIntvTyp ENG Calculation interval type O EXTERNAL  continuous
+recording since the last
+external min/max reset
+PMU/MMXU - Synchrophasor measurements
+MMXU class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+LNName MMXU1 M
+Data Objects
+Common Logical Node Information
+Mod ENC Mode M
+Beh ENS Behavior M
+Health ENS Health M
+NamePlt LPL Name plate M
+Measured Values
+PhV WYE Voltage synchrophasor (magnitude and
+angle)
+O
+A WYE Current synchrophasor (magnitude and
+angle)
+O
+Hz MV Frequency O Frequency deviation
+from nominal
+40
+MMXU class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+HzRte MV Rate of change of frequency (ROCOF) E IEC 61850-90-5:2012
+PMU/LTMS - Time master supervision
+LTMS class
+Data Object
+Name
+Common
+Data Class
+Explanation M/O/C/E Remarks
+LNName LTMS1 M
+Data Objects
+Common Logical Node Information
+Mod ENC Mode M
+Beh ENS Behavior M
+Health ENS Health M
+NamePlt LPL Name plate M
+Status Information
+TmSrc VSS Current time source M IRIG-B = IRIG-B source
+PTP = PTP source
+TmSyn ENS Time synchronized according to
+IEC 61850-9-2
+O
+TmLok ENS Unlock time (enumerated type
+TmLokKind)
+E IEC 61850-90-5:2012
+4.4 Enum Types Extensions
+4.4.1 New Enum Types
+New enum types are listed in this clause.
+TmLokKind
+Value Description Remarks
+1 Locked
+2 Unlocked10s
+3 Unlocked100s
+4 Unlocked1000s
+5 UnlockedMoreThan1000s
+4.4.2 Extended EnumTypes
+Not used.
+4.5 Common Data Classes
+The following tables indicate usage of common data classes.
+41
+Device name plate (DPL)
+Attribute Name Attribute Type FC M/O/C Comments
+vendor VISIBLE STRING255 DC M
+model VISIBLE STRING255 DC O
+location VISIBLE STRING255 DC O
+Logical node name plate (LPL)
+Attribute Name Attribute Type FC M/O/C Comments
+vendor VISIBLE STRING255 DC M
+swRev VISIBLE STRING255 DC M
+d VISIBLE STRING255 DC M
+confgRev VISIBLE STRING255 DC C
+ldNs VISIBLE STRING255 EX C LLN0 only
+lnNs VISIBLE STRING255 EX C IEC 61850-7-4:2003 nodes
+Single point status (SPS)
+Attribute Name Attribute Type FC M/O/C Comments
+stVal BOOLEAN ST M
+q Quality ST M
+t TimeStamp ST M
+d VISIBLE STRING255 DC O
+subEna BOOLEAN SV C Supported by CTRL/CILO nodes1
+subVal CODED ENUM SV C Supported by CTRL/CILO nodes1
+subQ Quality SV C Supported by CTRL/CILO nodes
+dataNs VISIBLE STRING255 EX C Extended logical nodes only
+1 Indicate the switch interlocking bypass status for EnaCls and EnaOpn attributes in CTRL/CILO
+nodes: TRUE when interlocking bypass is enabled, FALSE when bypass is disabled.
+Double point status (DPS)
+Attribute Name Attribute Type FC M/O/C Comments
+stVal CODED ENUM ST M
+q Quality ST M
+t TimeStamp ST M
+d VISIBLE STRING255 DC O
+Integer status (INS)
+Attribute Name Attribute Type FC M/O/C Comments
+stVal INT32 ST M
+q Quality ST M
+t TimeStamp ST M
+d VISIBLE STRING255 DC O
+Enumerated status (ENS)
+Attribute Name Attribute Type FC M/O/C Comments
+stVal ENUMERATED ST M
+42
+Attribute Name Attribute Type FC M/O/C Comments
+q Quality ST M
+t TimeStamp ST M
+d VISIBLE STRING255 DC O
+Visible string status (VSS)
+Attribute Name Attribute Type FC M/O/C Comments
+stVal VISIBLE STRING255 ST M
+q Quality ST M
+t TimeStamp ST M
+d VISIBLE STRING255 DC O
+Enumerated status settings (ENG)
+Attribute Name Attribute Type FC M/O/C Comments
+setVal ENUMERATED SP O
+d VISIBLE STRING255 DC O
+Integer status settings (ING)
+Attribute Name Attribute Type FC M/O/C Comments
+setVal INT32 SP M
+d VISIBLE STRING255 DC O
+Single point settings (SPG)
+Attribute Name Attribute Type FC M/O/C Comments
+setVal INT32 SP M
+d VISIBLE STRING255 DC O
+Single point settings (SPG)
+Attribute Name Attribute Type FC M/O/C Comments
+setVal INT32 SP M
+d VISIBLE STRING255 DC O
+Binary counter reading (BCR)
+Attribute Name Attribute Type FC M/O/C Comments
+actVal INT32 ST M
+q Quality ST M
+t TimeStamp ST M
+units Unit CF O
+pulsQty FLOAT32 CF M
+d VISIBLE STRING255 DC O
+Measured value (MV)
+Attribute Name Attribute Type FC M/O/C Comments
+mag AnalogueValue MX M
+q Quality MX M
+43
+Attribute Name Attribute Type FC M/O/C Comments
+t TimeStamp MX M
+units Unit CF O
+db INT32U CF O
+d VISIBLE STRING255 DC O
+dataNs VISIBLE STRING255 EX C Extended logical nodes only
+Complex measured value (CMV)
+Attribute Name Attribute Type FC M/O/C Comments
+cVal Vector MX M
+q Quality MX M
+t TimeStamp MX M
+units Unit CF O
+db INT32U CF O
+d VISIBLE STRING255 DC O
+dataNs VISIBLE STRING255 EX C Extended logical nodes only
+WYE
+Attribute Name Attribute Type FC M/O/C Comments
+phsA CMV C
+phsB CMV C
+phsC CMV C
+neut CMV C Signed with (*) where available
+dataNs VISIBLE STRING255 EX C Extended logical nodes only
+DELTA
+Attribute Name Attribute Type FC M/O/C Comments
+phsAB CMV C
+phsBC CMV C
+phsCA CMV C
+Sequence (SEQ)
+Attribute Name Attribute Type FC M/O/C Comments
+c1 CMV M
+c2 CMV M
+c3 CMV M
+seqT ENUMERATED MX M pos-neg-zero | dir-quad-zero
+dataNs VISIBLE STRING255 EX C Extended logical nodes only
+Harmonic value for WYE (HWYE) Ed2
+Attribute Name Attribute Type FC M/O/C Comments
+phsAHar ARRAY[0..numHar] OF
+CMV
+MX M In percent of fundamental
+phsBHar ARRAY[0..numHar] OF
+CMV
+MX O In percent of fundamental
+phsCHar ARRAY[0..numHar] OF MX O In percent of fundamental
+44
+Attribute Name Attribute Type FC M/O/C Comments
+CMV
+numHar INT16U CF M numHar = 63 (no subharmonics)
+numCyc INT16U CF M numCyc = 1
+evalTm INT16U CF M evalTm = nominal period
+frequency FLOAT32 CF M frequency = nominal frequency
+d VISIBLE STRING255 DC O
+Harmonic value for WYE (HWYE) Ed1
+Attribute Name Attribute Type FC M/O/C Comments
+q Quality MX M
+t TimeStamp MX M
+phsAHar ARRAY[0..numHar] OF
+Vector
+MX M In percent of fundamental
+phsBHar ARRAY[0..numHar] OF
+Vector
+MX O In percent of fundamental
+phsCHar ARRAY[0..numHar] OF
+Vector
+MX O In percent of fundamental
+numHar INT16U CF M numHar = 63 (no subharmonics)
+numCyc INT16U CF M numCyc = 1
+units Unit CF O
+evalTm INT16U CF M evalTm = nominal period
+frequency FLOAT32 CF M frequency = nominal frequency
+d VISIBLE STRING255 DC O
+Harmonic value for DEL (HDEL) Ed2
+Attribute Name Attribute Type FC M/O/C Comments
+phsABHar ARRAY[0..numHar] OF
+CMV
+MX M In percent of fundamental
+phsBCHar ARRAY[0..numHar] OF
+CMV
+MX O In percent of fundamental
+phsCAHar ARRAY[0..numHar] OF
+CMV
+MX O In percent of fundamental
+numHar INT16U CF M numHar = 63 (no subharmonics)
+numCyc INT16U CF M numCyc = 1
+evalTm INT16U CF M evalTm = nominal period
+frequency FLOAT32 CF M frequency = nominal frequency
+d VISIBLE STRING255 DC O
+Harmonic value for DEL (HDEL) Ed1
+Attribute Name Attribute Type FC M/O/C Comments
+q Quality MX M
+t TimeStamp MX M
+phsABHar ARRAY[0..numHar] OF
+Vector
+MX M In percent of fundamental
+phsBCHar ARRAY[0..numHar] OF
+Vector
+MX O In percent of fundamental
+phsCAHar ARRAY[0..numHar] OF MX O In percent of fundamental
+45
+Attribute Name Attribute Type FC M/O/C Comments
+Vector
+numHar INT16U CF M numHar = 63 (no subharmonics)
+numCyc INT16U CF M numCyc = 1
+units Unit CF O
+evalTm INT16U CF M evalTm = nominal period
+frequency FLOAT32 CF M frequency = nominal frequency
+d VISIBLE STRING255 DC O
+Controllable single point (SPC)
+Applied to boGGIO and evfGGIO class nodes.
+Attribute Name Attribute Type FC M/O/C Comments
+ctlVal BOOLEAN CO C See notes below for operation
+explanation
+stVal BOOLEAN ST M
+q Quality ST M
+t TimeStamp ST M
+d VISIBLE STRING255 DC O
+pulseConfig PulseConfig CF O
+ctlModel CtlModels CF M
+Relay output operation depends on the configurable cmdQual attribute value (see pulseConfig) and
+the relay operation mode configured in the device via the Relay Setup as indicated in the following
+table.
+cmdQual Relay Operation Mode Relay Output Operation
+pulse Pulse/KYZ Pulse output. ctlVal = 1  generates a pulse (normal/KYZ) with a
+duration defined by the onDur attribute; ctlVal = 0  no effect
+pulse Latched/unlatched No effect
+persistent Pulse/KYZ Pulse output. ctlVal = 1  generates a pulse (normal/KYZ) with a
+duration defined by the pulse width pre-configured in the device
+setup; ctlVal = 0  no effect
+persistent Latched/unlatched Latched output. ctlVal = 1  switch on, ctlVal = 0  switch off
+Controllable double point (DPC)
+Applied to CSWI class nodes.
+Attribute Name Attribute Type FC M/O/C Comments
+ctlVal BOOLEAN CO C
+stVal CODED ENUM ST M
+q Quality ST M
+t TimeStamp ST M
+subEna BOOLEAN SV C
+subVal CODED ENUM SV C
+subQ Quality SV C
+pulseConfig PulseConfig CF O
+ctlModel CtlModels CF M
+46
+Attribute Name Attribute Type FC M/O/C Comments
+d VISIBLE STRING255 DC O
+Controllable integer status (INC)
+Attribute Name Attribute Type FC M/O/C Comments
+ctlVal INT32 CO C
+stVal INT32 ST M
+q Quality ST M
+t TimeStamp ST M
+d VISIBLE STRING255 DC O
+4.6 Constructed Attribute Classes
+The following tables indicate usage of constructed attribute classes.
+Quality
+Attribute Name Attribute Type Value/range M/O/C Comments
+validity CODED ENUM good | invalid | reserved
+| questionable
+M Supported
+detailQual PACKED LIST M Supported
+overflow BOOLEAN FALSE M Defaulted
+outOfRange BOOLEAN TRUE | FALSE M Supported
+badReference BOOLEAN TRUE | FALSE M Supported
+oscillatory BOOLEAN FALSE M Defaulted
+failure BOOLEAN TRUE | FALSE M Supported
+oldData BOOLEAN FALSE M Supported
+inconsistent BOOLEAN FALSE M Defaulted
+inaccurate BOOLEAN FALSE M Defaulted
+source CODED ENUM process | substituted M Supported
+test BOOLEAN FALSE M Defaulted
+operatorBlocked BOOLEAN FALSE M Defaulted
+Analog value
+Attribute Name Attribute Type Value/range M/O/C Comments
+f FLOAT32 floating point value C
+Pulse configuration
+Attribute Name Attribute Type Value/range M/O/C Comments
+cmdQual ENUMERATED pulse | persistent M For boGGIO pulse output, a relay
+must be set to pulse mode via
+the device Relay Setup
+onDur INT32U M boGGIO class nodes: default =
+2000 ms
+CSWI class nodes: default = 0
+offDur INT32U M Not supported
+numPls INT32U 1 M Read only
+47
+Originator
+Attribute Name Attribute Type Value/range M/O/C Comments
+orCat ENUMERATED not-supported | bay-
+control | station-control
+| remote-control |
+automatic-bay |
+automatic-station |
+automatic-remote |
+maintenance | process
+M
+orIdent OCTET STRING64 M
+Unit definition
+Attribute Name Attribute Type Value/range M/O/C Comments
+SIUnit ENUMERATED IEC61850-7-3, Tables A.1
+to A.4
+M
+multiplier ENUMERATED IEC61850-7-3, Table A.5 O
+Vector definition
+Attribute Name Attribute Type Value/range M/O/C Comments
+mag AnalogueValue M
+ang AnalogueValue O
+CtlModels definition
+Attribute Value Comments
+status-only Not controllable SPS, DPS and ENS
+direct-with-normal-security Controllable SPC. Supported by boGGIO and evfGGIO class nodes.
+sbo-with-normal-security Controllable SPC. Supported by boGGIO and evfGGIO class nodes.
+direct-with-enhanced-security Controllable DPC. Supported by CSWI class nodes.
+sbo-with-enhanced-security Not supported
+SboClasses definition
+Attribute Value Comments
+operate-once
+operate-many Not supported
+48
+5 TICS - TISSUES Implementation Conformance Statement
+According to the UCA IUG QAP the tissue conformance statement is required to perform a
+conformance test and is referenced on the certificate.
+This document is applicable for the PM180 device.
+Mandatory Edition 2 Tissues
+The table below gives an overview of the applicable mandatory Tissues. The descriptions in greater
+detail can be found in the Tissue database at www.tissues.iec61850.com.
+Part No Description Implemented
+6 658
+Tracking related features
+EntryID and CST missing, these are checked by schema
+na
+663 FCDA element cannot be a "functionally constrained logical node"
+doName now mandatory in FCDA element, SCT: refuse to make empty
+doName? ICT: Refuse SCD
+Y
+668 Autotransformer modeling
+Autotransformer model in substation section has changed
+na
+687 SGCB ResvTms
+SettingControl has added attribute resvTms, see also TISSUE 845
+na
+719 ConfDataSet - maxAttributes definition is confusing
+maxAttributes now means max count of FCDA in dataset
+Y
+721 Log element name
+LN0/Log now has optional attribute "name"
+na
+768 bType VisString65 is missing
+VisString65 added as SCL BasicType
+Y
+779 object references
+"@" as first character in object references now allowed
+na
+788 SICS S56 from optional to mandatory
+SICS S56="Interpret IED capabilities and prohibit unsupported usage"
+na
+789 ConfLdName as services applies to both server and client
+Changes made to Services section
+na
+804 valKind and IED versus System configuration
+valImport missing/false DAI means ICT shall ignore value in SCD and SCT
+shall not change from ICD/IID value. Instance section inherits from
+DA/BDA element.
+na
+806 Max length of log name inconsistent between -6 and -7-2
+LogControl.logName and Log.name restricted to 32 chars
+Y
+807 Need a way to indicate if "Owner" present in RCB
+Services/ReportSettings owner added
+Y
+823 ValKind for structured data attributes
+valKind is prohibited on structured attributes
+Y
+824 Short addresses on structured data attributes
+sAddr is now allowed for structured attributes
+na
+825 Floating point value
+Server shall support <Val> with exponential notation
+Y
+845 SGCB ResvTms
+Services/SettingGroups/SGEdit added attribute resvTms
+Services/SettingGroups/ConfSG added attribute resvTms
+See also TISSUE 687
+na
+49
+Part No Description Implemented
+853 SBO and ProtNs
+DA[@name=SBO] element shall have ProtNS element
+na
+855 Recursive SubFunction
+Substation section extension must be tolerated
+na
+856 VoltageLevel frequency and phases
+Substation section extension must be tolerated
+na
+857 Function/SubFunction for ConductingEquipment
+Substation section extension must be tolerated
+na
+886 Missing 8-1 P-types
+"tP_IP_UDP_PORT" and "tP_IP_TCP_PORT" added
+na
+901 tServices as AP or as IED element
+Rules for contents of AP/Server/Services are now defined
+na
+936
+SupSubscription parameter usage is difficult
+SupSubscription "max" replaced by "maxGo" and "maxSv"
+Y
+1147 tServices - FileHandling not consistent with -7-2
+Services/FileHandling now means only support for GetFile and
+GetFileAttributeValues and NOT SetFile/DeleteFile
+Y
+1185 Valkind value Conf for EX FC data
+valKind=Conf is allowed for dataNs
+na
+1284 SCSM mapping may require a communication section in an ICD file
+Server IEDs supporting client/server associations to 61850-8-1 shall
+include a <Communication> section
+Y
+1328 Limitation on the size of data type templates identifiers
+Identifier now limited to 255 characters
+Y
+1395 Client LN attributes
+ReportControl/RptEnabled/ClientLN@ldInst shall be "LD0" for pure clients
+(without any Logical Devices)
+na
+1402 ExtRef during engineering
+an ExtRef.intAddr attribute value unequal to empty string (prescribed or
+filled by the IED tool) is the flag indicating that the ExtRef shall not be
+deleted by the system tool. The system tool can however remove the link
+to the source IED <<applicable for SCL tool test>>
+na
+1415 SICS-S110 IID import mandatory for Edition2
+only the import of data model modifications and CF value changes is
+mandatory for system tool <<applicable for SCL tool test>>
+na
+1419 Support of ldName on other IEDs
+SICS I212 is now mandatory
+na
+1444 Need to support fixed and SCT controlled Datasets
+Services/xxxSetttings@datSet=fix now means "data set pointed by Control
+Block cannot be altered from ICD/IID value <<applicable for SCL tool
+test>>
+na
+1445 ConfReportControl and a fixed ReportSettings
+Control block capabilities must be consistent <<applicable for SCL tool
+test>>
+na
+1450 originalSclXxx computation rules
+Ed2 ICD/IID files specifying SCL@version=2007 SHALL include
+originalSCLVersion=2007 and originalSCLRevision as attributes of the
+<IED>element
+na
+1485 Need to supersede Tissue 1398 to clarify SCT behavior
+Same as TISSUE 1450 <<applicable for SCL tool test>>
+na
+7-1 828 Data model namespace revision IEC 61850-7-4:2007[A] Y
+50
+Part No Description Implemented
+Both 2007 and 2007A are allowed for namespace name
+948 Enumeration (string) values format
+Enums are limited to 127 characters from Basic-Latin and Latin-1
+character sets
+Y
+1151 Simulated GOOSE disappears after 1st appearance when LPHD.Sim =
+TRUE
+New LGOS state machine defined, but TISSUE is not IntOp2, therefore
+TISSUE is optional if LGOS is used
+na
+1396 The use and configuration flow of LGOS and LSVS is unclear
+If Services/SupSubscription@maxGo > 1 then at least 1 LGOS must exist.
+Same for maxSv/LSVS.
+If maxGo > count(LGOS) then SCT can create additional LGOS. Same for
+maxSv/LSVS
+Y
+1447 Restriction on ENUMtypes in SCL
+If a ENUM DA limits write or configuration to a subset, then that subset
+must be declared
+na
+1457 Multiple DOI nodes with the same name
+LN can have no more than one DOI with same name
+Y
+1468 Re-use DO from other LN
+allow standard or private dataNs
+na
+1491 CmdBlk blocks itself?
+The data CmdBlk shall have no effect on the controllable data Mod or
+CmdBlk
+na
+1495 GetVariableAccessAttributes error code
+Return MMS error access/object-non-existent if the object does not exist
+Y
+7-2 728 BRCB: could PurgeBuf be set when RptEna=TRUE?
+PurgeBuf while RptEna=true is prohibited
+Y
+778 AddCause values  add value not-supported
+Align 7-2 with 8-1 (nothing new to 8-1)
+na
+780 What are unsupported trigger option at a control block?
+All control blocks must support all trigger options
+Y
+783 TimOper Resp-; add Authorization check
+Clarifies Time-Operated Controls
+na
+786 AddCause values 26 and 27 are switched
+Annex B.2 has wrong AddCause values
+na
+820 Mandatory ACSI services (use for PICS template)
+Model entries M18 (Application Association), M19 (GCB), M20 (SVCB) are
+new. Services S17 (Substitution) and S61 (GetServerDirectory) are new.
+Services S1, S3, S4, S5, S6, S8, S16, S18, S23, S36, S37, S41, S42 are
+changed.
+Y
+858 typo in enumeration ServiceType
+Tracking serviceType now has GetLogicalNodeDirectory
+na
+861 dchg of ConfRev attribute
+Clarifies (tracking) BTS.confRev is AFTER BRCB change
+na
+1050 GTS Phycomaddr definition in SCL
+(Tracking) GTS needs a special structure for SCL
+na
+1071 Length of DO name
+Private DO name length shall be <=12 including instance
+Y
+1127 Missing owner attribute in BTS and UTS na
+1202 GI not optional
+GI support is mandatory for both URCB and BRCB
+Y
+51
+Part No Description Implemented
+1232 EntryID needs clarification
+Segments of a report shall have same identifiers
+Y
+1242 NTS definition
+NTS.resv have been added
+na
+1307 Segmented report with Buffer overflow
+Segments of a report shall have identical buf-overflow value
+Y
+1428 MTS and NTS should use svOptFlds
+MTS.optFlds and NTS.optFlds now have bType=SvOptFlds
+na
+1630 Attributes in CDC=LTS do not match 8-1 definition
+Order of attributes in LTS changed to:
+logEna, logRef, datSet, oldEntrTm, newEntrTm, oldEnt, newEnt, trgOps,
+intgPd
+na
+7-3
+697 Persistent command/PulseConfig
+PulseConfig adds enum "persistent-feedback"
+DPC.cmdQual=="persistent" is conditionally allowed
+Y
+698 Wrong case is BAC.dB attribute
+attribute renamed from "dB" to "db"
+na
+711 blkEna freeze data update while setting its quality to operaterBlocked
+Mode=Blocked shall not cause q.operatorBlocked
+na
+722 Units for 'h' and 'min' not in UnitKind enumeration.
+New unit enums 84=hours, 85=minutes
+na
+919 Presence Condition for sVC
+svC may be valKind=Conf in ICD file
+na
+925 Presence of i or f attribute - Problem with writing
+New constructed attribute class "AnalogueValueCtl"
+na
+926 Presence Conditions within RangeConfig
+All or none of hhLim+hLim+lLim+llLim shall be present
+na
+954 Data attributes with FC=CF should have trgOp=dchg
+Some INS and HST and CSG attributes missing dchg
+na
+1078 CMV.t update if rangeAng changed
+Add rangeAng to"reasons-to-update-timestamp-of-CMV"
+na
+1565 db = 0 behaviour
+db=0 not longer suppresses reporting
+na
+1578 dataAttribute NameSpace content
+Attributes with FC=EX must be initialized in ICD/IID file
+Y
+7-4
+671 Mistake in definition of Mod & Beh
+Beh=on, q=test should be "Processed as valid"
+na
+674 CDC of ZRRC.LocSta is wrong
+ZRRC LocSta should be CDC=SPC
+na
+676 Same data object name used with different CDC
+LCCH.Fer renamed to FerCh, LCCH.RedFer to RedFerCh
+na
+677 MotStr is used with different CDC in PMMS and SOPM LN classes
+Rename SOPM.MotStr to MotStrNum
+na
+679 Remove CycTrMod Enum
+Enum is no longer used, use TrMod instead
+na
+680 SI unit for MHYD.Cndct
+Change unit from S/cm2 to S/m
+na
+681 Enum PIDAlg
+Typographical error, invalid XML syntax
+na
+682 ANCR.ParColMod
+ParColMod enum values text have changed
+na
+52
+Part No Description Implemented
+683 Enum QVVR.IntrDetMth
+IntrDetMth enum values text have changed
+na
+685 Enum ParTraMod
+ParTraMod enum values text have changed
+na
+686 New annex H -enums types in XML
+Changes have been made to enumeration names
+Y
+694 Data object CmdBlk
+CmdBlk semantics have changed
+na
+696 LSVS.St (Status of subscription)
+LSVS.St is now mandatory
+na
+712 Interpretation of quality operatorBlocked
+Mode and Behavior semantics have changed
+na
+713 DO Naming of time constants in FFIL
+Many DO names in FFIL have changed
+na
+714 Enums for ShOpCap and SwOpCap
+Type for YPSH.ShOpCap and XSWI.SwOpCap have changed
+na
+715 RBDR.ChNum1
+RBDR.ChNum1 changes from optional to conditional
+na
+716 TAXD text for condition
+TAXD.SmRte condition for inclusion has changed
+na
+724 ANCR.Auto
+ANCR.Auto changes from mandatory to optional
+na
+725 Loc in LN A-group
+Loc changes to optional, LocKey/LocSta conditions change
+na
+734 LLN0.OpTmh vs. LPHD.OpTmh
+LLN0.OpTmh deleted, LPHD.OpTmH added as conditional
+na
+736 PFSign
+MMXU.PFSign enum is extended with 3=Excitation
+na
+742 GAPC.Str, GAPC.Op and GAPC.StrVal
+Objects have instance indicator removed (ex, Str1 to Str)
+na
+743 CCGR.PmpCtl and CCGR.FanCtl
+Object have instance indicator added (ex:PmpCtl to PmpCtl1)
+na
+744 LN STMP, EEHealth and EEName
+Removed STMP.EEHealth and STMP.EEName
+na
+772 LPHD.PwrUp/PwrDn should be transient
+These objects are now transient
+na
+773 Loc, LocKey and LocSta YPSH and YLTC
+Add Loc, LocKey and LocSta in YLTC and YPSH (optional)
+na
+774 ITCI.LocKey
+Add ITCI.LocKey as optional
+na
+776 LPHD.OutOv/InOv and LCCH.OutOv/InOv
+Clarified: stays true until buffer space again available
+na
+800 Misspelling in CSYN
+CSYN.VInvTmms renamed to CSYN.VIntvTmms
+na
+802 CCGR and Harmonized control authority
+Add Loc, LocKSta to every controllable LN (e.g. FSPT)
+na
+808 Presence condition of ZMoT.DExt and new DOs
+Change ZMOT.DExt to optional; add TotThmSt and MotSt
+na
+831 Setting of ConfRevNum in LGOS
+Add RxConfRevNum to LGOS and LSVS
+na
+53
+Part No Description Implemented
+838 Testing in Beh=Blocked
+Change semantic of Beh=Blocked to allow controls to be acknowledged
+even when LN is blocked.
+na
+844 MFLK.PhPiMax, MFLK.PhPiLoFil, MFLK.PhPiRoot DEL->WYE
+Change these NFLK objects from cdc=DEL to cdc=WYE
+na
+877 QVUB -settings should be optional
+Change QVUB.UnbDetMth and QVUB.StrVal to optional
+na
+908 ARIS.StrSeq  transient
+Change ARIS.StrSeq to transient
+na
+909 Remove ANCR.ColOpR and ColOpL
+Replace ANCR.ColOpR and ANCR.ColOpL with ANCR.ColChg. Add
+YEFN.ColChg
+na
+912 Clarification of PwrRtg/VARtg
+Change many DOs in YPTR, and ZGEN, see name space 2007A2.nsd for
+final result
+na
+920 Resetable Counter is NOT resettable
+Change GGIO.CntRs to CntVal; Same for FCNT
+na
+932 Rename AVCO.SptVol to AVCO.VolSpt na
+933 Presence of LCCH.RedFerCh and RedRxCnt
+Change the presence condition of LCCH.RedChLiv
+na
+939 Change CDC for ANCR.FixCol
+Change ANCR.FixCol from APC to ASG
+na
+991 LGOS: GoCBRef (as well as LSVS.SvCBRef) should be mandatory
+LGOS.GoCBRef and LSVS.SvCBRef are now both mandatory
+Y
+1007 PTRC as fault indicator - Update of description required
+PTRC.Tr and Op and Str conditional (at least 1 of group)
+na
+1044 TapChg in AVCO
+AVCO.TapChg is now optional
+na
+1077 Rename DOnames within LTIM
+LTIM.TmChgDayTm, changed to TmChgDay;
+LTIM.TmChgStdTm changed to TmChgStd
+na
+1256 New DO for LTIM to set time "manually"
+Add LTIM.TmSet
+na
+1331 Mod, Beh and Health with q=TEST, client can't receive their states
+Mod while in Blocked will always be processed
+na
+1426 Add two DO for leap seconds in LTIM
+LTIM.Leap added
+na
+1456 Annex A and Mod/Beh/Health
+Mod.stVal writes always ignore test bits in controls
+na
+1568 ISAF.AlmReset ->transient
+Change ISAF.AmlReset to transient
+na
+8-1
+770 GoID type mismatch 18.1.1 and 18.1.2.5.2
+GoID string length is now 129
+Y
+784 Tracking of control (CTS)
+Tracking CTS has been added
+na
+817 Fixed-length GOOSE float encoding
+GOOSE float is encoded Tag-0x87, length=5, first octet=8
+na
+827 Mandatory ACSI services (Part of 7-2 TISSUE resolution)
+Change Table 111 (ServicesSupported): Add initiate, abort, and release.
+Change conditions for defineNamedVariables
+Y
+834 File dir name length 64 Y
+54
+Part No Description Implemented
+Filename length changed from 32 to 64
+951 Encoding of Owner attribute
+xRCB.owner is encoded as 4 octets(IPv4) or 16 octets(IPv6)
+na
+1040 More associate error codes
+3 additional associate error codes added
+na
+1178 Select Response+ is non-null value
+Response to SBO read should be <CO_CtrlObjectRef>
+Y
+1324 The response- for DeleteNamedVariableList is not defined
+numDeleted=0; error=service/object-constraint-conflict
+Y
+1345 Fixed-length GOOSE ASN.1 length encoding
+GOOSE publisher shall always encode minimum size length field
+na
+1441 Optional fields in buffered reports
+Writing BRCB.optFld shall not cause a purgeBuf operation
+Y
+1442 Journal variableTag for ReasonCode
+Example in the standard is incorrect
+na
+1453 Purge buffer on write to BRCB
+PurgeBuf only occurs if different value is written
+Y
+1454 Reports can be transmitted before write (RptEna=true) is confirmed na
+1500 the response for DeleteNamedVariableList with a non-existent LN is not
+specified
+CreateDataSet/DefineNamedVariableList specifying a non-existing LD/LN
+shall fail with access/object-non-existent
+Y
+Note: Tissues 675, 735, 772, 775, 776, 878 are not relevant for conformance testing.
+Mandatory Edition 1 Tissues
+The table below lists the other applicable Edition 1 technical issues.
+Part No Description Implemented
+6 1 Syntax Y
+5 tExtensionAttributeNameEnum is restricted Y
+8 SIUnit enumeration for W Y
+10 Base type for bitstring usage na
+17 DAI/SDI elements syntax Y
+169 Ordering of enum differs from 7-3 na
+245 Attribute RptId in SCL Y
+529 Replace sev - Unknown by unknown na
+7-2 30 Control parameter T Y
+31 Typo Y
+32 Typo in syntax Y
+35 Typo Syntax Control time Y
+36 Syntax parameter DSet-Ref missing Y
+37 Syntax GOOSE "T" type Y
+39 Add DstAddr to GoCB Y
+40 GOOSE Message AppID to GoID Y
+41 GsCB "AppID" to "GsID" na
+42 SV timestamp: "EntryTime" to "TimeStamp" Y
+43 Control "T" semantic Y
+55
+Part No Description Implemented
+44 AddCause - Object not selected Y
+46 Synchrocheck cancel na
+47 "." in LD Name? na
+49 BRCB TimeOfEntry? Y
+50 LNName start with number? na
+51 ARRAY [0..num] missing na
+52 Ambiguity GOOSE SqNum Y
+53 Add DstAddr to GsCB, SV Y
+151 Name constraint for control blocks etc. Y
+166 DataRef attribute in Log na
+185 Logging - Integrity period na
+189 SV Format Y
+190 BRCB: EntryId and TimeOfEntry Y
+191 BRCB: Integrity and buffering reports Y
+234 New type CtxInt na
+275 Confusing statement on GI usage Y
+278 EntryId not valid for a server Y
+297 BRCB: SqNum generation Y
+298 BRCB: SqNum attribute data type Y
+305 BufTim=0 with 2 or more data set changes Y
+322 BRCB: Buffer purge when changing configuration Y
+329 BRCB: Conditions for setting buffer overflow Y
+333 Enabling of an incomplete GoCB Y
+335 BRCB: Clearance of BufOvl flag Y
+348 URCB class and report Y
+349 TimeOfEntry has two definitions Y
+7-3 28 Definition of APC na
+54 Point def xVal, not cVal na
+55 Ineut = Ires? na
+60 Services missing in tables Y
+63 mag in CDC CMV na
+219 operTm in ACT na
+270 WYE and DEL rms values Y
+8-1 116 GetNameList with empty response? Y
+165 Improper Error Response for GetDataSetValues Y
+183 GetNameList error handling Y
+246 Control negative response (SBO-normal-security) with LastApplError Y
+545 Skip file directories with no files Y
+Note: Tissues 49, 190, 191, 275 and 278 are part of the optional tissue 453.
+

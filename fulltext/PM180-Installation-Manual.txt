@@ -1,0 +1,1114 @@
+PM180
+PM180 Series
+SUBSTATION AUTOMATION UNIT
+INSTALLATION MANUAL
+BG0521 Rev. A10
+PM180 Substation Automation Unit i
+LIMITED WARRANTY
+The manufacturer offers the customer a 24-month functional warranty on the instrument for faulty workmanship or
+parts from date of dispatch from the distributor. In all cases, this warranty is valid for 36 months from the date of
+production. This warranty is on a return to factory basis.
+The manufacturer does not accept liability for any damage caused by instrument malfunction. The manufacturer
+accepts no responsibility for the suitability of the instrument to the application for which it was purchased.
+Failure to install, set up or operate the instrument according to the instructions herein will void the warranty.
+Your instrument may be opened only by a duly authorized representative of the manufacturer. The unit should
+only be opened in a fully anti-static environment. Failure to do so may damage the electronic components and will
+void the warranty.
+NOTE
+The greatest care has been taken to manufacture and calibrate your instrument. However, these instructions do
+not cover all possible contingencies that may arise during installation, operation or maintenance, and all details
+and variations of this equipment are not covered by these instructions.
+For additional information regarding installation, operation or maintenance of this instrument, contact the
+manufacturer or your local representative or distributor.
+Please read the instructions in this manual before performing installation, and take note of the following
+precautions:
+1. Ensure that all incoming AC power and other power sources are turned OFF before performing any work
+on the instrument. Failure to do so may result in serious or even fatal injury and/or equipment damage.
+2. Before connecting the instrument to the power source, check the labels on the side of the instrument to
+ensure that your instrument is equipped with the appropriate power supply voltage, input voltages, currents,
+analog output and communication protocol for your application
+3. Do not connect the instrument to a power source if it is damaged.
+4. Do not expose the instrument to rain or moisture.
+5. The secondary of an external current transformer must never be allowed to be open circuit when the
+primary is energized. An open circuit can cause high voltages, possibly resulting in equipment damage, fire and
+even serious or fatal injury. Ensure that the current transformer wiring is made through shorting switches and is
+secured using an external strain relief to reduce mechanical strain on the screw terminals, if necessary.
+6. Setup procedures must be performed only by qualified personnel familiar with the instrument and its
+associated electrical equipment
+7. Do NOT open the instrument under any circumstances.
+Read this manual thoroughly before connecting the meter to the current carrying circuits.
+During operation of the meter, hazardous voltages are present on input terminals. Failure to
+observe precautions can result in serious or even fatal injury or damage to equipment.
+All trademarks are property of their respective owners.
+June 2025
+Copyright 2003-2025  SATEC Ltd.
+ii
+Contents
+1. Introduction ..............................................................................................................1
+1.1 About This Manual .................................................................................................................1
+1.2 About The PM180 ...................................................................................................................1
+1.2.1 AC/DC Inputs............................................................................ 2
+1.2.2 Digital and Analog I/O Options ................................................. 2
+1.2.3 Communications Options ......................................................... 2
+1.2.4 Remote Displays....................................................................... 2
+1.2.5 Upgradeable Firmware ............................................................. 3
+2. Installation................................................................................................................4
+2.1 Mechanical Installation ..........................................................................................................4
+2.2 Electrical Installation..............................................................................................................6
+2.2.1 Power Source Connection........................................................ 6
+2.2.2 Current Inputs........................................................................... 6
+2.2.3 Ground...................................................................................... 6
+2.2.4 Voltage Inputs........................................................................... 6
+2.2.5 Wiring Configurations ............................................................... 7
+2.2.6 Digital Inputs............................................................................. 12
+2.2.7 Relays....................................................................................... 13
+2.2.8 Digital Input/Output................................................................... 13
+2.2.9 Analog Input/Output.................................................................. 14
+2.2.10 Transient Module  TRM .......................................................... 15
+2.2.11 Phasor Measurement Unit Module  PMU............................... 16
+2.2.12 Digital Fault Recorder module  DFR....................................... 17
+2.2.13 Serial Communication options  COM1, COM2....................... 18
+2.2.14 USB communication port.......................................................... 19
+2.2.15 Network Communication options.............................................. 19
+2.3 Location of Modules.............................................................................................................21
+3. Communications......................................................................................................22
+4. Changing the Battery...............................................................................................27
+5. Appendix: Technical Specifications ......................................................................28
+5.1 Environmental Conditions...................................................................................................28
+5.2 Construction .........................................................................................................................28
+5.3 Power Supply........................................................................................................................28
+5.4 Input Ratings.........................................................................................................................29
+5.5 Plug-In I/O Ratings ...............................................................................................................30
+5.6 Communication Ports ..........................................................................................................31
+5.7 IRIG-B.....................................................................................................................................33
+5.8 Log Memory ..........................................................................................................................33
+5.9 Remote Display Module .......................................................................................................33
+5.10 Standards Compliance.........................................................................................................34
+iii
+5.11 Measurement Specifications...............................................................................................37
+PM180 Substation Automation Unit 1
+Chapter 1 Introduction
+1. Introduction
+1.1 About This Manual
+This manual is intended to assist the user in the installation of the PM180 Series (expertmeterTM PM180)
+Substation Automation Unit. The term `PM180' is used herein to refer to all models in the series.
+This chapter gives an overview of this manual and an introduction to the PM180.
+Chapter 2, Installation, provides instructions for mechanical and electrical installation.
+Chapter 3, Communications, provides drawings for communications connections and instructions.
+Chapter 4, installing the Battery, provides the replacement/installation battery procedure and instructions.
+Appendix, Technical Specifications for the PM180
+1.2 About The PM180
+The PM180 series is a group of advanced multi-microprocessor-based digital instruments that incorporate the
+capabilities of a power quality analyzer, energy meter, fault and data recorder and programmable controller,
+oriented for substation automation. These instruments provide three-phase measurements of electrical quantities
+in power distribution systems, monitoring external events, operating external equipment via relay contacts, fast
+and long-term on-board recording of measured quantities, faults with currents up to 100A and events, harmonic
+network analysis and disturbance recording.
+Features
+The PM180 combines in a single enclosure:
+ Digital Fault Recorder (onboard fault detector - programmable fault thresholds and hysteresis, up to 100
+Amps fault currents in standard product (using CS1S model) and up to 200Amps fault current with DFR
+add-on module, zero-sequence currents and volts, current and volt unbalance; up to 48 external digital
+triggers from tripping protection relays; ready-for-use fault reports - fault currents magnitude and
+duration, coincident volts magnitude, fault waveforms and RMS trace)
+ Precise Sequence-of-Events Recorder (up to 48 digital inputs at 1-ms resolution, fault events and relay
+operations)
+ Power Quality Recorder (EN50160/IEEE1159/GOST13109/32144-2013, onboard PQ analyzer;
+programmable thresholds and hysteresis; ready-for-use reports; transients, impulses, sags/swells,
+interruptions, harmonics, inter-harmonics, frequency variations, volts unbalance)
+ Event Recorder for logging internal diagnostics events, control events and I/O operations
+ Eight fast Waveform Recorders (simultaneous 8-channel AC, VDC and 16-channel digital inputs
+recording in a single plot; selectable AC sampling rate of 32, 64, 128 or 256 samples per cycle and 512
+or 1024 samples per cycle (TRM); 20 pre-fault cycles, 1-ms resolution for digital inputs; up to 3 hours of
+continuous recording with a 250-Mbyte onboard memory at a rate of 32 samples per cycle)
+ Sixteen fast Data Recorders (from 1/2 cycle RMS to 2-hour RMS envelopes; up to 20 pre-fault cycles;
+programmable data logs on a periodic basis and on any internal and external trigger)
+ Programmable Controller (64 control setpoints, OR/AND logic, extensive triggers, programmable
+thresholds and delays, relay control, event-driven data recording)
+ High-Class 3-phase Power meter (true RMS, volts, amps, powers, power factors, unbalance, neutral
+current)
+ Demand Meter (amps, volts, harmonic demands)
+ Precise Energy and Power Demand Meter (TOU, 16 Summary energy and demand registers for
+substation energy management, accumulation of energy pulses from external watt-meters, block and
+sliding demands, up to 64 energy sources)
+ Harmonic Analyzer (to 63rd harmonic volts and amps, directional power harmonics and power factor,
+Phasor, symmetrical components)
+ 32 digital counters for counting pulses from external sources and numerous internal events
+ 16 programmable timers from 1/2 cycle to 24 hours for periodic recording and triggering operations on a
+time basis
+PM180 Substation Automation Unit 2
+ 1-ms satellite-synchronized clock (IRIG-B time-code input)
+ Second backup power supply unit
+1.2.1 AC/DC Inputs
+The PM180 is provided with a set of fully isolated AC/DC inputs for a connection to the AC feeders and station
+battery:
+Three standard isolated AC voltage inputs (up to 690VAC direct line-to-line input voltage)
+AC/DC voltage input (up to 400V AC/DC) for monitoring fourth AC voltage or DC of the station battery
+Four optional isolated AC voltage inputs (up to 690VAC direct line-to-line input voltage) for transient up to 2kVp
+Four standard isolated AC current inputs:
+- using internal CT, with an extended input range up to 1000% overload (up to 50 Amps input currents -
+fault currents)
+- using HACS 100A (PM180-CS1S model), with an extended input range up to 2000% overload (up to
+100 Amps input currents - fault currents)
+Four optional isolated current inputs up to 200 Amps, external CT, fault currents detector
+1.2.2 Digital and Analog I/O Options
+The PM180 has three I/O expansion slots for removable "hot-swap" plug-in I/O modules:
+DI - Digital inputs (16 optically isolated inputs per module, up to 3 modules per device; options for dry contacts,
+24-250VDC wet inputs; programmable de-bounce time from 1 ms to 1 sec; free linkage to Sequence-of-Events
+Recorder, Fault Recorder, control setpoints, pulse counters and Energy/TOU subsystem)
+RO - Relay outputs (8 relays per module, up to 3 modules per device; unlatched, latched and pulse operations,
+failsafe operation for alarm notifications; programmable pulse width; direct remote relay control through
+communications)
+AI/AO - Mixed analog input/output modules (four optically isolated AI and four AO with internal power supplies per
+module, up to 3 modules per device; options for 0-1mA, 1mA, 0-20mA and 4-20mA inputs and outputs; 200%
+overload current for 0-1mA and 1mA AI/AO)
+TRM  Fast Transient recorder module, with ability to capture transient up to 2kV AC with minimum width of
+17sec, programmable sampling rate 512/1024 samples per cycle (spc)
+DFR  Digital Fault Recorder module to enable current fault capture up to 40 x In (@ In =5A, Ifault = 200A max.).
+1.2.3 Communications Options
+The PM180 has extensive communications capabilities:
+Three independent universal serial communications ports (RS-232/RS-4851, RS-422/RS-485, up to 115,200 bps,
+Modbus RTU/ASCII and DNP3.0 protocols)
+Infrared port (MODBUS RTU/ASCII and DNP3.0 protocols)
+Embedded 3.5G wireless modem for communications through public cellular service provider network
+(MODBUS/TCP or DNP3.0/TCP protocols)
+Ethernet 10/100TX- 100FX port (MODBUS/TCP or DNP3.0/TCP protocols, up to five non-intrusive simultaneous
+connections, Telnet service port)
+USB 1.1 port (MODBUS RTU protocol, 12 Mbps) for fast local communications and data retrieving
+1.2.4 Remote Displays
+The PM180 can be ordered with an optional 3 windows LED Remote Display Module (RDM180) or 12 windows
+LED Remote Display Module (RDM312) or LCD Remote Graphical Module (RGM180). Both have a fast RS-485
+port and communicate with the PM180 through the MODBUS RTU protocol. Remote displays can be located at
+distances of up to 0.5 km from the device. The RGM180 can also be ordered with an Ethernet 10/100Base-T port
+and can communicate with the PM180 through a local network.
+1 RS-485 only on PM180 N3 Version
+PM180 Substation Automation Unit 3
+The RDM180 has 3-row (2x4 characters + 1x6 characters) bright red LEDs well suited for dark areas. It allows the
+user to view real-time RMS and harmonics measurements, status indication parameters, and perform basic setup
+operations when installing and servicing the device.
+The RDM312 has 3-row x 4-window (9x4 characters + 3x6 characters) bright red LEDs well suited for dark areas.
+It allows the user to view real-time RMS and harmonics measurements, status indication parameters, and perform
+basic setup operations when installing and servicing the device.
+The RGM180 is equipped with a color graphics LCD display with Touch Panel and has extensive dialog
+capabilities, allowing the user to view different fault and power quality information in a graphical form, such as
+waveforms, harmonic spectrum, phasors and data trends, review latest fault and power quality reports for fast
+fault analysis, and much more.
+1.2.5 Upgradeable Firmware
+The PM180 uses flash memory for storing device firmware that allows future upgrading of the device without
+replacing any hardware component. The new features can be easily added to your device by simply replacing the
+firmware through a local RS-232/485 port, USB port or Ethernet port.
+PM180 Substation Automation Unit 4
+Chapter 2 Installation
+2. Installation
+2.1 Mechanical Installation
+Figure 2-1: Dimensions
+Figure 2-2: Panel Mounting
+PM180 Substation Automation Unit 5
+Figure 2-3: DIN Rail Mounting
+PM180 Substation Automation Unit 6
+2.2 Electrical Installation
+The PM180 is packed without battery; therefore it must be installed by the
+installer during the PM180 installation (see chapter 4. Installing the Battery.).
+After turning "ON" the PM180 power supply for the first time following battery
+installation, the PM180 initialization process duration may take about 7 minutes,
+while regular PM180 initialization process duration takes 40 seconds
+2.2.1 Power Source Connection
+The PM180 unit has two independent power supplies: main and auxiliary backup power supply. The standard
+power supply may be connected to a 50-290V AC or 90-290V DC power source. Lower voltage DC power supply
+options are also available (see Appendix: Technical Specifications).
+The main power supply connections are:
+ AC power: line to VOLTAGES board terminal "L/+"; neutral to VOLTAGES board terminal "N/-".
+ DC power: positive to VOLTAGES board terminal "L/+"; negative to VOLTAGES board terminal "N/-".
+The auxiliary backup power supply connections:
+ AC power: line to AUX. P.S. AC/DC board terminal "L/+"; neutral to AUX. P.S. AC/DC board terminal
+"N/-"
+ DC power: positive to AUX. P.S. AC/DC board terminal "L/+"; negative to AUX. P.S. AC/DC board
+terminal "N/-".
+Copper wiring 1.5-2.5 mm2 (15 -13 AWG) should be used.
+2.2.2 Current Inputs
+PM180 has 4 current inputs up to 50A with internal current transformer and up to 100A with external SATEC split
+core CT  HACS 100A, connected to Relay Protection CT's via CURRENTS board terminal and 4 current inputs for
+fault up to 40 x In using optional DFR add-on module.
+Copper wiring 2.5  6 mm2 (10 AWG) should be used.
+2.2.3 Ground
+Connect the chassis ground of the PM180 to the switchgear earth ground using dedicated wire greater than 2
+mm2/14 AWG.
+2.2.4 Voltage Inputs
+PM180 models have 3 AC Y-connected voltage inputs of 480V1 (phase-to-phase) and neutral, and one separate
+isolated AC/DC voltage input of 400V.
+1 690 VAC (phase-to-phase) and neutral using PM180-N1 model with 1MOhm voltage input impedance
+PM180 Substation Automation Unit 7
+2.2.5 Wiring Configurations
+2.2.5.1 Configurable Wiring mode
+Use any of the eight wiring configurations shown in Figures 2-4, 2-4, 2-5a/5b, 2-6, 2-7, 2-8 or 2-9.
+Wiring Configuration
+(See parameter setup instructions in Section 4.1) Code for Setup See Figure:
+3-wire direct connection using 2 CTs (2-element) 3dir2 2-4
+4-wire WYE direct connection using 4 CTs (3-element) 4Ln3 or
+4LL3
+2-5
+4-wire WYE connection using 3 PTs, 3 CTs (3-element) 4Ln3 or
+4LL3
+2-6
+4-wire WYE connection using 3 PTs, 3 CTs (3-element)
+With External CT  DFR model (CS2/CS21SCS2SL)
+4Ln3 or
+4LL3
+2-7
+3-wire open delta connection using 2 PTs, 2 CTs (2-
+element)
+3OP2 2-8
+4-wire WYE connection using 2 PTs, 3 CTs (2-element) 3Ln3 or3LL3 2-9
+3-wire open delta connection using 2 PTs, 3 CTs (2 -
+element)
+3OP3 2-10
+4-wire delta direct connection using 3 CTs (3-element) 4Ln3 or
+4LL3
+2-11
+Figure 2-4: Three Wire Direct Connection Using 2 CTs (2-element)
+Wiring Mode = 3dir2
+PM180 Substation Automation Unit 8
+Figure 2-5: Four Wire WYE Direct Connection Using 4 CTs (3-element)
+Wiring Mode = 4LL3 or 4Ln3
+Figure 2-6: Four Wire WYE Connection Using 3 PTs, 4 CTs (3-element) - internal CT
+Wiring Mode = 4LL3 or 4Ln3
+PM180 Substation Automation Unit 9
+Figure 2-7: Four Wire WYE Connection Using 3 PTs, 3 CTs (3-element) external CT  HACS 100A (CS1S)
+Wiring Mode = 4LL3 or 4Ln3
+Figure 2-8: Three Wire Open Delta Connection Using 2 PTs, 2 CTs (2-element)
+Wiring Mode = 3OP2
+PM180 Substation Automation Unit 10
+Figure 2-9: Four Wire Wye Connection Using 2 PTs, 3 CTs (2-element)
+Wiring Mode = 3LL3 or 3Ln3
+Figure 2-10: Three Wire Open Delta Connection Using 2 PTs, 3 CTs (2-element)
+Wiring Mode = 3OP3
+PM180 Substation Automation Unit 11
+Figure 2-11: Four Wire Delta Direct Connection Using 3 CTs (3 element)
+Wiring Mode = 4LL3 or 4Ln3
+2.2.5.2 Line Monitor wiring
+The PM180 can be equipped with a special Current Input board to accommodate direct connection to Medium
+Voltage lines using MV Pole Top Voltage/Current sensors. The figure below shows typical direct Line Monitor (MV)
+application using PM180.
+PM180 Substation Automation Unit 12
+2.2.6 Digital Inputs
+16 optically isolated digital inputs in one digital input module (16DI) are provided for status monitoring and external
+synchronization of power demand period and time. Dry or wet contacts may be connected to these inputs, as
+shown in Figures 2-12 and 2-13. All common terminals are internally connected together.
+Up to three 16DI modules can be installed in the PM180.
+Dry Contacts
+Figure 2-12: Digital Input Connection for Dry Contacts
+Wet Contacts
+Wet contact options are: 24V, 125V or 250V DC (voltage varies according to wet contact option).
+Figure 2-13: Digital Input Connection for Wet Contacts
+PM180 Substation Automation Unit 13
+2.2.7 Relays
+8 relays in one Relay Output Module (8RO) are provided for alarms, remote control or energy pulsing, as shown in
+Figure 2-14. For ratings, see Appendix: Technical Specifications.
+Up to three 8RO modules can be installed in the PM180.
+Figure 2-14: Relays Connection
+2.2.8 Digital Input/Output
+8 optically isolated digital inputs and 4 relay outputs in module (8DI/4RO) are provided for status monitoring and
+external synchronization of power demand period and time, and for alarms, remote control or energy pulsing, as
+shown in Figures 2-15. All common terminals are internally connected together.
+Up to three 8DI/4DO modules can be installed in the PM180 (From Firmware version V31.XX.28).
+IMPORTANT: Whenever 16DI and 8DI/4RO modules are used in same installation, the 16DI modules should be
+placed into lower slots before any 8DI/4RO module
+PM180
+D. INPUTS
+RELAYS
+8 In/4 Out
+R1
+R2
+R3
+R4
+N/A
+1
+2
+3
+4
+5
+6
+7
+8
+LOAD
+LOAD
+LOAD
+LOAD
+LOAD
+LOAD
+LOAD
+LOAD
++125 VDC
+-125 VDC
+FUSE
+10A
+FUSE
+10A
+125V AC/DC
+Line (+)
+N ()
+LOAD
+LOAD
+LOAD
+LOAD
+Figure 2-15: Digital Inputs and Relays Connection
+PM180 Substation Automation Unit 14
+2.2.9 Analog Input/Output
+The PM180 provides 4 optically isolated analog inputs and 4 analog outputs (4AI/AO) with internal isolated power
+supply. Current input/output options are: 0-20 mA and 4-20 mA (current loop load of up to 500 Ohm), 0-1 mA and
+1 mA (current loop load of up to10 kOhm), for  10V option only 4 Analog Inputs module is available as shown in
+Figure 2-16.
+Up to three 4AI/AO modules can be installed in the PM180.
+Figure 2-16: Analog Input/Output Connection
+PM180 Substation Automation Unit 15
+2.2.10 Transient Module  TRM
+The PM180 provides a high speed and high voltage transient detection capabilities versus ground, using the
+transient module TRM, by connecting V1, V2, V3 and Vn, as shown in Figure 2-17.
+The TRM module is detected automatically by the PM180, no configuration is needed.
+TRM Module restrictions:
+ The TRM module is supported by the PM180 from firmware version: V31.XX.10
+ Only one TRM module can be installed in the PM180. It can be plugged in any optional slot (slot 1, 2 or
+3) right after the CPU module
+Figure 2-17: Transient Recorder typical installation
+PM180 Substation Automation Unit 16
+2.2.11 Phasor Measurement Unit Module  PMU
+The PM180 phasor measurement unit (PMU) provides Synchrophasor and frequency measurements compliant
+with the IEEE C37.118.1 P performance class, and real-time cyclic exchange of synchronized phasor data with the
+substation phasor data concentrator (PDC) based on the IEC 61850-9-2 sampled value (SV) service.
+The PMU is implemented as an add-on module integrated in one assembly with the fast transient recorder TRM
+module.
+PMU Module restrictions:
+ Only can function with PM180 N3 with new CPU board (AP1451 - with built-in IRIG-B input)
+ The PMU module is supported by the PM180 from firmware version: V31.XX.29
+ Only one PMU module can be installed in the PM180. It can be plugged in any free slot
+L
+SW2
+2A
+N-
+GND
+MAIN POWER SUPPLY:
+50-290 VAC or
+90-290 VDC
+PM180 Line Monitor
+VOLTAGES
+Measurements
+V1
+V2
+V3
+VN
+V4
+Vref
+L
+N-
+Power Supply
+- V
+- V
+15VA
+CURRENTS
+I1
++
+
+I2
++
+
+I3
++
+
+I4
++
+
+5A 1A
+40
+mA
+Ready
+LAN
+ACT
+LNK
+USB
+TX
+RX
+SH
+Lit
+Bat
+3V
+CPU
+(A)
+LOAD
+SW1
+2A
+GND
+POLE
+LINE 2 (B)
+LINE 3 (C)
+LINE 1
+VN
+I1
+I2
+I3
+V1
+Vn
+I1
+I2
+I3
+GND
+V2
+V3
+1pps
+COM1/IRIG-B
+SW3
+2A
+V3 GND
+VG
+V1
+V2
+Figure 2-18: Phasor Measurement Unit typical installation  MV line monitoring
+PM180 Substation Automation Unit 17
+2.2.12 Digital Fault Recorder module  DFR
+The PM180 provides a high fault current recorder. The DFR measures and captures up to 40 x In (200A @ In = 5A
+using HACS 200A or 40A @ In = 1A using HACS 100A) in 4 current channels  I1X, I2X, I3X and I4X from the Current
+Transformer Protection circuits as shown in Figure 2-19.
+The DFR module is detected automatically by the PM180, no configuration is needed.
+DFR Module restrictions:
+ The DFR module is supported by the PM180 from firmware version: V31.XX.11
+ Only one DFR module can be installed in the PM180. It can be plugged in at any optional slot (slot 1, 2 or
+3) right after the CPU module
+Figure 2-19:Digital Fault Recorder wiring installation
+PM180 Substation Automation Unit 18
+2.2.13 Serial Communication options  COM1, COM2
+The PM180 provides 2 optically isolated serial communication ports, COM11 in the CPU module and COM2
+(RS422/485) in one of the optional Communication modules (IRIG-B, 2G/3G, TXFX, WiFi2, DUP), as shown in
+Figure 2-20.
+If two or more communication modules are plugged in the PM180, only one COM2 port will be active.
+The RGM180/RDM180 remote display can be connected to COM1 or to COM2 using cable AC0198.
+Figure 2-20: Communication Network Connection  RS-485 (Old CPU model)
+1 COM1: RS-485 only from PM180 N3 version
+2 WiFi, MODEM and PROFIBUS communication modules are not available  future options, contact SATEC for more details.
+PM180 Substation Automation Unit 19
+Figure 2-21: Communication Network Connection  RS-485 (PM180 N3 Version) and IRIG-B connection
+2.2.14 USB communication port
+The PM180 CPU module provides one galvanic isolated USB Device communication port, to be connected to a
+personal computer to run PAS configuration tool, as shown in Figure 2-22.
+Figure 2-22: USB port Connection  USB device
+2.2.15 Network Communication options
+ETHERNET module - 10/100Base TX and 100FX
+The PM180 provides one 10/100TX Ethernet communication port in the CPU module and a redundant Ethernet
+wire line/fiber 10/100TX/100FX Ethernet communication port in the TXFX module, as shown in Figure 2-23.
+TXFX Module restrictions:
+ The TXFX module is supported by the PM180 from firmware version: V31.XX.8
+ Only one TXFX module can be installed in the PM180. It must be plugged in at the first optional slot right
+after the CPU module.
+PM180 Substation Automation Unit 20
+Figure 2-23: ETHERNET port Connection  RJ45 and SC
+CELLULAR module - 2G/3G
+The PM180 provides one 2G/3G Cellular communication using the CELLULAR module, as shown in Figure 2-24.
+Insert SIM card at the SIM card compartment, connect Antenna cable using SMA connector.
+CELLULAR Module restrictions:
+ The CELLULAR module is supported by the PM180 from firmware version: V31.XX.15
+ Only one CELLULAR module can be installed in the PM180. It must be plugged in at the first optional slot
+right after the CPU module.
+.
+Figure 2-24: CELLULAR port Connection  SMA connector
+PM180 Substation Automation Unit 21
+2.3 Location of Modules
+The PM180 provides a total of 6 modules slots: 3 fixed slots for COLTAGES, CPU and CURRENTS factory
+installed modules and 3 general purpose field installable "hot swap" modules slots (slot #1, #2 and #3) for
+input/output, measurement and communication optional modules. Any type of optional module can be installed in
+any slot
+CURRENTS
+I1
++
+
+I2
++
+
+I3
++
+
+I4
++
+
+5A 1A 40mA
+DIGITAL
+INPUTS
+16 Inputs
+1
+2
+3
+4
+5
+6
+7
+8
+CM
+9
+10
+11
+12
+13
+14
+15
+16
+CM
+RELAYS
+R8
+R7
+R6
+R5
+R1
+R2
+R3
+R4
+CPU
+Ready
+LAN10/100
+ACT
+LNK
+USB
+COM1
+TX
+RX
+TX/+
+RX/-
+SH
+Lit.
+Bat.
+3V
+Open: RS-485
+Closed: RS-232
+TX+
+TX
+RX
+RX+
+TX-
+RX-
+CM
+COM2
+Slidetolock
+SIM
+LNK
+RSSI
+ANT
+CELLULAR
+OPTIONAL MODULES:
+I/O, COM and
+MEASUREMENT
+CPU MODULE
+2G/3G
+SATEC
+ANALOG
+MODULE
+CT
+MODULE
+VOLTAGES
+Measurements
+V1
+V2
+V3
+VN
+V4
+Vref
+L/+
+N/-
+Power Supply
+50-290V
+90-290V
+15VA
+~
+SLOT #1 SLOT #2 SLOT #3
+Figure 2-25: Location of Modules
+PM180 Substation Automation Unit 22
+Chapter 3 Serial Communications
+3. Communications
+Figure 3-1
+Figure 3-1: RS-232/RS-422/RS-485 ports location
+COM11, RS-232/485 versatile port is provided CPU module.
+COM22, RS-422/485 port is provided by a number of Communication modules: CELLULAR, TXFX, WiFi,
+PROFIBUS and IRIG-B.
+COM3, RS-485 port communicates with any SATEC remote display: RGM180 or RDM.
+COM4, IR port is provided in the RGM180 display when directly attached to the PM180.
+COM51, RS-232 to communicate with modules to activate following modules communication ports: MODEM
+port, PROFIBUS port and CELLULAR port.
+1 COM1: RS-485 only from PM180 N3 version
+2 WiFi, MODEM and PROFIBUS communication modules are not available  future options, contact SATEC for more
+details.
+PM180 Substation Automation Unit 23
+Computer Connections  RS-232 (COM1)
+Figure 3-2: RS-232 Simple 3-wire Connection, 9-pin and 25-pin female
+External Modem Connections
+Figure 3-3: RS-232 Simple 3-wire Connection, 9-pin and 25-pin female
+Initialization String: ATS0=1&D0&K0&W0
+PM180 Substation Automation Unit 24
+Computer Connections  RS-485 (COM1), RS-422/485 (COM2)
+Figure 3-4: RS-485 Multidrop COM1 Connection, 25-pin PC Port
+Figure 3-5: RS-485 Multidrop COM2 Connection, 25-pin PC Port
+PM180 Substation Automation Unit 25
+Figure 3-6: RS-485 Multidrop COM2 Connection, 9-pin PC Port
+Figure 3-7: RS-422 Multidrop COM2 Connection, 25-pin PC Port
+PM180 Substation Automation Unit 26
+Figure 3-8: RS-422 Multidrop COM2 Connection, 9-pin PC Port
+PM180 Substation Automation Unit 27
+Chapter 4 Installing the Battery
+4. Changing the Battery
+The PM180 is packed without battery; therefore it must be installed by the
+installer during the PM180 installation.
+After turning "ON" the PM180 power supply for the first time following
+battery installation, the PM180 initialization process duration may take
+about 7 minutes, while regular PM180 initialization process duration takes
+40 seconds
+IMPORTANT
+Use CR1225 lithium 3.0 volt battery.
+The battery can be replaced or installed in any powered PM180 condition while operating or not; if PM180
+Power Supply is turned "OFF" the battery can be replaced/installed in the coming 30 minutes without
+loosing any data. The data may be uploaded and restored in a PC using PAS (see PM180 Operation
+Manual, Chapter 12) to avoid loosing data.
+When the battery level drops below the minimum allowed threshold, the "BATTERY LOW" flag is set and an
+event is generated in the "Event Log" memory, indicating that the battery should be replaced. Use the
+following procedure:
+1. Use a flat screwdriver to pull the battery holder
+out from the CPU Panel.
+2. Pull the battery from the battery holder
+3. Insert the new battery with the correct polarity 4. Insert the battery holder with the new battery in
+the CPU panel battery compartment
+5. Push the battery holder until a click is heard
+PM180 Substation Automation Unit 28
+Appendix: Technical Specifications
+5. Appendix: Technical Specifications
+5.1 Environmental Conditions
+Operating Temperature: -30C to 70C (-22F to 158F)
+Storage Temperature: -40C to 85C (-40F to 185F)
+Humidity: 0 to 95% non-condensing
+Altitude  2000m
+5.2 Construction
+Overall Dimensions
+Width: 220.00 mm (8.66 Inches)
+Height: 152 mm (5.98 Inches)
+Depth: 210.00 mm (8.26 Inches)
+Weight: 2.5kg (5.51 Lb)
+Materials
+Enclosure: Polycarbonate
+Panels: Polycarbonate
+PCB. : FR4 (UL94-V0)
+Terminals: PBT (UL94-V0)
+Connectors-Plug-in type: Polyamide PA6.6 (UL94-V0)
+Packaging Case: Carton and Stratocell (Polyethylene Foam) Brackets
+Labels: Polyester film (UL94-V0)
+5.3 Power Supply
+Main Power Supply
+Withstanding Insulation: 4kV AC @ 1mn
+AD/DC Power Supply (standard): L/+, N/- and GND
+Rated input: 50-290VAC 50/60 Hz, 90-290VDC, Maximum Power 10W
+Wire Size: up to 10 AWG (up to 6 mm2)
+Terminals Pitch 7.5 mm, three pins
+Auxiliary Power Supply (module)
+Withstanding Insulation: 4kV AC @ 1mn
+AC/DC Power Supply: L/+, N/- and GND
+Rated input: 50-290VAC 50/60 Hz, 40-290VDC, Maximum Power 20W
+Low DC/DC Power Supply (module option): (+), (-) and GND
+12/24 VDC Option: Rated input 9.6-35 VDC, Maximum Power 20W
+Wire Size: up to 10 AWG (up to 6 mm2)
+Terminals Pitch 7.5 mm, three pins
+PM180 Substation Automation Unit 29
+5.4 Input Ratings
+AC Voltage Inputs: V1, V2, V3, VN
+PM180-N1 model
+Measuring range: 57/100  400/690 VAC PM180-N1 to N3 model only
+Direct input and input via PT (up to 576VAC line-to-line, up to 335VAC line-to-neutral)
+Input Impedance: > 1 M
+Burden for 400V: < 0.2 VA
+Burden for 277V: < 0.1 VA
+Burden for 120V: < 0.02 VA
+PM180 model
+Measuring range: 57/100  277/480 VAC
+Direct input and input via PT (up to 576VAC line-to-line, up to 335VAC line-to-neutral)
+Burden for 277V: < 0.76 VA
+Burden for 120V: < 0.144 VA
+Overvoltage Withstand: 1000VAC continuous, 2500VAC for 1 second
+Galvanic Isolation, withstanding insulation: 4kV AC @ 1mn
+Wire Size: up to 10 AWG (up to 6 mm2)
+Terminals Pitch 7.5 mm
+AC/DC Voltage Input: V4, Vref
+Operating Range: 400VAC
+Direct input and input via PT (up to 480VAC) or Battery input
+Input Impedance: > 10 M
+Burden for 400V: << 0.01 VA
+Burden for 120V: << 0.01 VA
+Overvoltage Withstand: 1000VAC continuous, 2500VAC for 1 second
+Resistive Isolation, withstanding Insulation: 4kV AC @ 1mn
+Wire Size: 10 AWG (up to 6 mm2)
+Terminals Pitch: 7.5 mm
+AC Transient Voltage Inputs: V1, V2, V3, VN, VG (TRANSIENT RECORDER module)
+Measuring range: up to 2kV AC
+High impedance input: 10 M, withstanding insulation: 4kV AC @ 1mn
+Wire Size: up to 10 AWG (up to 6 mm2)
+Terminals Pitch 7.5 mm
+AC Current Inputs:
+Standard: I1, I2, I3, I4
+Input via Internal CT with 5A secondary
+Operating range: maximum continuous 10A/20A RMS (ANSI C12.20 and IEC 62053-22)
+Nominal measured Current: In = 5A RMS
+Fault measured Currents: up to 50A RMS (10 x In)  without DFR module
+Burden: < 0.15 VA
+Overload Withstand: 50A RMS continuous, 250A for 1 second
+Wire Size: 10 AWG (2.5 to 6 mm2)
+Terminals Pitch: 9.5 mm
+PM180 Substation Automation Unit 30
+Input via Internal CT with 1A secondary
+Operating Range: continuous 4A RMS (ANSI C12.20) or 2A RMS (IEC 62053-22)
+Nominal measured Current: In = 1A RMS
+Fault measured Currents: up to 10A RMS
+Burden: < 0.02 VA
+Overload Withstand: 10A RMS continuous, 50A for 1 second
+Wire Size: 10 AWG (2.5 to 6 mm2)
+Terminals Pitch: 9.5 mm
+Input via SATEC HACS 100A with 40mA secondary
+Operating range: maximum continuous 10A/20A RMS (ANSI C12.20 and IEC 62053-22)
+Nominal measured Current: 5A RMS
+Fault measured Currents: up to 100A RMS (20 x In)
+Burden: < 0.15 VA
+Overload Withstand: 100A RMS continuous, 250A for 1 second
+Wire Size: 10 AWG (2.5 to 6 mm2)
+Terminals Pitch: 9.5 mm
+Fault Current Inputs:
+Optional DFR Module: I1x, I2x, I3x, I4x  40 x In
+maximum measured fault current
+Input via SATEC HACS 200A with 40mA secondary
+Fault measured Currents: up to 200A RMS @ In = 5A (40 x In)
+Burden: < 0.15 VA
+Overload Withstand: 200A RMS continuous, 1000A for 1 second
+Input via SATEC HACS 100A with 40mA secondary
+Fault measured Currents: up to 40A RMS @ In = 1A (40 x In)
+Burden: < 0.15 VA
+Overload Withstand: 40A RMS continuous, 200A for 1 second
+Wire Size: 10 AWG (2.5 to 6 mm2)
+Terminals Pitch: 9.5 mm
+5.5 Plug-In I/O Ratings
+Digital Inputs  16 Inputs (up to 3 Modules)
+Scan time: 1 ms @ 60Hz, 1.25 ms @ 50Hz.
+16 optically isolated, dry contact sensing (voltage-free):
+Internal power supply 24 VDC
+Sensitivity: open @ input resistance >16kOhm, closed @ input resistance <10kOhm
+Wire Size: 12 AWG (up to 2.5 mm2)
+Terminals Pitch: 3.81 mm
+16 optically isolated, wet contact sensing:
+External Power Supply: 24 VDC
+Sensitivity: open @ input resistance >16kOhm, closed @ input resistance <10kOhm
+Wire Size: 12 AWG (up to 2.5 mm2)
+Terminals Pitch: 3.81 mm
+16 optically isolated, wet contact sensing:
+External Power Supply: 48 VDC
+PM180 Substation Automation Unit 31
+Wire Size: 12 AWG (up to 2.5 mm2)
+Terminals Pitch: 3.81 mm
+16 optically isolated, wet contact sensing:
+External Power Supply: 125 VDC
+Wire Size: 12 AWG (up to 2.5 mm2)
+Terminals Pitch: 3.81 mm
+16 optically isolated, wet contact sensing:
+External Power Supply: 250 VDC
+Wire Size: 12 AWG (up to 2.5 mm2)
+Terminals Pitch: 3.81 mm
+Relays - 8 Outputs (up to 3 Modules)
+8 relays -SPSTFormA
+Contact rating:
+8A @ 250V AC, 5A @ 30V DC
+0.25A @ 250V DC (sw. Volt.)
+5A 24V DC (sw. Cur.)
+Wire Size: 12 AWG (up to 2.5 mm2)
+Terminals Pitch: 3.81 mm
+Update time: 1/2 cycle
+Analog I/O  4 Inputs, 4 Outputs (up to 3 Modules)
+4 Analog Inputs:
+Ranges (upon order):
+1 mA (100% overload)
+0-20 mA
+4-20 mA
+0-1 mA (100% overload)
+Accuracy: 0.5% FS
+Scan time: 2 cycles
+Wire Size: 12 AWG (up to 2.5 mm2)
+Terminals Pitch: 5 mm
+4 Analog Outputs:
+Ranges (upon order):
+1 mA, maximum load 10 k (100% overload)
+0-20 mA, maximum load 510
+4-20 mA, maximum load 510
+0-1 mA, maximum load 10 k  (100% overload)
+Accuracy: 0.5% FS
+Update time: 2 cycles
+Wire Size: 12 AWG (up to 2.5 mm2)
+Terminals Pitch: 5 mm
+5.6 Communication Ports
+COM1 (CPU)
+PM180 Substation Automation Unit 32
+Serial EIA RS-232/485 optically isolated port
+Withstanding Insulation: 4kV AC @ 1 mn
+Connector Type: removable, captured-wire, 4 terminals.
+Wire Size: up to 12 AWG (up to 2.5 mm2).
+Baud Rate: up to 115,200 bps.
+Supported Protocols: MODBUS RTU/ASCII, DNP 3.0
+COM2 (Communication Module)
+Serial EIA RS-422/RS-485 optically isolated port
+Withstanding Insulation: 4kV AC @ 1 mn
+Connector type: removable, captured-wire, 5 terminals.
+Wire Size: up to 12 AWG (up to 2.5 mm2).
+Baud Rate: up to 115,200 bps.
+Supported Protocols: MODBUS RTU/ASCII, DNP 3.0
+COM3 (Display Communication port)
+Serial EIA RS-485 optically isolated port for the RDM.
+Withstanding Insulation: 2.5kV AC @ 1 mn
+Connector Type: DB15.
+Baud Rate: up to 115,200 bps.
+Supported Protocols: MODBUS RTU/ASCII, DNP 3.0
+USB Port (CPU)
+Isolated USB 1.1 port.
+Withstanding Insulation: 4kV AC @ 1 mn
+Connector Type A male, standard USB cable, max. Length 2 meters
+Supported protocols: MODBUS RTU
+Ethernet Port (CPU)
+Transformer-isolated 10/100Base-T port
+Withstanding Insulation: 4kV AC @ 1 mn
+Connector Type: RJ45 modular.
+Supported Protocols: MODBUS TCP (Port 502), DNP 3.0/TCP (Port 20000), IEC 61850
+Number of simultaneous connections (sockets): 5.
+ETH2 - 10/100 TX- 100 FX (Communication Module)
+Transformer-isolated 10/100Base-T port
+Connector Type TX port: RJ45 modular
+Optical-isolated 100Base FX
+Connector Type FX port: SC
+Supported Protocols: MODBUS TCP (Port 502), DNP 3.0/TCP (Port 20000), IEC 61850
+Number of simultaneous connections (sockets): 5.
+COM5 - CELLULAR (Communication Module)
+2G/3G CELLULAR MODEM
+Withstanding Insulation: 2.5kV AC @ 1 mn
+Connector type: SMA
+Supported Protocols: MODBUS TCP (Port 502), DNP 3.0/TCP (Port 20000)
+Infrared (RGM180)
+Optional optical IEC/ANSI head
+PM180 Substation Automation Unit 33
+Baud Rate: up to 115,200 bps.
+Supported Protocols: MODBUS RTU/ASCII, DNP 3.0
+Real-time Clock
+Accuracy: maximum error 5 seconds per month @ 25C
+5.7 IRIG-B
+Recommended cable: 51Ohm low loss - RG58A/U (Belden 8219 or equivalent), TNC connector
+Recommended GPS time code generator: Masterclock GPS-200A
+CPU Board (PM180  N3 version)
+Optically isolated IRIG-B port
+Withstanding Insulation: 4kV AC @ 1 mn
+Time code signal: non-modulated (pulse-width coded).
+Level: unbalanced 5V.
+Connector type: removable, captured-wire, 4 terminals
+Communication Module
+Optically isolated IRIG-B port
+Withstanding Insulation: 4kV AC @ 1 mn
+Time code signal: non-modulated (pulse-width coded).
+Level: unbalanced 5V.
+Connector Type: BNC.
+5.8 Log Memory
+Standard onboard memory: 250 Mbytes.
+5.9 Remote Display Module
+RDM180 (PM180-D model)
+Display: high-brightness seven-segment digital LEDs, two 4-digit windows and one 6-digit windows
+Keypad: 6 push buttons
+Communication: EIA RS-485 port with 12V supply voltage
+Connector Type: DB15
+Wires Size: up to 12 AWG (up to 2.5 mm2)
+Distance:
+3m cable (10 feet)
+up to 500m (2000 feet) with external 12VDC power supply
+RDM312 (PM180-M model)
+Display: high-brightness seven-segment digital LEDs, nine 4-digit windows and three 6-digit windows
+Keypad: 7 push buttons
+Communication: EIA RS-485 port with 12V supply voltage
+Connector Type: DB15
+Wires Size: up to 12 AWG (up to 2.5 mm2)
+Distance: up to 500m (2000 feet) with external 12VDC power supply
+RGM180 (PM180-G)
+5.7 Inch Touch-Panel LCD graphic TFT display
+Resolution: 320 x 240
+PM180 Substation Automation Unit 34
+Operating temperature: -20C - +70 C
+Communication:
+EIA RS-485 port with 12V supply voltage
+Connector Type: DB15
+Wires Size: up to 12 AWG (up to 2.5 mm2)
+Distance: up to 500m (2000 feet)
+10/100Base T ETHERNET port with 12 V supply voltage and PoE (Power over ETHERNET)
+Connector Type: RJ-45 and DB15 (for 12VDC external Power Supply connection)
+5.10 Standards Compliance
+Directive complied with: EMC: 89/336/EEC as amended by 92/31/EEC and 93/68/EEC
+LVD: 72/23/EEC as amended by 93/68/EEC and 93/465/EEC
+Harmonized standards to which conformity is declared: EN55011:1991; EN50082-1:1992; EN61010-1:1993;
+A2/1995
+ANSI C37.90.1 Surge Withstand Capability (SWC)
+EN50081-2 Generic Emission Standard - Industrial Environment
+EN50082-2 Generic Immunity Standard - Industrial Environment
+EN55022: Class A
+IEC61000-6-2
+IEC61000-6-4
+IEC60255-5
+IEC60255-22
+Accuracy
+Active Energy, IEC/AS 62053-22, class 0.2S1
+Reactive Energy, class 0.5S (under conditions as per IEC 62053-22:2003 @ 0 |PF|  0.9)
+Power Quality
+EN50160: 2007 & 2010 Power Quality in European Electricity Supply Networks
+IEEE 1159: Power Quality Recorder in US
+GOST 32144/145-2013: Electric energy, Electromagnetic compatibility of technical equipment, Power
+quality limits in public electrical systems
+GOST 54149: 2010: Electric energy, Electromagnetic compatibility of technical equipment, Power quality
+limits in public electrical systems
+IEC61000-4-7, Harmonics and inter-harmonics measurement
+IEC61000-4-15, Flicker measurement
+IEC61000-4-30:2015 3rd ed. class A, Power quality measurement methods
+IEC62586-1/2:2017 2nd ed. Power quality measurement for power supply systems
+IEC 62054-21: Real time clock backup, RTC accuracy  2ppm @ 23C
+EMC Immunity:
+IEC61000-4-2, IEC60255-22-2: Electrostatic discharge, 15kV/8kV  air/contact
+IEC61000-4-3, IEC60255-22-3: Radiated Immunity, 10V/m and 30V/m @ 80 MHz  1000 MHz
+IEC61000-4-4, IEC60255-22-4: Fast Transients burst, 4KV on current and voltage circuits and 2 KV for
+auxiliary circuits
+1 Only for PM180-5A and PM180-1A models (internal CT), PM180-CS1S model accuracy meets class 1
+PM180 Substation Automation Unit 35
+IEC61000-4-5, IEC60255-22-5: Surge 6KV on current, voltage circuits and power supply
+PM180 Substation Automation Unit 36
+IEEE C62.41.2-2002: high voltage line surges,
+ 100 kHz ring wave  6kV @ 0.5kA
+ 1.2/50 microsecond  8/20 microsecond Combination Wave  6kV @ 3kA
+IEC61000-4-6, IEC62052-11: Conducted Radio-frequency, 10V @ 0.15 MHz  80MHz
+IEC61000-4-8: Magnetic Field
+IEC61000-4-12, IEC62052-11, IEEE C37.90.1: 2002: Oscillatory waves, CMM 2.5KV and DFM 1KV @
+100KHz and 1MHz
+Emission (radiated/conducted)
+EN55022, IEC60255-22: Class A
+Construction
+Safety
+Meets IEC/UL 61010-1
+Insulation
+Meets IEC62052-11: Insulation impulse 6KV/500 @ 1.2/50 s
+Meets IEC62052-11, IEC61010-1: AC voltage tests related to ground, 4 KV AC @ 1mn
+Atmospheric Environment
+Operational ambient temperature range: 30C to +70 C
+Long-term damp heat withstand according to IEC 68-2-3 <95%, +40 C
+Transport and storage temperature range: 40C to +85 C
+Vibration
+IEC 60255-21-1: Vibration Response, Table I, Class-2
+IEC 60255-21-1: Vibration Endurance, Table II, Class-1
+Mechanical Shock
+IEC 60255-21-2: Shock, Table II, Class-1
+IEC 60255-21-2: Bump, Table III, Class-1
+Seismic Vibration
+IEC 60255-21-3: Bump, Table III, Class-1
+Panel Display protection
+IEC 60529: IP54 (NEMA type 13)
+Instrument protection
+IEC 60529: IP30 (NEMA type 13)
+PM180 Substation Automation Unit 37
+5.11 Measurement Specifications
+Parameter Full Scale @ Input
+Range
+Accuracy Range
+% Reading % FS Conditions
+Voltage V1-V3,Vn 120VxPT @ 120V
+277VxPT @ 480V
+0.05 0.01 10% to 120% FS 0 to 99,999,999 V
+Line current I1- I4 CT
+0.05
+0.05
+0.2
+0.01
+0.01
+For ANSI C12.20:
+1% - 120% FS
+120% - 400% FS
+For IEC 62053-22:
+1% - 200% FS
+0 to 29,999 A
+Fault current I1- I4 (standard
+without DFR module)
+CT 2.0 400% - 1000% FS 0 to 29,999 A
+Fault current I1- I4 (PM180-
+CS1S)
+HACS 100 2.0 400% - 2000% FS 0 to 29,999 A
+Fault current I1x - I4x (with
+DFR module)
+HACS 200 2.0 400% - 4000% FS 0 to 29,999 A
+DC Voltage 125V/220V 0.3 10% - 120% FS 0 to 290VDC
+Active power 0.36PTCT @ 120V
+1.2PTCT @ 480V 0.2
+0.002
+0.002
+|PF|  0.5 and
+
+-2,000,000 to +2,000,000 kW
+Reactive power 0.36PTCT @ 120V
+1.2PTCT @ 480V 0.3
+0.002
+0.002
+|PF|  0.9 and
+
+-2,000,000 to +2,000,000 kvar
+Apparent power 0.36PTCT @ 120V
+1.2PTCT @ 480V 0.2
+0.002
+0.002
+|PF|  0.5 and
+
+0 to 2,000,000 kVA
+Power factor 1.000 0.35 |PF|  0.5,
+I  2% FSI
+-0.999 to +1.000
+Frequency 0.002 3 40.00 Hz to 70.00 Hz
+Total Harmonic
+Distortion, THD
+V (I), %Vf (%If)
+999.9 1.5 0.2 THD  1% FS,
+V (I)  10% FSV (FSI)
+0 to 999.9
+Total Demand Distortion,
+TDD, %
+100 1.5 TDD  1% FS,
+I  10% FSI
+0 to 100
+Active energy1
+Import & Export
+Accuracy Class 0.2 ANSI C12.20-2002
+Current class 20
+Class 0.2S IEC 62053-22
+0 to 999,999.999 MWh
+Reactive energy1
+Import & Export
+Accuracy Class 0.2% 0 to 999,999.999 Mvarh
+Apparent energy2 Accuracy Class 0.2% 0 to 999,999.999 MVAh
+Volt-hours Class 0.2 20% - 120% FS 0 to 999,999.999 kVh
+Ampere-hours Class 0.2 10% - 200% FS 0 to 999,999.999 kAh
+Symmetrical components Voltage FS
+Current FS
+Current FS
+1
+1
+3
+10% - 120% FS
+10% - 200% FS
+200% - 2000%FS
+Phasor angles 1 degree
+Key: PT - external potential transformer ratio  @ 80% to 120% of voltage FS and 1% to 200% of
+current FS
+CT - primary current rating of external current transformer
+FSV - voltage full scale; FSI - current full scale
+Vf- fundamental voltage; If - fundamental current
+1 Specified Accuracy Class Only for PM180-5A and PM180-1A models (internal CT), for PM180-CS1S model (HACS 100)
+accuracy meets class 1
+2 Specified Accuracy Class Only for PM180-5A and PM180-1A models (internal CT), for PM180-CS1S model accuracy meets
+class 1
+3 This accuracy specification is available from PM180 firmware version V31.XX.8 and can be displayed from RGM180
+software version V22.1.5
+PM180 Substation Automation Unit 38
+Notes
+1. Accuracy is expressed as  (percentage of reading + percentage of full scale)  1 digit. This does not
+include inaccuracies introduced by the user's potential and current transformers. Accuracy calculated at 1
+second average.
+2. Specifications assume: voltage and current waveforms with THD  5% for kvar, kVA and PF; reference
+operating temperature: 20C - 26C.
+3. Measurement error is typically less than the maximum error indicated here.
+

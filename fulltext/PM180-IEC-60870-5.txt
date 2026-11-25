@@ -1,0 +1,3711 @@
+expertmeterTM
+High Performance Analyzer
+PM180
+IEC60870-5-101/104 Communications Protocol
+Reference Guide
+BG0593 Rev. A1
+2
+Every effort has been made to ensure that the material herein is complete and accurate.
+However, the manufacturer is not responsible for any mistakes in printing or faulty
+instructions contained in this book. Notification of any errors or misprints will be received
+with appreciation.
+For further information regarding a particular installation, operation or maintenance of
+equipment, contact the manufacturer or your local representative or distributor.
+REVISION HISTORY
+A1 March 2015 Release
+3
+Table of Contents
+1 General .................................................................................................................. 7
+2 Protocol Implementation ..................................................................................... 8
+2.1 Configuring IEC 60870-5 .......................................................................................... 8
+2.2 Communicating via IEC 60870-5 Ports .................................................................... 8
+2.3 Device Addressing .................................................................................................... 8
+2.4 Information Object Addressing and Mapping .......................................................... 9
+2.5 Interrogation ............................................................................................................ 9
+2.6 Cyclic Data Transmission.......................................................................................... 9
+2.7 Transmission of Integrated Totals ......................................................................... 10
+2.7.1 Transmission Counters with Local Freeze.....................................................................10
+2.7.2 Counter Interrogation with/without Remote Freeze ......................................................10
+2.8 Event Reporting ...................................................................................................... 11
+2.9 Clock Synchronization............................................................................................. 12
+2.10 Single and Double Commands................................................................................ 12
+2.11 Read Command....................................................................................................... 13
+2.12 Parameter Loading ................................................................................................. 13
+2.13 Data Types .............................................................................................................. 13
+2.13.1 Single Point Information ............................................................................................13
+2.13.2 Double Point Information ...........................................................................................13
+2.13.3 Normalized Values.....................................................................................................14
+2.13.4 Scaled Values............................................................................................................14
+2.13.5 Floating Point Numbers..............................................................................................15
+2.13.6 Packed Long Integer and Octet String Formats ............................................................15
+2.14 Password Protection............................................................................................... 15
+2.15 Interoperability....................................................................................................... 15
+3 Information Object Map ..................................................................................... 16
+3.1 Mapped Information Objects.................................................................................. 16
+Mapped Object Points................................................................................................ 16
+3.2 General Information Objects.................................................................................. 17
+3.2.1 Single Point Objects...................................................................................................17
+Digital Inputs............................................................................................................ 17
+Relay Outputs........................................................................................................... 17
+Internal Static Events................................................................................................ 17
+Setpoint Status SP1-SP64.......................................................................................... 17
+3.2.2 Double Point Objects .................................................................................................17
+Digital Inputs............................................................................................................ 18
+Relay Outputs........................................................................................................... 18
+3.2.3 Measured Values .......................................................................................................18
+Special Inputs .......................................................................................................... 18
+1/2-Cycle Values....................................................................................................... 18
+1-Cycle Phase Values ................................................................................................ 19
+1-Cycle Low Phase Values.......................................................................................... 20
+1/2-Cycle Analog Inputs ............................................................................................ 20
+1-Cycle High Phase Values......................................................................................... 20
+1-Second Analog Inputs ............................................................................................ 21
+1-Cycle Total Values.................................................................................................. 21
+1-Cycle Auxiliary Values ............................................................................................ 21
+Fundamental Phasor Values ....................................................................................... 21
+1-Second Phase Values.............................................................................................. 22
+1-Second Low Phase Values....................................................................................... 23
+4
+1-Second High Phase Values ...................................................................................... 23
+1-Second Total Values............................................................................................... 24
+1-Second Auxiliary Values.......................................................................................... 24
+Present Harmonic Demands ....................................................................................... 24
+Present Demands...................................................................................................... 25
+Symmetrical Components .......................................................................................... 26
+V1 Harmonics........................................................................................................... 26
+V2 Harmonics........................................................................................................... 26
+V3 Harmonics........................................................................................................... 26
+V4 Harmonics........................................................................................................... 26
+I1 Harmonics............................................................................................................ 26
+I2 Harmonics............................................................................................................ 27
+I3 Harmonics............................................................................................................ 27
+I4 Harmonics............................................................................................................ 27
+V1 Harmonic Voltages (odd numbers) ......................................................................... 27
+V2 Harmonic Voltages (odd numbers) ......................................................................... 27
+V3 Harmonic Voltages (odd numbers) ......................................................................... 27
+V4 Harmonic Voltages (odd numbers) ......................................................................... 27
+I1 Harmonic Currents (odd numbers).......................................................................... 28
+I2 Harmonic Currents (odd numbers).......................................................................... 28
+I3 Harmonic Currents (odd numbers).......................................................................... 28
+I4 Harmonic Currents (odd numbers).......................................................................... 28
+Total Harmonic kW (odd numbers) ............................................................................. 28
+Total Harmonic kvar (odd numbers)............................................................................ 28
+Total Harmonic Power Factor (odd numbers) ............................................................... 28
+Flicker ..................................................................................................................... 28
+Minimum 1-Cycle Phase Values .................................................................................. 29
+Minimum 1-Cycle Total Values.................................................................................... 30
+Minimum 1-Cycle Auxiliary Values .............................................................................. 30
+Minimum Analog Inputs............................................................................................. 30
+Programmable Min/Max Minimum Values..................................................................... 30
+Maximum 1-Cycle Phase Values ................................................................................. 30
+Maximum 1-Cycle Total Values................................................................................... 31
+Maximum 1-Cycle Auxiliary Values.............................................................................. 31
+Maximum Analog Inputs ............................................................................................ 32
+Maximum Demands .................................................................................................. 32
+Programmable Min/Max Maximum Values.................................................................... 32
+Maximum Harmonic Demands.................................................................................... 33
+Maximum Analog Input Demands ............................................................................... 33
+Present Analog Input Demands .................................................................................. 33
+1-Cycle Analog Inputs ............................................................................................... 33
+Raw Analog Inputs.................................................................................................... 34
+TOU Parameters ....................................................................................................... 34
+Scaled Analog Outputs .............................................................................................. 34
+Billing Summary Accumulated Demands...................................................................... 34
+Billing Summary Block Demands ................................................................................ 34
+Billing Summary Sliding Window Demands .................................................................. 34
+Billing Summary Maximum Demands .......................................................................... 34
+Billing TOU Maximum Demand Register #1.................................................................. 34
+Billing TOU Maximum Demand Register #4.................................................................. 35
+Billing TOU Maximum Demand Register #2.................................................................. 35
+Billing TOU Maximum Demand Register #5.................................................................. 35
+Billing TOU Maximum Demand Register #3.................................................................. 35
+Billing TOU Maximum Demand Register #6.................................................................. 35
+Billing TOU Maximum Demand Register #7.................................................................. 35
+Billing TOU Maximum Demand Register #8.................................................................. 35
+Billing TOU Maximum Demand Register #9.................................................................. 35
+Billing TOU Maximum Demand Register #10................................................................ 36
+Billing TOU Maximum Demand Register #11................................................................ 36
+5
+Billing TOU Maximum Demand Register #12................................................................ 36
+Billing TOU Maximum Demand Register #13................................................................ 36
+Billing TOU Maximum Demand Register #14................................................................ 36
+Billing TOU Maximum Demand Register #15................................................................ 36
+Billing TOU Maximum Demand Register #16................................................................ 36
+V1/V12 Harmonic Angles ........................................................................................... 37
+V2/V23 Harmonic Angles ........................................................................................... 37
+V3/V31 Harmonic Angles ........................................................................................... 37
+V4 Harmonic Angles.................................................................................................. 37
+I1 Harmonic Angles................................................................................................... 37
+I2 Harmonic Angles................................................................................................... 37
+I3 Harmonic Angles................................................................................................... 37
+I4 Harmonic Angles................................................................................................... 37
+0.2-Second RMS and Auxiliary Values ......................................................................... 38
+3-Second RMS and Auxiliary Values ............................................................................ 38
+1-Minute RMS and Auxiliary Values (GOST) ................................................................. 39
+10-Minute RMS and Auxiliary Values ........................................................................... 40
+2-Hour RMS and Auxiliary Values................................................................................ 40
+0.2-Second Harmonics .............................................................................................. 41
+3-Second Harmonics ................................................................................................. 42
+10-Minute Harmonics ................................................................................................ 43
+2-Hour Harmonics..................................................................................................... 44
+Present PQ Measurements (EN50160)......................................................................... 45
+Present PQ Measurements (GOST 13109).................................................................... 46
+Present PQ Measurements (GOST 54149).................................................................... 47
+3.2.4 Integrated Totals.......................................................................................................48
+Counters.................................................................................................................. 48
+Total Energies .......................................................................................................... 48
+Billing Summary Registers ......................................................................................... 49
+Billing TOU Register #1 ............................................................................................. 49
+Billing TOU Register #2 ............................................................................................. 49
+Billing TOU Register #3 ............................................................................................. 49
+Billing TOU Register #4 ............................................................................................. 49
+Billing TOU Register #5 ............................................................................................. 50
+Billing TOU Register #6 ............................................................................................. 50
+Billing TOU Register #7 ............................................................................................. 50
+Billing TOU Register #8 ............................................................................................. 50
+Billing TOU Register #9 ............................................................................................. 50
+Billing TOU Register #10............................................................................................ 50
+Billing TOU Register #11............................................................................................ 50
+Billing TOU Register #12............................................................................................ 51
+Billing TOU Register #13............................................................................................ 51
+Billing TOU Register #14............................................................................................ 51
+Billing TOU Register #15............................................................................................ 51
+Billing TOU Register #16............................................................................................ 51
+3.3 Device Status and Control Parameters................................................................... 52
+Device Port Identification........................................................................................... 52
+Device Diagnostics .................................................................................................... 52
+Reference Meter Time ............................................................................................... 52
+Device Reset/Clear Registers...................................................................................... 52
+Device Authorization Register..................................................................................... 52
+3.4 System Parameters................................................................................................. 54
+Device Identification.................................................................................................. 54
+Factory Device Settings ............................................................................................. 54
+3.5 Device Setup Parameters ....................................................................................... 55
+Communication Ports Setup Parameters...................................................................... 55
+Basic Device Setup Parameters .................................................................................. 55
+Device Options Setup ................................................................................................ 56
+Device Data Scales ................................................................................................... 56
+6
+3.6 Protocol Setup Parameters..................................................................................... 57
+IEC 60870-5 Options Setup........................................................................................ 57
+IEC 60870-5 Class 2 Data and Counters Setup............................................................. 57
+IEC 60870-5 Assignable Point Map and Events Setup.................................................... 58
+4 Data Scales and Units........................................................................................ 59
+Data Scales.............................................................................................................. 59
+Data Units................................................................................................................ 59
+5 Data Formats....................................................................................................... 60
+Wiring Mode ............................................................................................................. 60
+Device Diagnostics .................................................................................................... 60
+Single Point Info Static Type ...................................................................................... 60
+Single Point Info Event Type ...................................................................................... 60
+Double Point Info Static Type ..................................................................................... 60
+Double Point Info Event Type ..................................................................................... 60
+Measured Value Static Type ....................................................................................... 60
+Measured Value Event Type ....................................................................................... 60
+Integrated Totals Static Type ..................................................................................... 61
+Integrated Totals Event Type ..................................................................................... 61
+6 Configuring IEC 60870-5.................................................................................... 62
+6.1 Configuring IEC 60870-5 Options........................................................................... 62
+6.2 Remapping Point Addresses and Event Reporting................................................. 66
+6.3 Configuring Class 2 Data and Counter Transmission ............................................. 67
+Appendix A IEC 60870-5 Interoperability Profile.............................................. 70
+A.1 IEC 60870-5-101 Protocol Implementation Conformance Statement
+(PICS) ..................................................................................................................... 70
+A.1.1 System or device ......................................................................................................70
+A.1.2 Network configuration................................................................................................70
+A.1.3 Physical layer............................................................................................................70
+A.1.4 Link layer .................................................................................................................71
+A.1.5 Application layer........................................................................................................72
+A.1.6 Basic application functions .........................................................................................76
+A.2 IEC 60870-5-104 Protocol Implementation Conformance Statement
+(PICS) ..................................................................................................................... 79
+A.2.1 System or device ......................................................................................................79
+A.2.2 Network configuration................................................................................................79
+A.2.3 Physical layer............................................................................................................79
+A.2.4 Link layer .................................................................................................................80
+A.2.5 Application layer........................................................................................................81
+A.2.6 Basic application functions .........................................................................................85
+7
+1 General
+This document specifies a subset of the IEC60780-5-101/104 communications protocol used
+to transfer data between a master controlling station and the PM180. The document provides
+the complete information necessary to develop third-party communications software capable
+of communication with PM180 meters.
+IEC 60870-5-101/104 references:
+IEC 60870-5-1:1990, Telecontrol Equipment and Systems - Part 5, Transmission
+Protocols - Section 1: Transmission frame formats
+IEC 60870-5-2:1991, Telecontrol Equipment and Systems - Part 5, Transmission
+Protocols - Section 2: Link transmission procedures
+IEC 60870-5-3:1992, Telecontrol Equipment and Systems - Part 5, Transmission
+Protocols - Section 3: General structure of application data
+IEC 60870-5-4:1993, Telecontrol Equipment and Systems - Part 5, Transmission
+Protocols - Section 4: Definition and coding of application information elements
+IEC 60870-5-5:1995, Telecontrol Equipment and Systems - Part 5, Transmission
+Protocols - Section 5: Basic application functions.
+IEC 60870-5-101:2003-02, Telecontrol Equipment and Systems - Part 5, Transmission
+Protocols - Section 101: Companion standard for basic telecontrol tasks
+IEC 60870-5-104:2006-06, Telecontrol Equipment and Systems - Part 5, Transmission
+Protocols - Section 104: Network access for IEC 60870-5-101 using standard transport
+profiles
+8
+2 Protocol Implementation
+2.1 Configuring IEC 60870-5
+The PM180 protocol stack is implemented in a very flexible manner. Most of IEC 60870-5-
+101/104 protocol features are user-configurable allowing easy adaptation for use in different
+IEC 60870-5 installations. To keep maximum interoperability with master RTU and SCADA
+systems, the PM180 supports all standard ASDU types for data interrogation, event reporting
+and control.
+The support PAS configuration software supplied with the meter provides all necessary tools
+for remote configuration of the meter via serial ports or via a TCP/IP Internet connection
+using either IEC 60870-5-101/104, or Modbus protocol.
+See Chapter 6 for instructions on how to configure IEC 60870-5 options in the meter for your
+particular installation.
+See the PM180 Installation and Operation Manual for more information on configuring the
+meter via PAS.
+The protocol implementation details are explained in the following sections.
+2.2 Communicating via IEC 60870-5 Ports
+The PM180 supports unbalanced IEC 60870-5-101 communications via serial ports and
+multiple balanced IEC 60870-5-104 TCP/IP connections via an Ethernet port.
+Serial IEC 60870-5-101 Connections
+The PM180 has one RS-232/422/485 port, additional RS-485/485 and RS-485 ports can be
+ordered to provide communications with master stations. Listed serial ports can operate in
+IEC 60870-5-101 mode.
+TCP/IP IEC 60870-5-104 Connections
+The Ethernet port provides an IEC 60870-5-104 TCP server on port 2404 that supports some
+simultaneous connections with controlling stations via IEC 60870-5-104 protocol.
+Modbus TCP server on port 502 and / or DNP TCP server on port 20000 provide additional
+simultaneous connections to the meter without affecting to the IEC 60870-5-104
+communication. Thus, you can easily configure and monitor network meters using PAS, using
+advanced Modbus features.
+NOTES:
+Cyclic / spontaneous transmission of data through the port IEC 60870-5-104 require
+appropriate configuration of the device (see Section 6 for details).
+The following functionality is specific for the PM180 IEC 60870-5-104 port:
+1. An idling connection is closed in 2 minutes if there is no activity on both sides.
+To keep a rarely used connection open, either periodically send test APDU to
+the meter, or configure cyclic data transmission in the meter to maintain some
+kind of activity on the connection socket.
+2. Data transmission is suspended when the number of unacknowledged ASDU
+sent to a controlling station exceeds the maximum number configured in the
+meter. So the master station should send acknowledgments as frequently as
+possible to avoid loss of data.
+You can disable this feature by setting the maximum number of unacknowledged ASDU
+to zero causing the meter to never suspend data transmission.
+2.3 Device Addressing
+The data link address field in IEC 60870-5-101 and the COMMON ADDRESS OF ASDU
+represent the device address assigned in the meter to an IEC 60870-5-101/104
+9
+communication port. See the PM180 Installation and Operation Manual on how to configure
+the device address in your meter.
+The data link address and COMMON ADDRESS OF ASDU length are configurable for IEC
+60870-5-101 ports (see Section 6.1 for details).
+2.4 Information Object Addressing and Mapping
+Information object address length is configurable for IEC 60870-5-101 ports and is fixed to 3
+octets in IEC 60870-5-104. See Section 6.1 for more information on selecting the object
+address length in the meter.
+Information object addressing scheme normally uses structured two-octet (three-octet in IEC
+60870-5-104) addresses. See Chapter 3 for the full list of the available object points and
+their addresses.
+The PM180 allocates a special configurable address space in the range of 1 to 4095 for user-
+assignable point addresses called mapped points. Mapped points can be used as aliases of
+the original point addresses to provide a more convenient and faster way for polling and
+interrogating data. Event reporting in the PM180 is only available for mapped points.
+You can remap any of 64 general object points listed in Section 3.2 to a single range or a
+number of ranges in the configurable address space. See Section 6.2 for more information on
+remapping object addresses.
+Different classes of objects - measurement values, single points, double points and
+integrated totals  can be remapped to separate ranges with a configurable starting object
+address. See Section 6.1 on how to configure the starting address for mapped object points.
+When required, one-octet addresses can be used for IEC 60870-5-101 ports by remapping
+points to the address range of 1 to 255.
+2.5 Interrogation
+The PM180 supports general and group interrogation commands for binary and analog
+objects. Address ranges for general and group interrogation are configurable via the IEC
+60870-5 Class 2 Data and Counters Setup (see Section 6.3).
+Up to 15 groups can be arranged for group interrogation. Any compatible ASDU data type
+can be separately selected for each range of points regardless of the configured default
+object type.
+Interrogated data are sent in the order they are listed in the Class 2 Data Setup. The meter
+always responds to interrogation requests with a sequence of information objects ASDU with
+the SQ bit in the variable structure qualifier set to 0.
+2.6 Cyclic Data Transmission
+Object address ranges for cyclic data transmission are configurable via the IEC 60870-5
+Class 2 Data and Counters Setup (see Section 6.3). Any compatible ASDU data type can be
+separately selected for each range of points regardless of the configured default object type.
+Cyclic data is sent in the order they are listed in the Class 2 Data Setup. The meter always
+transmits cyclic data using a sequence of information objects ASDU with the SQ bit in the
+variable structure qualifier set to 0.
+IEC 60870-5-101 Cyclic Transmission
+In IEC 60870-5-101, the meter responds to class 2 data requests with data configured for
+cyclic transmission if there are no higher priority messages ready for transmission. An
+interrogation command interrupts a cyclic transmission sequence, which is automatically
+restarted after the interrogation command has been responded.
+IEC 60870-5-104 Cyclic Transmission
+In IEC 60870-5-104, configured cyclic data is transmitted periodically to the selected
+controlling station after it confirms start of data transfer. An interrogation command
+10
+interrupts cyclic transmission in progress, which is automatically restarted after the
+interrogation command has been responded.
+See Section 6.1 on how to set up a client IP address for cyclic data transmission and the
+cyclic transmission period.
+2.7 Transmission of Integrated Totals
+The PM180 supports modes A, B, C and D of acquisition of integrated totals  local freeze
+(with or without reset) with spontaneous transmission, local freeze (with or without reset)
+with counter interrogation, counter interrogation with/without remote freeze (with or without
+reset), and counter freeze by an interrogation command with spontaneous transmission of
+frozen values.
+Object address ranges for counter transmission are configurable via the IEC 60870-5 Class 2
+Data and Counters Setup (see Section 6.3). Up to 4 groups can be arranged for counter
+group interrogation. Any compatible ASDU data type can be separately selected for each
+range of points regardless of the configured default counter object type.
+Interrogated data is sent in the order they are listed in the Class 2 Data and Counters Setup.
+The meter always transmits counters using a sequence of information objects ASDU with the
+SQ bit in the variable structure qualifier set to 0.
+NOTES:
+1. The sequence number in the counter qualifier is incremented modulo 32 after
+each local or remote freeze.
+2. The counter overflow is indicated in case the actual counter rolls over to zero
+since last counter reading. The counter adjustment is indicated when the
+counter has been preset or cleared outside of the standard sequence controlled
+by local freeze and remote interrogation commands.
+3. When using multiple connections via IEC60870-5 ports, only one client should
+use counter interrogation commands with FRZ qualifiers 1-3 to maintain
+consistency of the counter freeze buffers.
+4. Do not apply interrogation commands with FRZ qualifiers 1-2 to counters with
+local freeze, as they will disturb frozen counter buffers.
+2.7.1 Transmission Counters with Local Freeze
+Integrated totals configured for mode A or B transmission (those checked for local freeze in
+the IEC 60870-5 Class 2 Data and Counters Setup, see Section 6.3), are locally frozen at
+configurable intervals synchronized with the meter clock. If the local freeze period is evenly
+divisible into an hour, the counter freeze/transmission intervals will be synchronized with the
+beginning of the hour. See Section 6.1 on how to set up the local freeze period for mode A or
+B transmission.
+If the counter range is checked for freeze with reset, the actual counters are reset to zero
+after current counter values are frozen in the freeze buffers.
+Frozen values signed for spontaneous transmission are transmitted with spontaneous cause
+of transmission <3> in response to class 1 requests in IEC 60870-5-101 and spontaneously
+to the selected client IP address in IEC 60870-5-104.
+Interrogation commands with FRZ=0 for ranges of counters signed for local freeze return
+locally frozen counter values.
+2.7.2 Counter Interrogation with/without Remote Freeze
+The PM180 supports general and group counter interrogation commands with FRZ qualifiers
+0-3:
+<0> - read (no freeze or reset)
+<1> - counter freeze without reset
+<2> - counter freeze with reset
+11
+<3> - counter reset
+Interrogation commands with remote freeze qualifiers FRZ=1 and FRZ=2 cause the specified
+counters' values to be locally frozen to the freeze buffers, optionally followed by the reset of
+the actual counter values for commands with FRZ=2. Commands with FRZ=1-3 do not cause
+the counter values to be transmitted.
+Interrogation commands with FRZ=0 (no freeze, no reset) are responded either with the
+frozen counter values if the command was preceded by a remote or local freeze, or with the
+actual counter values for counters that were not frozen.
+For mode D of spontaneous counter transmission with remote freeze, check the required
+counters for spontaneous transmission without local freeze (see Section 6.3). They will be
+transmitted with cause of transmission <3> in response to class 1 requests in IEC 60870-5-
+101 and spontaneously to the client IP address selected for spontaneous data transmission in
+IEC 60870-5-104.
+NOTE:
+Integrated totals checked for spontaneous transmission without local freeze that have not
+been frozen by a remote freeze command will be periodically reported at specified local
+freeze/transmission intervals with the actual counter values.
+2.8 Event Reporting
+The PM180 provides up to 64 configurable setpoints for reporting events when a measured
+value exceeds a predefine threshold or changes by a certain percentage, or a binary point
+status changes. The scan period for events is one power frequency cycle time for binary
+events, and 200 ms for analog events.
+Events can only be reported for mapped static object points in the address range of 1 to
+4095. Default data types for event reporting are configurable via the IEC 60870-5 Options
+Setup (see Section 6.1) for supported classes of objects. See Section 6.2 on how to select
+object point addresses and configure thresholds for event reporting.
+The meter always reports events in a chronological order by a sequence of information
+objects ASDU with the SQ bit in the variable structure qualifier set to 0.
+The meter data change buffers can hold up to 128 unreported events.
+IEC 60870-5-101 Event Reporting
+In IEC 60870-5-101, collected events are transmitted in response to class 1 requests. The
+meter can also respond with class 1 data to class 2 requests if there is no class 2 data in
+transmission and this option is enabled in the IEC 60870-5 Options Setup (see Section 6.1).
+IEC 60870-5-104 Event Reporting
+In IEC 60870-5-104, collected events are transmitted spontaneously to the selected
+controlling station after it confirms start of data transfer. See Section 6.1 on how to set up a
+client IP address for spontaneous event transmission.
+NOTES:
+1. Event reports on counter change events always follow the actual counter
+changes and are reported with the actual counter values.
+2. Because the PM180 maintains a single set of data change buffers, only one
+master connected to the meter can receive spontaneous event reports. You
+should not send class 1 requests via a serial connection if you configured a
+client IP address for spontaneous event transmission via a TCP/IP connection.
+12
+2.9 Clock Synchronization
+The meter clock time is local time.
+The IV Invalid bit in the binary time elements is set to 1 after the meter loses power and is
+reset to 0 when the meter time is updated by the C_CS_NA_1 Clock synchronization
+command.
+The meter can periodically request clock synchronization by setting the IV Invalid bit in the
+time tag of the information objects to 1 if the Time sync period in the IEC 60870-5 Options
+setup is configured to a non-zero value. See Section 6.1 on how to configure the Time sync
+period in your meter.
+In case of using a tree octet CP24Time2a time tag in event ASDU types, the meter sends
+spontaneous clock synchronization messages to the controlling station at the beginning of
+each hour. In IEC 60870-5-104 using CP24Time2a time tags should be avoided.
+2.10 Single and Double Commands
+The PM180 supports single and double commands addressed to meter relay outputs.
+See the following table for description of relay output operation using single commands.
+Single Command State
+(SCS)
+Qualifier of Command
+(QU)
+Relay Output Operation
+0 (Not permitted) Any No action
+1 (OFF)
+0 (No additional definitions) Short pulsed ON
+1 (Short pulse duration) Short pulsed ON
+2 (Long pulse duration) Long pulsed ON
+3 (Persistent output) Latched OFF
+2 (ON)
+0 (No additional definitions) Short pulsed ON
+1 (Short pulse duration) Short pulsed ON
+2 (Long pulse duration) Long pulsed ON
+3 (Persistent output) Latched ON
+3 (Not permitted) Any No action
+Double commands must always be sent to the first relay output address between two
+adjacent addresses occupied by a double point object. See the following table for description
+of relay output operation using double commands.
+Double Command State
+(DCS)
+Qualifier of Command
+(QU)
+Relay Output Operation
+RO2 RO3
+0 (Not permitted) Any No action No action
+1 (OFF)
+0 (No additional definitions) Short pulsed ON No action
+1 (Short pulse duration) Short pulsed ON No action
+2 (Long pulse duration) Long pulsed ON No action
+3 (Persistent output) Latched ON Latched OFF
+2 (ON)
+0 (No additional definitions) No action Short pulsed ON
+1 (Short pulse duration) No action Short pulsed ON
+2 (Long pulse duration) No action Long pulsed ON
+3 (Persistent output) Latched OFF Latched ON
+3 (Not permitted) Any No action No action
+The short and long pulse duration for pulsed operations are configurable via the IEC 60870-5
+Options Setup (see Section 6.1).
+NOTE:
+Single and double commands with QU=0 are executed using a configured short pulse
+duration by default.
+Command execution is always confirmed by C_SC_ACTTERM or C_DC_ACTTERM.
+13
+Single and double commands with qualifiers QU=0-2 (pulse operation) will not have effect
+unless meter relay outputs are configured for pulse mode operation, and commands with
+qualifier QU=3 (persistent output) will not be effective unless relay outputs are configured for
+operation in either unlatched, or latched mode (both modes provide latched operations on
+remote commands).
+See the meter Installation and Operation manual on how to configure relay outputs for
+operation in pulse or latched mode. The IEC 60870-5 pulse duration settings override the
+default relay pulse width configured for relay outputs in the meter.
+2.11 Read Command
+Default data types for responses to a C_RD_NA_1 Read command for general and mapped
+object points listed in Sections 3.1 and 3.2 are configurable via the IEC 60870-5 Options
+Setup for supported classes of objects (see Sections 6.1 and 6.2). System and configuration
+parameters are read in a fixed format indicated for each parameter in Sections 3.3 through
+3.6.
+The PM180 allows a non-standard interpretation of the Read command variable structure
+qualifier: a master can request more than one information element starting from the
+specified information object address by setting the SQ bit to 1 and the number of elements N
+to a value more than 1.
+When a single value is requested, or the object type of the requested values has a time tag,
+the meter responds to a read request with a sequence of information objects ASDU with the
+SQ bit in the variable structure qualifier set to 0. If more than one value is requested and the
+object type does not have a time tag, the meter responds with a sequence of information
+elements ASDU with the SQ bit set to 1.
+2.12 Parameter Loading
+System and configuration parameters are written with either P_ME_NB_1, or P_ME_NC_1
+ASDU type indicated for each parameter in Sections 3.3 through 3.6 with KPA = 32 (private
+range) in the qualifier of a parameter, and are reported to a Read command with the same
+object type and attributes.
+The PM180 allows a non-standard interpretation of the P_ME_NB_1 and P_ME_NC_1 ASDU
+variable structure qualifier: a master can write more than one information element starting
+from the specified information object address by using a sequence of information elements
+ASDU with the SQ bit set to 1 and the number of elements N more than 1.
+2.13 Data Types
+2.13.1 Single Point Information
+See the following table for decoding the status of a binary input accessed as a single point
+object.
+Single Point Info Qualifier
+(SPI)
+Digital Input Status
+0 (OFF) OFF (Open)
+1 (ON) ON (Closed)
+2.13.2 Double Point Information
+Double point objects occupy two adjacent object addresses and should always be accessed
+by addressing the first address of the pair. See the following table for decoding the status of
+binary inputs accessed as double point objects.
+14
+Double Point Info Qualifier
+(DPI)
+Digital Inputs Status
+DI1 DI2
+0 (Intermediate state) OFF (Open) OFF (Open)
+1 (OFF) ON (Closed) OFF (Open)
+2 (ON) OFF (Open) ON (Closed)
+3 (Indeterminate state) ON (Closed) ON (Closed)
+2.13.3 Normalized Values
+A normalized value represents per unit scaled reading of a measured value. Normalized
+values are transmitted as 16-bit signed fixed point numbers (F16, Type 4.1 IEC 60870-5-4)
+in the range of 1..+12-15. On integer platforms, they can be taken as 16-bit signed integer
+numbers in the range of 32768..+32767 by dividing a value by 32767 to provide same
+conversion results.
+Per unit normalization allows transmission of any measured value within its measurement
+range being scaled to a 16-bit fixed-point binary number, where 1+2-15 corresponds to the
+minimum negative value measurement and 12-15 corresponds to the maximum value
+measurement. The actual measurement range and reading resolution are indicated in the
+object address map for all measured values (see Chapter 3).
+To get a true measurement, a normalized value should be converted using the following
+formula:
+Y = Raw_reading  Max_Measurement_Range
+When over-range occurs, a positive value is reported as 12-15 and a negative value as -1
+with the OV bit in the quality descriptor byte QDS set to 1.
+Conversion Example:
+If the value you have read at object address 20736, which represents a phase I1 current
+reading (see Section 3.1), is 201  2-15 and the CT primary current setting is 200A, then the
+current reading in engineering units is as follows:
+Max_Measurement_Range (see Section 4) = 2200A = 400A
+Value_Resolution = 0.01A
+True value reading = (201  2-15)  400A = 2.45A
+2.13.4 Scaled Values
+A scaled value represents the reading of a measured value scaled to a 16-bit integer number.
+Scaled values are transmitted as 16-bit signed integer numbers (I16, Type 2.1 IEC 60870-5-
+4) in the range of 32768..+32767.
+Integer scaling allows transmission of any measured value within its measurement range
+being scaled to a 16-bit integer number by dividing by a fixed scale factor.
+To get a true measurement, a scaled value should be converted using the following formula:
+Y = Raw_reading  Scale_Factor
+The scale factor depends on the maximum measurement range and resolution of a measured
+value as follows:
+a) if (Max_Measurement_Range/Value_Resolution) <= 32767 then
+Scale_Factor = 1  Value_Resolution
+b) if (Max_Measurement_Range/Value_Resolution) > 32767 then
+Scale_Factor = Max_Measurement_Range/32767
+The actual scale factor and measurement resolution are indicated in the object address map
+for all measured values (see Chapter 3).
+When over-range occurs, a positive value is reported as 32767 and a negative value as
+-32768 with the OV bit in the quality descriptor byte QDS set to 1.
+15
+Conversion Example:
+If the value you have read at object address 20736, which represents a phase I1 current
+reading (see Section 3.1), is 201 and the CT primary current setting is 200A, then the
+current reading in engineering units is as follows:
+Max_Measurement_Range (see Section 4) = 2200A = 400A
+Value_Resolution = 0.01A
+Max_Measurement_Range/Value_Resolution = 400/0.01 = 40000 > 32767
+True value reading = 201  (400A/32767) = 2.45A
+2.13.5 Floating Point Numbers
+A floating point number represents the true readings of a measured value. Floating point
+numbers are transmitted in an IEEE single precision floating point format (R32.23, Type 5
+IEC 60870-5-4).
+The actual measurement resolution is indicated in the object address map for all measured
+values (see Chapter 3).
+2.13.6 Packed Long Integer and Octet String Formats
+Some of system and configuration parameters are stored in the meter in 32-bit signed or
+unsigned integer format or in octet strings that cannot be scaled or represented using
+floating point numbers. Since IEC-60870-101/104 do not offer compatible ASDU types, the
+PM180 uses standard scaled value parameter format P_ME_NB_1 for transferring these data
+types that requires following interpretation in application software.
+32-bit integer numbers are packed in two adjacent scaled 16-bit integer numbers in UI32
+UNSIGNED INTEGER or I32 SIGNED INTEGER format (Type 1.1 and Type 2.1, IEC 60870-5-
+4).
+Octet strings are packed in continuous 16-bit unsigned integer numbers, two octets in a
+scaled value, in OCTETSTRING OS8i or OS8iASCII format (Type 7, IEC 60870-5-4).
+2.14 Password Protection
+System and configuration parameters in the PM180 are password protected from
+unauthorized changes via communications. Refer to the meter Installation and Operation
+Manual for details.
+A user password must be written to the device authorization register before changing meter
+parameters. If a correct password is not supplied, the meter will respond to write requests
+with the cause of transmission "unknown information object address".
+2.15 Interoperability
+See Appendix A for the device interoperability profile.
+16
+3 Information Object Map
+3.1 Mapped Information Objects
+IO Address Point ID Description Measurement Range Units and
+Resolution
+Type R/W Notes
+1-4095 Mapped Object Points
+1 Mapped point R/W
+2 Mapped point R/W
+... ... R/W
+4095 Mapped point R/W
+NOTE:
+Up to 64 general object points can be remapped to addresses 1-4095. See Section 3.2 for the measurement range, resolution and scale factors of the original object points. See Section 6.2 on
+how to remap object addresses in the meter.
+17
+3.2 General Information Objects
+3.2.1 Single Point Objects
+IO Address Point ID Description Measurement Range 2 Units and
+Resolution 2
+Type 4 R/W Notes
+Digital Inputs
+17920-18047 Digital inputs DI1DI128 0x00000000 - 0xFFFFFFFF UINT32 R
+0x0600 Digital Input DI1 0/1 M_SP R
+0x0601 Digital Input DI2 0/1 M_SP R
+...
+0x067F Digital Input D128 0/1 M_SP R
+Relay Outputs
+18432-18495
+0x0800 RO1 0/1 M_SP, C_SC R/W
+0x0801 RO2 0/1 M_SP, C_SC R/W
+...
+0x083F RO64 0/1 M_SP, C_SC R/W
+Internal Static Events
+18688-18697
+0x0900 Phase order error 0/1 M_SP R
+0x0901 Positive phase order 0/1 M_SP R
+0x0902 Negative phase order 0/1 M_SP R
+0x0903 0/1 0/1 M_SP R
+0x0904 General fault event 0/1 M_SP R
+0x0905 Fault detected 0/1 M_SP R
+0x0906 External fault trigger 0/1 M_SP R
+0x0907 Device fault (non-critical error) 0/1 M_SP R
+0x0908 No voltage 0/1 M_SP R
+0x0909 Remote control 0/1 M_SP R
+Setpoint Status SP1-SP64 M_SP R
+48128-48191
+0x7C00 Setpoint SP1 0/1 M_SP R
+0x7C01 Setpoint SP2 0/1 M_SP R
+... ...
+0x7C3F Setpoint SP64 0/1 M_SP R
+3.2.2 Double Point Objects
+IO Address Point ID Description Measurement Range 2 Units and
+Resolution 2
+Type 4 R/W Notes
+18
+IO Address Point ID Description Measurement Range 2 Units and
+Resolution 2
+Type 4 R/W Notes
+64512-64638 Digital Inputs
++0 0xBC00 Digital Inputs DI1:2 00/01/10/11 M_DP R
++1 0xBC01 Digital Inputs DI2:3 00/01/10/11 M_DP R
+...
++126 0xBC7E Digital Inputs DI127:128 00/01/10/11 M_DP R
+64640-64702 Relay Outputs
++0 0xBC80 RO1:2 00/01/10/11 M_DP, C_DC R/W
++1 0xBC81 RO2:3 00/01/10/11 M_DP, C_DC R/W
+...
++62 0xBCBE RO63:64 00/01/10/11 M_DP, C_DC R/W
+NOTE:
+Double point objects occupy two adjacent object addresses and should always be accessed by addressing the first address of the pair.
+3.2.3 Measured Values
+IO Address Point ID Description Measurement Range 2 Units and
+Resolution 2
+Type 4 R/W Notes
+16384 0x0000 None 0 M_ME R Zero object reference
+16640-16641 Special Inputs
+0x0100 Voltage disturbance 0-100 % M_ME R
+0x0101 Phase rotation order 0=error, 1=positive (ABC),
+2=negative (CBA)
+M_ME R
+19328-19350 1/2-Cycle Values
++0 0x0B80 V1 voltage 0-Vmax U1 M_ME R 1
++1 0x0B81 V2 voltage 0-Vmax U1 M_ME R 1
++2 0x0B82 V3 voltage 0-Vmax U1 M_ME R 1
++3 0x0B83 V4 voltage 0-V4max U4 M_ME R
++4 0x0B84 V12 voltage 0-Vmax U1 M_ME R
++5 0x0B85 V23 voltage 0-Vmax U1 M_ME R
++6 0x0B86 V31 voltage 0-Vmax U1 M_ME R
++7 0x0B87 I1 current 0-Imax U2 M_ME R
++8 0x0B88 I2 current 0-Imax U2 M_ME R
++9 0x0B89 I3 current 0-Imax U2 M_ME R
++10 0x0B8A I4 current 0-I4max U2 M_ME R
++11 0x0B8B In current 0-Imax U2 M_ME R
++12 0x0B8C I1x current 0-Ixmax U2 M_ME R
++13 0x0B8D I2x current 0-Ixmax U2 M_ME R
++14 0x0B8E I3x current 0-Ixmax U2 M_ME R
++15 0x0B8F I4x current 0-I4xmax U2 M_ME R
+19
+IO Address Point ID Description Measurement Range 2 Units and
+Resolution 2
+Type 4 R/W Notes
++16 0x0B90 Inx current 0-Ixmax U2 M_ME R
++17 0x0B91 Zero-sequence voltage 0-Vmax U1 M_ME R
++18 0x0B92 Zero-sequence current 0-Imax U2 M_ME R
++19 0x0B93 Ix Zero-sequence current 0-Ixmax U2 M_ME R
++20 0x0B94 Voltage unbalance 0-3000 0.1% M_ME R
++21 0x0B95 Current unbalance 0-3000 0.1% M_ME R
++22 0x0B96 Ix current unbalance 0-3000 0.1% M_ME R
+19456-19491 1-Cycle Phase Values
++0 0x0C00 V1 voltage 0-Vmax U1 M_ME R 1
++1 0x0C01 V2 voltage 0-Vmax U1 M_ME R 1
++2 0x0C02 V3 voltage 0-Vmax U1 M_ME R 1
++3 0x0C03 I1 current 0-Imax U2 M_ME R
++4 0x0C04 I2 current 0-Imax U2 M_ME R
++5 0x0C05 I3 current 0-Imax U2 M_ME R
++6 0x0C06 kW L1 -Pmax-Pmax U3 M_ME R
++7 0x0C07 kW L2 -Pmax-Pmax U3 M_ME R
++8 0x0C08 kW L3 -Pmax-Pmax U3 M_ME R
++9 0x0C09 kvar L1 -Pmax-Pmax U3 M_ME R
++10 0x0C0A kvar L2 -Pmax-Pmax U3 M_ME R
++11 0x0C0B kvar L3 -Pmax-Pmax U3 M_ME R
++12 0x0C0C kVA L1 0-Pmax U3 M_ME R
++13 0x0C0D kVA L2 0-Pmax U3 M_ME R
++14 0x0C0E kVA L3 0-Pmax U3 M_ME R
++15 0x0C0F Power factor L1 -1000-1000 0.001 M_ME R
++16 0x0C10 Power factor L2 -1000-1000 0.001 M_ME R
++17 0x0C11 Power factor L3 -1000-1000 0.001 M_ME R
++18 0x0C12 V1 voltage THD 0-9999 0.1% M_ME R 1 2-cycle value
++19 0x0C13 V2 voltage THD 0-9999 0.1% M_ME R 1 2-cycle value
++20 0x0C14 V3 voltage THD 0-9999 0.1% M_ME R 1 2-cycle value
++21 0x0C15 I1 current THD 0-9999 0.1% M_ME R 2-cycle value
++22 0x0C16 I2 current THD 0-9999 0.1% M_ME R 2-cycle value
++23 0x0C17 I3 current THD 0-9999 0.1% M_ME R 2-cycle value
++24 0x0C18 I1 K-Factor 10-9999 0.1 M_ME R 2-cycle value
++25 0x0C19 I2 K-Factor 10-9999 0.1 M_ME R 2-cycle value
++26 0x0C1A I3 K-Factor 10-9999 0.1 M_ME R 2-cycle value
++27 0x0C1B I1 current TDD 0-1000 0.1% M_ME R 2-cycle value
++28 0x0C1C I2 current TDD 0-1000 0.1% M_ME R 2-cycle value
++29 0x0C1D I3 current TDD 0-1000 0.1% M_ME R 2-cycle value
++30 0x0C1E V12 voltage 0-Vmax U1 M_ME R
+20
+IO Address Point ID Description Measurement Range 2 Units and
+Resolution 2
+Type 4 R/W Notes
++31 0x0C1F V23 voltage 0-Vmax U1 M_ME R
++32 0x0C20 V31 voltage 0-Vmax U1 M_ME R
++33 0x0C21 I1x current 0-Ixmax U2 M_ME R
++34 0x0C22 I2x current 0-Ixmax U2 M_ME R
++35 0x0C23 I3x current 0-Ixmax U2 M_ME R
+19712-19725 1-Cycle Low Phase Values
++0 0x0D00 Low L-N voltage 0-Vmax U1 M_ME R
++1 0x0D01 Low current 0-Imax U2 M_ME R
++2 0x0D02 Low kW -Pmax-Pmax U3 M_ME R
++3 0x0D03 Low kvar -Pmax-Pmax U3 M_ME R
++4 0x0D04 Low kVA 0-Pmax U3 M_ME R
++5 0x0D05 Low PF Lag 0-1000 0.001 M_ME R
++6 0x0D06 Low PF Lead 0-1000 0.001 M_ME R
++7 0x0D07 Low voltage THD 0-9999 0.1% M_ME R
++8 0x0D08 Low current THD 0-9999 0.1% M_ME R
++9 0x0D09 Low K-Factor 10-9999 0.1 M_ME R
++10 0x0D0A Low current TDD 0-1000 0.1% M_ME R
++11 0x0D0B Low L-L voltage 0-Vmax U1 M_ME R
++12 0x0D0C Low voltage interharmonics THD 0-9999 0.1% M_ME R
++13 0x0D0D Low current interharmonics THD 0-9999 0.1% M_ME R
+19840-19855 1/2-Cycle Analog Inputs
++0 0x0D80 Analog input AI1 AI1min-AI1max M_ME R
++1 0x0D81 Analog input AI2 AI2min-AI2max M_ME R
+...
++15 0x0D8F Analog input AI16 AI16min-AI16max M_ME R
+19968-19981 1-Cycle High Phase Values
++0 0x0E00 High L-N voltage 0-Vmax U1 M_ME R
++1 0x0E01 High current 0-Imax U2 M_ME R
++2 0x0E02 High kW -Pmax-Pmax U3 M_ME R
++3 0x0E03 High kvar -Pmax-Pmax U3 M_ME R
++4 0x0E04 High kVA 0-Pmax U3 M_ME R
++5 0x0E05 High PF Lag 0-1000 0.001 M_ME R
++6 0x0E06 High PF Lead 0-1000 0.001 M_ME R
++7 0x0E07 High voltage THD 0-9999 0.1% M_ME R
++8 0x0E08 High current THD 0-9999 0.1% M_ME R
++9 0x0E09 High K-Factor 10-9999 0.1 M_ME R
++10 0x0E0A High current TDD 0-1000 0.1% M_ME R
++11 0x0E0B High L-L voltage 0-Vmax U1 M_ME R
++12 0x0E0C High voltage interharmonics THD 0-9999 0.1% M_ME R
+21
+IO Address Point ID Description Measurement Range 2 Units and
+Resolution 2
+Type 4 R/W Notes
++13 0x0E0D High current interharmonics THD 0-9999 0.1% M_ME R
+20096-20111 1-Second Analog Inputs
++0 0x0E80 Analog input AI1 AI1min-AI1max M_ME R
++1 0x0E81 Analog input AI2 AI2min-AI2max M_ME R
+...
++15 0x0E8F Analog input AI16 AI16min-AI16max M_ME R
+20224-20237 1-Cycle Total Values
++0 0x0F00 Total kW -Pmax-Pmax U3 M_ME R
++1 0x0F01 Total kvar -Pmax-Pmax U3 M_ME R
++2 0x0F02 Total kVA 0-Pmax U3 M_ME R
++3 0x0F03 Total PF -1.000-1.000 0.001 M_ME R
++4 0x0F04 Total PF lag 0-1000 0.001 M_ME R
++5 0x0F05 Total PF lead 0-1000 0.001 M_ME R
++6 0x0F06 Total kW import 0-Pmax U3 M_ME R
++7 0x0F07 Total kW export 0-Pmax U3 M_ME R
++8 0x0F08 Total kvar import 0-Pmax U3 M_ME R
++9 0x0F09 Total kvar export 0-Pmax U3 M_ME R
++10 0x0F0A 3-phase average L-N 0-Vmax U1 M_ME R 1
++11 0x0F0B 3-phase average L-L voltage 0-Vmax U1 M_ME R
++12 0x0F0C 3-phase average current 0-Imax U2 M_ME R
++13 0x0F0D 3-phase average current, extended inputs I1x-I3x 0-Ixmax U2 M_ME R
+20480-20488 1-Cycle Auxiliary Values
++0 0x1000 I4 current M_ME R
++1 0x1001 In current 0-Imax U2 M_ME R
++2 0x1002 Frequency 0-Fmax 0.01Hz M_ME R
++3 0x1003 Voltage unbalance 0-300 1% M_ME R
++4 0x1004 Current unbalance 0-300 1% M_ME R
++5 0x1005 Not used M_ME R
++6 0x1006 V4 voltage 0-V4max U4 M_ME R
++7 0x1007 I4x current 0-Ixmax U2 M_ME R
++8 0x1008 Frequency 0-100000 0.001Hz M_ME R
+20608-20623 Fundamental Phasor Values
++0 0x1080 V1 voltage magnitude 0-Vmax U1 M_ME R 2
++1 0x1081 V2 voltage magnitude 0-Vmax U1 M_ME R 2
++2 0x1082 V3 voltage magnitude 0-Vmax U1 M_ME R 2
++3 0x1083 V4 voltage magnitude 0-V4max M_ME R
++4 0x1084 I1 current magnitude 0-Imax U2 M_ME R
++5 0x1085 I2 current magnitude 0-Imax U2 M_ME R
++6 0x1086 I3 current magnitude 0-Imax U2 M_ME R
+22
+IO Address Point ID Description Measurement Range 2 Units and
+Resolution 2
+Type 4 R/W Notes
++7 0x1087 I4 current magnitude 0-Imax M_ME R
++8 0x1088 V1 voltage angle -1800-1800 0.1 M_ME R 2
++9 0x1089 V2 voltage angle -1800-1800 0.1 M_ME R 2
++10 0x108A V3 voltage angle -1800-1800 0.1 M_ME R 2
++11 0x108B V4 voltage angle -1800-1800 0.1 M_ME R
++12 0x108C I1 current angle -1800-1800 0.1 M_ME R
++13 0x108D I2 current angle -1800-1800 0.1 M_ME R
++14 0x108E I3 current angle -1800-1800 0.1 M_ME R
++15 0x108F I4 current angle -1800-1800 0.1 M_ME R
+20736-20774 1-Second Phase Values
++0 0x1100 V1 voltage 0-Vmax U1 M_ME R 1
++1 0x1101 V2 voltage 0-Vmax U1 M_ME R 1
++2 0x1102 V3 voltage 0-Vmax U1 M_ME R 1
++3 0x1103 I1 current 0-Imax U2 M_ME R
++4 0x1104 I2 current 0-Imax U2 M_ME R
++5 0x1105 I3 current 0-Imax U2 M_ME R
++6 0x1106 kW L1 -Pmax-Pmax U3 M_ME R
++7 0x1107 kW L2 -Pmax-Pmax U3 M_ME R
++8 0x1108 kW L3 -Pmax-Pmax U3 M_ME R
++9 0x1109 kvar L1 -Pmax-Pmax U3 M_ME R
++10 0x110A kvar L2 -Pmax-Pmax U3 M_ME R
++11 0x110B kvar L3 -Pmax-Pmax U3 M_ME R
++12 0x110C kVA L1 0-Pmax U3 M_ME R
++13 0x110D kVA L2 0-Pmax U3 M_ME R
++14 0x110E kVA L3 0-Pmax U3 M_ME R
++15 0x110F Power factor L1 -1000-1000 0.001 M_ME R
++16 0x1110 Power factor L2 -1000-1000 0.001 M_ME R
++17 0x1111 Power factor L3 -1000-1000 0.001 M_ME R
++18 0x1112 V1 voltage THD 0-9999 0.1% M_ME R 2, 5
++19 0x1113 V2 voltage THD 0-9999 0.1% M_ME R 2, 5
++20 0x1114 V3 voltage THD 0-9999 0.1% M_ME R 2, 5
++21 0x1115 I1 current THD 0-9999 0.1% M_ME R 5
++22 0x1116 I2 current THD 0-9999 0.1% M_ME R 5
++23 0x1117 I3 current THD 0-9999 0.1% M_ME R 5
++24 0x1118 I1 K-Factor 10-9999 0.1 M_ME R 5
++25 0x1119 I2 K-Factor 10-9999 0.1 M_ME R 5
++26 0x111A I3 K-Factor 10-9999 0.1 M_ME R 5
++27 0x111B I1 current TDD 0-1000 0.1% M_ME R 5
++28 0x111C I2 current TDD 0-1000 0.1% M_ME R 5
+23
+IO Address Point ID Description Measurement Range 2 Units and
+Resolution 2
+Type 4 R/W Notes
++29 0x111D I3 current TDD 0-1000 0.1% M_ME R 5
++30 0x111E V12 voltage 0-Vmax U1 M_ME R
++31 0x111F V23 voltage 0-Vmax U1 M_ME R
++32 0x1120 V31 voltage 0-Vmax U1 M_ME R
++33 0x1121 I1x current 0-Ixmax U2 M_ME R
++34 0x1122 I2x current 0-Ixmax U2 M_ME R
++35 0x1123 I3x current 0-Ixmax U2 M_ME R
++36 0x1124 V1x Voltage 0-Vmax U1 M_ME R Transient recorder V1 channel
++37 0x1125 V2x Voltage 0-Vmax U1 M_ME R Transient recorder V2 channel
++38 0x1126 V3x Voltage 0-Vmax U1 M_ME R Transient recorder V3 channel
+20992-21005 1-Second Low Phase Values
++0 0x1200 Low L-N voltage 0-Vmax U1 M_ME R
++1 0x1201 Low current 0-Imax U2 M_ME R
++2 0x1202 Low kW -Pmax-Pmax U3 M_ME R
++3 0x1203 Low kvar -Pmax-Pmax U3 M_ME R
++4 0x1204 Low kVA 0-Pmax U3 M_ME R
++5 0x1205 Low PF Lag 0-1000 0.001 M_ME R
++6 0x1206 Low PF Lead 0-1000 0.001 M_ME R
++7 0x1207 Low voltage THD 0-9999 0.1% M_ME R 2, 5
++8 0x1208 Low current THD 0-9999 0.1% M_ME R 5
++9 0x1209 Low K-Factor 10-9999 0.1 M_ME R 5
++10 0x120A Low current TDD 0-1000 0.1% M_ME R 5
++11 0x120B Low L-L voltage 0-Vmax U1 M_ME R
++12 0x120C Low voltage interharmonics THD 0-9999 0.1% M_ME R 2, 5
++13 0x120D Low current interharmonics THD 0-9999 0.1% M_ME R 5
+21248-21261 1-Second High Phase Values
++0 0x1300 High L-N voltage 0-Vmax U1 M_ME R
++1 0x1301 High current 0-Imax U2 M_ME R
++2 0x1302 High kW -Pmax-Pmax U3 M_ME R
++3 0x1303 High kvar -Pmax-Pmax U3 M_ME R
++4 0x1304 High kVA 0-Pmax U3 M_ME R
++5 0x1305 High PF Lag 0-1000 0.001 M_ME R
++6 0x1306 High PF Lead 0-1000 0.001 M_ME R
++7 0x1307 High voltage THD 0-9999 0.1% M_ME R 2, 5
++8 0x1308 High current THD 0-9999 0.1% M_ME R 5
++9 0x1309 High K-Factor 10-9999 0.1 M_ME R 5
++10 0x130A High current TDD 0-1000 0.1% M_ME R 5
++11 0x130B High L-L voltage 0-Vmax U1 M_ME R
++12 0x130C High voltage interharmonics THD 0-9999 0.1% M_ME R 2, 5
+24
+IO Address Point ID Description Measurement Range 2 Units and
+Resolution 2
+Type 4 R/W Notes
++13 0x130D High current interharmonics THD 0-9999 0.1% M_ME R 5
+21504-21517 1-Second Total Values
++0 0x1400 Total kW -Pmax-Pmax U3 M_ME R
++1 0x1401 Total kvar -Pmax-Pmax U3 M_ME R
++2 0x1402 Total kVA 0-Pmax U3 M_ME R
++3 0x1403 Total PF -1000-1000 0.001 M_ME R
++4 0x1404 Total PF lag 0-1000 0.001 M_ME R
++5 0x1405 Total PF lead 0-1000 0.001 M_ME R
++6 0x1406 Total kW import 0-Pmax U3 M_ME R
++7 0x1407 Total kW export 0-Pmax U3 M_ME R
++8 0x1408 Total kvar import 0-Pmax U3 M_ME R
++9 0x1409 Total kvar export 0-Pmax U3 M_ME R
++10 0x140A 3-phase average L-N 0-Vmax U1 M_ME R
++11 0x140B 3-phase average L-L voltage 0-Vmax U1 M_ME R
++12 0x140C 3-phase average current 0-Imax U2 M_ME R
++13 0x140D 3-phase average current, extended inputs I1x-I3x 0-Ixmax U2 M_ME R
+21760-21770 1-Second Auxiliary Values
++0 0x1500 I4 current 0-Imax U2 M_ME R
++1 0x1501 In current 0-Imax U2 M_ME R
++2 0x1502 Frequency 0-10000 0.01Hz M_ME R
++3 0x1503 Voltage unbalance 0-3000 0.1% M_ME R
++4 0x1504 Current unbalance 0-3000 0.1% M_ME R
++5 0x1505 Not used M_ME R
++6 0x1506 V4 voltage 0-V4max U4 M_ME R
++7 0x1507 I4x current 0-Ixmax U2 M_ME R
++8 0x1508 V4x (neutral-ground) voltage 0-Vmax U1 M_ME R Transient recorder Vn channel
++9 0x1509 Internal temperature -2000 to 2000 0.1C M_ME R
++10 0x150A Frequency 0-100000 0.001Hz M_ME R
+21888-21899 Present Harmonic Demands
++0 0x1580 V1 THD demand 0-9999 0.1% M_ME R
++1 0x1581 V2 THD demand 0-9999 0.1% M_ME R
++2 0x1582 V3 THD demand 0-9999 0.1% M_ME R
++3 0x1583 V4 THD demand 0-9999 0.1% M_ME R
++4 0x1584 I1 THD demand 0-9999 0.1% M_ME R
+25
+IO Address Point ID Description Measurement Range 2 Units and
+Resolution 2
+Type 4 R/W Notes
++5 0x1585 I2 THD demand 0-9999 0.1% M_ME R
++6 0x1586 I3 THD demand 0-9999 0.1% M_ME R
++7 0x1587 I4 THD demand 0-9999 0.1% M_ME R
++8 0x1588 I1 TDD demand 0-1000 0.1% M_ME R
++9 0x1589 I2 TDD demand 0-1000 0.1% M_ME R
++10 0x158A I3 TDD demand 0-1000 0.1% M_ME R
++11 0x158B I4 TDD demand 0-1000 0.1% M_ME R
+22016-22050 Present Demands
++0 0x1600 V1 volt demand 0-Vmax U1 M_ME R 2
++1 0x1601 V2 volt demand 0-Vmax U1 M_ME R 2
++2 0x1602 V3 volt demand 0-Vmax U1 M_ME R 2
++3 0x1603 I1 ampere demand 0-Imax U2 M_ME R
++4 0x1604 I2 ampere demand 0-Imax U2 M_ME R
++5 0x1605 I3 ampere demand 0-Imax U2 M_ME R
++6 0x1606 kW import block demand 0-Pmax U3 M_ME R
++7 0x1607 kvar import block demand 0-Pmax U3 M_ME R
++8 0x1608 kVA block demand 0-Pmax U3 M_ME R
++9 0x1609 kW import sliding window demand 0-Pmax U3 M_ME R
++10 0x160A kvar import sliding window demand 0-Pmax U3 M_ME R
++11 0x160B kVA sliding window demand 0-Pmax U3 M_ME R
++12 0x160C Not used 0 M_ME R
++13 0x160D Not used 0 M_ME R
++14 0x160E Not used 0 M_ME R
++15 0x160F kW import accumulated demand 0-Pmax U3 M_ME R
++16 0x1610 kvar import accumulated demand 0-Pmax U3 M_ME R
++17 0x1611 kVA accumulated demand 0-Pmax U3 M_ME R
++18 0x1612 kW import predicted sliding window demand 0-Pmax U3 M_ME R
++19 0x1613 kvar import predicted sliding window demand 0-Pmax U3 M_ME R
++20 0x1614 kVA predicted sliding window demand 0-Pmax U3 M_ME R
++21 0x1615 PF (import) at Max. kVA sliding window demand 0-1000 0.001 M_ME R
++22 0x1616 kW export block demand 0-Pmax U3 M_ME R
++23 0x1617 kvar export block demand 0-Pmax U3 M_ME R
++24 0x1618 kW export sliding window demand 0-Pmax U3 M_ME R
++25 0x1619 kvar export sliding window demand 0-Pmax U3 M_ME R
++26 0x161A kW export accumulated demand 0-Pmax U3 M_ME R
++27 0x161B kvar export accumulated demand 0-Pmax U3 M_ME R
++28 0x161C kW export predicted sliding window demand 0-Pmax U3 M_ME R
++29 0x161D kvar export predicted sliding window demand 0-Pmax U3 M_ME R
++30 0x161E Not used 0 M_ME R
+26
+IO Address Point ID Description Measurement Range 2 Units and
+Resolution 2
+Type 4 R/W Notes
++31 0x161F Not used 0 M_ME R
++32 0x1620 V4 volt demand 0-Vmax U4 M_ME R
++33 0x1621 I4 ampere demand 0-Imax U2 M_ME R
++34 0x1622 In ampere demand 0-Imax U2 M_ME R
+22656-22665 Symmetrical Components
++0 0x1880 Positive-sequence voltage 0-Vmax U1 M_ME R
++1 0x1881 Negative-sequence voltage 0-Vmax U1 M_ME R
++2 0x1882 Zero-sequence voltage 0-Vmax U1 M_ME R
++3 0x1883 Negative-sequence voltage unbalance 0-3000 0.1% M_ME R
++4 0x1884 Zero-sequence voltage unbalance 0-3000 0.1% M_ME R
++5 0x1885 Positive-sequence current 0-Imax U2 M_ME R
++6 0x1886 Negative-sequence current 0-Imax U2 M_ME R
++7 0x1887 Zero-sequence current 0-Imax U2 M_ME R
++8 0x1888 Negative-sequence current unbalance 0-3000 0.1% M_ME R
++9 0x1889 Zero-sequence current unbalance 0-3000 0.1% M_ME R
+22784-22846 V1 Harmonics 1
++0 0x1900 H01 Harmonic magnitude 0-10000 0.01% M_ME R
++1 0x1901 H02 Harmonic magnitude 0-10000 0.01% M_ME R
+... ...
++62 0x193E H63 Harmonic magnitude 0-10000 0.01% M_ME R
+23040-23102 V2 Harmonics 1
++0 0x1A00 H01 Harmonic magnitude 0-10000 0.01% M_ME R
++1 0x1A01 H02 Harmonic magnitude 0-10000 0.01% M_ME R
+... ...
++62 0x1A3E H63 Harmonic magnitude 0-10000 0.01% M_ME R
+23296-23358 V3 Harmonics 1
++0 0x1B00 H01 Harmonic magnitude 0-10000 0.01% M_ME R
++1 0x1B01 H02 Harmonic magnitude 0-10000 0.01% M_ME R
+... ...
++62 0x1B3E H63 Harmonic magnitude 0-10000 0.01% M_ME R
+26624-26686 V4 Harmonics
++0 0x2800 H01 Harmonic magnitude 0-10000 0.01% M_ME R
++1 0x2801 H02 Harmonic magnitude 0-10000 0.01% M_ME R
+...
++62 0x283E H63 Harmonic magnitude 0-10000 0.01% M_ME R
+23552-23614 I1 Harmonics
++0 0x1C00 H01 Harmonic magnitude 0-10000 0.01% M_ME R
++1 0x1C01 H02 Harmonic magnitude 0-10000 0.01% M_ME R
+27
+IO Address Point ID Description Measurement Range 2 Units and
+Resolution 2
+Type 4 R/W Notes
+... ...
++62 0x1C3E H63 Harmonic magnitude 0-10000 0.01% M_ME R
+23808-23870 I2 Harmonics
++0 0x1D00 H01 Harmonic magnitude 0-10000 0.01% M_ME R
++1 0x1D01 H02 Harmonic magnitude 0-10000 0.01% M_ME R
+... ...
++62 0x1D3E H63 Harmonic magnitude 0-10000 0.01% M_ME R
+24064-24126 I3 Harmonics
++0 0x1E00 H01 Harmonic magnitude 0-10000 0.01% M_ME R
++1 0x1E01 H02 Harmonic magnitude 0-10000 0.01% M_ME R
+... ...
++62 0x1E3E H63 Harmonic magnitude 0-10000 0.01% M_ME R
+27392-27454 I4 Harmonics
++0 0x2B00 H01 Harmonic magnitude 0-10000 0.01% M_ME R
++1 0x2B01 H02 Harmonic magnitude 0-10000 0.01% M_ME R
+...
++62 0x2B3E H63 Harmonic magnitude 0-10000 0.01% M_ME R
+24320-24351 V1 Harmonic Voltages (odd numbers) 2
++0 0x1F00 H01 Harmonic voltage 0-Vmax U1 M_ME R
++1 0x1F01 H03 Harmonic voltage 0-Vmax U1 M_ME R
+...
++31 0x1F1E H63 Harmonic voltage 0-Vmax U1 M_ME R
+24576-24607 V2 Harmonic Voltages (odd numbers) 2
++0 0x2000 H01 Harmonic voltage 0-Vmax U1 M_ME R
++1 0x2001 H03 Harmonic voltage 0-Vmax U1 M_ME R
+...
++31 0x201E H63 Harmonic voltage 0-Vmax U1 M_ME R
+24832-24863 V3 Harmonic Voltages (odd numbers) 2
++0 0x2100 H01 Harmonic voltage 0-Vmax U1 M_ME R
++1 0x2101 H03 Harmonic voltage 0-Vmax U1 M_ME R
+...
++31 0x211E H63 Harmonic voltage 0-Vmax U1 M_ME R
+28928-28959 V4 Harmonic Voltages (odd numbers)
++0 0x3100 H01 Harmonic voltage 0-Vmax U1 M_ME R
++1 0x3101 H03 Harmonic voltage 0-Vmax U1 M_ME R
+...
++31 0x311E H63 Harmonic voltage 0-Vmax U1 M_ME R
+28
+IO Address Point ID Description Measurement Range 2 Units and
+Resolution 2
+Type 4 R/W Notes
+25088-25119 I1 Harmonic Currents (odd numbers)
++0 0x2200 H01 Harmonic current 0-Imax U2 M_ME R
++1 0x2201 H03 Harmonic current 0-Imax U2 M_ME R
+...
++31 0x221E H63 Harmonic current 0-Imax U2 M_ME R
+25344-25375 I2 Harmonic Currents (odd numbers)
++0 0x2300 H01 Harmonic current 0-Imax U2 M_ME R
++1 0x2301 H03 Harmonic current 0-Imax U2 M_ME R
+...
++31 0x231E H63 Harmonic current 0-Imax U2 M_ME R
+25600-25631 I3 Harmonic Currents (odd numbers)
++0 0x2400 H01 Harmonic current 0-Imax U2 M_ME R
++1 0x2401 H03 Harmonic current 0-Imax U2 M_ME R
+...
++31 0x241E H63 Harmonic current 0-Imax U2 M_ME R
+29184-29115 I4 Harmonic Currents (odd numbers)
++0 0x3200 H01 Harmonic current 0-Imax U2 M_ME R
++1 0x3201 H03 Harmonic current 0-Imax U2 M_ME R
+...
++31 0x321E H63 Harmonic current 0-Imax U2 M_ME R
+25856-25887 Total Harmonic kW (odd numbers)
++0 0x2500 H01 Harmonic kW -Pmax -Pmax U3 M_ME R
++1 0x2501 H03 Harmonic kW -Pmax -Pmax U3 M_ME R
+...
++31 0x251E H63 Harmonic kW -Pmax -Pmax U3 M_ME R
+26112-26143 Total Harmonic kvar (odd numbers)
++0 0x2600 H01 Harmonic kvar -Pmax -Pmax U3 M_ME R
++1 0x2601 H03 Harmonic kvar -Pmax -Pmax U3 M_ME R
+...
++31 0x261E H63 Harmonic kvar -Pmax -Pmax U3 M_ME R
+26368-26399 Total Harmonic Power Factor (odd numbers)
++0 0x2700 H01 Harmonic PF -1000-1000 0.001 M_ME R
++1 0x2701 H03 Harmonic PF -1000-1000 0.001 M_ME R
+...
++31 0x271E H63 Harmonic PF -1000-1000 0.001 M_ME R
+27008-27013 Flicker
++0 0x2980 V1 Pst 0-10000 0.01 M_ME R
++1 0x2981 V2 Pst 0-10000 0.01 M_ME R
+29
+IO Address Point ID Description Measurement Range 2 Units and
+Resolution 2
+Type 4 R/W Notes
++2 0x2982 V3 Pst 0-10000 0.01 M_ME R
++3 0x2983 V1 Plt 0-10000 0.01 M_ME R
++4 0x2984 V2 Plt 0-10000 0.01 M_ME R
++5 0x2985 V3 Plt 0-10000 0.01 M_ME R
+27648-27683 Minimum 1-Cycle Phase Values
++0 0x2C00 V1 voltage 0-Vmax U1 M_ME R 1
++1 0x2C01 V2 voltage 0-Vmax U1 M_ME R 1
++2 0x2C02 V3 voltage 0-Vmax U1 M_ME R 1
++3 0x2C03 I1 current 0-Imax U2 M_ME R
++4 0x2C04 I2 current 0-Imax U2 M_ME R
++5 0x2C05 I3 current 0-Imax U2 M_ME R
++6 0x2C06 kW L1 -Pmax-Pmax U3 M_ME R
++7 0x2C07 kW L2 -Pmax-Pmax U3 M_ME R
++8 0x2C08 kW L3 -Pmax-Pmax U3 M_ME R
++9 0x2C09 kvar L1 -Pmax-Pmax U3 M_ME R
++10 0x2C0A kvar L2 -Pmax-Pmax U3 M_ME R
++11 0x2C0B kvar L3 -Pmax-Pmax U3 M_ME R
++12 0x2C0C kVA L1 0-Pmax U3 M_ME R
++13 0x2C0D kVA L2 0-Pmax U3 M_ME R
++14 0x2C0E kVA L3 0-Pmax U3 M_ME R
++15 0x2C0F Power factor L1 0-1000 0.001 M_ME R Absolute value
++16 0x2C10 Power factor L2 0-1000 0.001 M_ME R Absolute value
++17 0x2C11 Power factor L3 0-1000 0.001 M_ME R Absolute value
++18 0x2C12 V1 voltage THD 0-9999 0.1% M_ME R 2, 4
++19 0x2C13 V2 voltage THD 0-9999 0.1% M_ME R 2, 4
++20 0x2C14 V3 voltage THD 0-9999 0.1% M_ME R 2, 4
++21 0x2C15 I1 current THD 0-9999 0.1% M_ME R 4
++22 0x2C16 I2 current THD 0-9999 0.1% M_ME R 4
++23 0x2C17 I3 current THD 0-9999 0.1% M_ME R 4
++24 0x2C18 I1 K-Factor 10-9999 0.1 M_ME R 4
++25 0x2C19 I2 K-Factor 10-9999 0.1 M_ME R 4
++26 0x2C1A I3 K-Factor 10-9999 0.1 M_ME R 4
++27 0x2C1B I1 current TDD 0-1000 0.1% M_ME R 4
++28 0x2C1C I2 current TDD 0-1000 0.1% M_ME R 4
++29 0x2C1D I3 current TDD 0-1000 0.1% M_ME R 4
++30 0x2C1E V12 voltage 0-Vmax U1 M_ME R
++31 0x2C1F V23 voltage 0-Vmax U1 M_ME R
++32 0x2C20 V31 voltage 0-Vmax U1 M_ME R
++33 0x2C21 I1x current 0-Ixmax U2 M_ME R
+30
+IO Address Point ID Description Measurement Range 2 Units and
+Resolution 2
+Type 4 R/W Notes
++34 0x2C22 I2x current 0-Ixmax U2 M_ME R
++35 0x2C23 I3x current 0-Ixmax U2 M_ME R
+27904-27909 Minimum 1-Cycle Total Values
++0 0x2D00 Total kW -Pmax-Pmax U3 M_ME R
++1 0x2D01 Total kvar -Pmax-Pmax U3 M_ME R
++2 0x2D02 Total kVA 0-Pmax U3 M_ME R
++3 0x2D03 Total PF 0-1000 0.001 M_ME R Absolute value
++4 0x2D04 Total PF lag 0-1000 0.001 M_ME R
++5 0x2D05 Total PF lead 0-1000 0.001 M_ME R
+28160-28170 Minimum 1-Cycle Auxiliary Values
++0 0x2E00 I4 current 0-Imax U2 M_ME R
++1 0x2E01 In current 0-Imax U2 M_ME R
++2 0x2E02 Frequency 0-10000 0.01Hz M_ME R
++3 0x2E03 Voltage unbalance 0-3000 0.1% M_ME R
++4 0x2E04 Current unbalance 0-3000 0.1% M_ME R
++5 0x2E05 Not used R
++6 0x2E06 V4 voltage 0-V4max U4 M_ME R
++7 0x2E07 I4x current 0-Ixmax U2 M_ME R
++8 0x2E08 V4 THD 0-9999 0.1% M_ME R 4
++9 0x2E09 I4x THD 0-9999 0.1% M_ME R 4
++10 0x2E0A I4x TDD 0-1000 0.1% M_ME R 4
+17728-17759 Minimum Analog Inputs
++0 0x2E80 Analog input AI1 AI1min-AI1max M_ME R
++1 0x2E81 Analog input AI2 AI2min-AI2max M_ME R
+...
++15 0x2E8F Analog input AI16 AI16min-AI16max M_ME R
+17920-17951 Programmable Min/Max Minimum Values
++0 0x3000 Min/Max Register #1 M_ME R
++1 0x3001 Min/Max Register #2 M_ME R
+...
++15 0x300F Min/Max Register #16 M_ME R
+18432-18503 Maximum 1-Cycle Phase Values
++0 0x3400 V1 voltage 0-Vmax U1 M_ME R 1
++1 0x3401 V2 voltage 0-Vmax U1 M_ME R 1
++2 0x3402 V3 voltage 0-Vmax U1 M_ME R 1
++3 0x3403 I1 current 0-Imax U2 M_ME R
++4 0x3404 I2 current 0-Imax U2 M_ME R
++5 0x3405 I3 current 0-Imax U2 M_ME R
++6 0x3406 kW L1 -Pmax-Pmax U3 M_ME R
+31
+IO Address Point ID Description Measurement Range 2 Units and
+Resolution 2
+Type 4 R/W Notes
++7 0x3407 kW L2 -Pmax-Pmax U3 M_ME R
++8 0x3408 kW L3 -Pmax-Pmax U3 M_ME R
++9 0x3409 kvar L1 -Pmax-Pmax U3 M_ME R
++10 0x340A kvar L2 -Pmax-Pmax U3 M_ME R
++11 0x340B kvar L3 -Pmax-Pmax U3 M_ME R
++12 0x340C kVA L1 0-Pmax U3 M_ME R
++13 0x340D kVA L2 0-Pmax U3 M_ME R
++14 0x340E kVA L3 0-Pmax U3 M_ME R
++15 0x340F Power factor L1 0-1000 0.001 M_ME R Absolute value
++16 0x3410 Power factor L2 0-1000 0.001 M_ME R Absolute value
++17 0x3411 Power factor L3 0-1000 0.001 M_ME R Absolute value
++18 0x3412 V1 voltage THD 0-9999 0.1% M_ME R 2, 4
++19 0x3413 V2 voltage THD 0-9999 0.1% M_ME R 2, 4
++20 0x3414 V3 voltage THD 0-9999 0.1% M_ME R 2, 4
++21 0x3415 I1 current THD 0-9999 0.1% M_ME R 4
++22 0x3416 I2 current THD 0-9999 0.1% M_ME R 4
++23 0x3417 I3 current THD 0-9999 0.1% M_ME R 4
++24 0x3418 I1 K-Factor 10-9999 0.1 M_ME R 4
++25 0x3419 I2 K-Factor 10-9999 0.1 M_ME R 4
++26 0x341A I3 K-Factor 10-9999 0.1 M_ME R 4
++27 0x341B I1 current TDD 0-1000 0.1% M_ME R 4
++28 0x341C I2 current TDD 0-1000 0.1% M_ME R 4
++29 0x341D I3 current TDD 0-1000 0.1% M_ME R 4
++30 0x341E V12 voltage 0-Vmax U1 M_ME R
++31 0x341F V23 voltage 0-Vmax U1 M_ME R
++32 0x3420 V31 voltage 0-Vmax U1 M_ME R
++33 0x3421 I1x current 0-Ixmax U2 M_ME R
++34 0x3422 I2x current 0-Ixmax U2 M_ME R
++35 0x3423 I3x current 0-Ixmax U2 M_ME R
+18560-18571 Maximum 1-Cycle Total Values
++0 0x3500 Total kW -Pmax-Pmax U3 M_ME R
++1 0x3501 Total kvar -Pmax-Pmax U3 M_ME R
++2 0x3502 Total kVA 0-Pmax U3 M_ME R
++3 0x3503 Total PF 0-1000 0.001 M_ME R Absolute value
++4 0x3504 Total PF lag 0-1000 0.001 M_ME R
++5 0x3505 Total PF lead 0-1000 0.001 M_ME R
+18668-18689 Maximum 1-Cycle Auxiliary Values
++0 0x3600 I4 current 0-Imax U2 M_ME R
++1 0x3601 In current 0-Imax U2 M_ME R
+32
+IO Address Point ID Description Measurement Range 2 Units and
+Resolution 2
+Type 4 R/W Notes
++2 0x3602 Frequency 0-10000 0.01Hz M_ME R
++3 0x3603 Voltage unbalance 0-3000 0.1% M_ME R
++4 0x3604 Current unbalance 0-3000 0.1% M_ME R
++5 0x3605 Not used M_ME R
++6 0x3606 V4 voltage 0-V4max U4 M_ME R
++7 0x3607 I4x current 0-Ixmax U2 M_ME R
++8 0x3608 V4 THD 0-9999 0.1% M_ME R 4
++9 0x3609 I4x THD 0-9999 0.1% M_ME R 4
++10 0x360A I4x TDD 0-1000 0.1% M_ME R 4
+18732-18795 Maximum Analog Inputs
++0 0x3680 Analog input AI1 AI1min-AI1max M_ME R
++1 0x3681 Analog input AI2 AI2min-AI2max M_ME R
+...
++15 0x368F Analog input AI16 AI16min-AI16max M_ME R
+18816-18859 Maximum Demands
++0 0x3700 V1 Maximum volt demand 0-Vmax U1 M_ME R 2
++1 0x3701 V2 Maximum volt demand 0-Vmax U1 M_ME R 2
++2 0x3702 V3 Maximum volt demand 0-Vmax U1 M_ME R 2
++3 0x3703 I1 Maximum ampere demand 0-Imax U2 M_ME R
++4 0x3704 I2 Maximum ampere demand 0-Imax U2 M_ME R
++5 0x3705 I3 Maximum ampere demand 0-Imax U2 M_ME R
++6 0x3706 Not used 0 M_ME R
++7 0x3707 Not used 0 M_ME R
++8 0x3708 Not used 0 M_ME R
++9 0x3709 Maximum kW import sliding window demand 0-Pmax U3 M_ME R
++10 0x370A Maximum kvar import sliding window demand 0-Pmax U3 M_ME R
++11 0x370B Maximum kVA sliding window demand 0-Pmax U3 M_ME R
++12 0x3737 Not used 0 M_ME R
++13 0x370D Not used 0 M_ME R
++14 0x370E Not used 0 M_ME R
++15 0x370F Maximum kW export sliding window demand 0-Pmax U3 M_ME R
++16 0x3710 Maximum kvar export sliding window demand 0-Pmax U3 M_ME R
++17 0x3737 Not used 0 M_ME R
++18 0x3712 Not used 0 M_ME R
++19 0x3713 V4 Maximum volt demand 0-Vmax U4 M_ME R
++20 0x3714 I4 Maximum ampere demand 0-I4max U2 M_ME R
++21 0x3715 In Maximum ampere demand 0-Imax U2 M_ME R
+18944-18975 Programmable Min/Max Maximum Values
++0 0x3800 Min/Max Register #1 M_ME R
+33
+IO Address Point ID Description Measurement Range 2 Units and
+Resolution 2
+Type 4 R/W Notes
++1 0x3801 Min/Max Register #2 M_ME R
+...
++15 0x380F Min/Max Register #16 M_ME R
+19008-19031 Maximum Harmonic Demands
++0 0x3880 V1 THD demand 0-9999 0.1% M_ME R 2
++1 0x3881 V2 THD demand 0-9999 0.1% M_ME R 2
++2 0x3882 V3 THD demand 0-9999 0.1% M_ME R 2
++3 0x3883 V4 THD demand 0-9999 0.1% M_ME R
++4 0x3884 I1 THD demand 0-9999 0.1% M_ME R
++5 0x3885 I2 THD demand 0-9999 0.1% M_ME R
++6 0x3886 I3 THD demand 0-9999 0.1% M_ME R
++7 0x3887 I4 THD demand 0-9999 0.1% M_ME R
++8 0x3888 I1 TDD demand 0-1000 0.1% M_ME R
++9 0x3889 I2 TDD demand 0-1000 0.1% M_ME R
++10 0x388A I3 TDD demand 0-1000 0.1% M_ME R
++11 0x388B I4 TDD demand 0-1000 0.1% M_ME R
+19072-19135 Maximum Analog Input Demands
++0 0x3900 Analog input AI1+ AI1min-AI1max M_ME R Positive AI readings demand
++1 0x3901 Analog input AI2+ AI2min-AI2max M_ME R
+...
++15 0x390F Analog input AI16+ AI16min-AI16max M_ME R
++16 0x3910 Analog input AI1- AI1min-AI1max M_ME R Negative AI readings demand
++17 0x3911 Analog input AI2- AI2min-AI2max M_ME R
+...
++31 0x391F Analog input AI16- AI16min-AI16max M_ME R
+19200-19263 Present Analog Input Demands
++0 0x3A00 Analog input AI1+ AI1min-AI1max M_ME R Positive AI readings demand
++1 0x3A01 Analog input AI2+ AI2min-AI2max M_ME R
+...
++15 0x3A0F Analog input AI16+ AI16min-AI16max M_ME R
++16 0x3A10 Analog input AI1- AI1min-AI1max M_ME R Negative AI readings demand
++17 0x3A11 Analog input AI2- AI2min-AI2max M_ME R
+...
++31 0x3A1F Analog input AI16- AI16min-AI16max M_ME R
+19328-19359 1-Cycle Analog Inputs
++0 0x3B00 Analog input AI1 AI1min-AI1max M_ME R
++1 0x3B01 Analog input AI2 AI2min-AI2max M_ME R
+...
++15 0x3B0F Analog input AI16 AI16min-AI16max M_ME R
+34
+IO Address Point ID Description Measurement Range 2 Units and
+Resolution 2
+Type 4 R/W Notes
+19392-19423 Raw Analog Inputs
++0 0x3B80 Analog input AI1 0-4095 M_ME R
++1 0x3B81 Analog input AI2 0-4095 M_ME R
+...
++15 0x3B8F Analog input AI16 0-4095 M_ME R
+19456-19459 TOU Parameters
++0 0x3C00 Active tariff 0-15 = Tariff 1-16 M_ME R/W
++1 0x3C01 Active profile 0-15 = Profile 1-16 M_ME R
+19520-19551 Scaled Analog Outputs
++0 0x3C80 Analog input AO1 0-4095 M_ME R/W
++1 0x3C81 Analog input AO2 0-4095 M_ME R/W
+...
++15 0x3C8F Analog input AO16 0-4095 M_ME R/W
+34048-34063 Billing Summary Accumulated Demands
++0 0x4500 Summary register #1 0-Pmax U3 M_ME R
++1 0x4501 Summary register #2 0-Pmax U3 M_ME R
+...
++15 0x450F Summary register #16 0-Pmax U3 M_ME R
+34176-34191 Billing Summary Block Demands
++0 0x4580 Summary register #1 0-Pmax U3 M_ME R
++1 0x4581 Summary register #2 0-Pmax U3 M_ME R
+...
++15 0x458F Summary register #16 0-Pmax U3 M_ME R
+34304-34319 Billing Summary Sliding Window Demands
++0 0x4600 Summary register #1 0-Pmax U3 M_ME R
++1 0x4601 Summary register #2 0-Pmax U3 M_ME R
+...
++15 0x460F Summary register #16 0-Pmax U3 M_ME R
+34688-34703 Billing Summary Maximum Demands
++0 0x4780 Summary register #1 0-Pmax U3 M_ME R
++1 0x4781 Summary register #2 0-Pmax U3 M_ME R
+...
++15 0x4783 Summary register #16 0-Pmax U3 M_ME R
+34816-34831 Billing TOU Maximum Demand Register #1
++0 0x4800 Tariff #1 register 0-Pmax U3 M_ME R
++1 0x4801 Tariff #2 register 0-Pmax U3 M_ME R
+... R
++15 0x480F Tariff #16 register 0-Pmax U3 M_ME R
+35
+IO Address Point ID Description Measurement Range 2 Units and
+Resolution 2
+Type 4 R/W Notes
+34944-34959 Billing TOU Maximum Demand Register #4
++0 0x4880 Tariff #1 register 0-Pmax U3 M_ME R
++1 0x4881 Tariff #2 register 0-Pmax U3 M_ME R
+... R
++15 0x488F Tariff #16 register 0-Pmax U3 M_ME R
+35072-35087 Billing TOU Maximum Demand Register #2
++0 0x4900 Tariff #1 register 0-Pmax U3 M_ME R
++1 0x4901 Tariff #2 register 0-Pmax U3 M_ME R
+... R
++15 0x490F Tariff #16 register 0-Pmax U3 M_ME R
+35200-35215 Billing TOU Maximum Demand Register #5
++0 0x4980 Tariff #1 register 0-Pmax U3 M_ME R
++1 0x4981 Tariff #2 register 0-Pmax U3 M_ME R
+... R
++15 0x498F Tariff #16 register 0-Pmax U3 M_ME R
+35328-35343 Billing TOU Maximum Demand Register #3
++0 0x4A00 Tariff #1 register 0-Pmax U3 M_ME R
++1 0x4A01 Tariff #2 register 0-Pmax U3 M_ME R
+... R
++15 0x4A0F Tariff #16 register 0-Pmax U3 M_ME R
+35456-35471 Billing TOU Maximum Demand Register #6
++0 0x4A80 Tariff #1 register 0-Pmax U3 M_ME R
++1 0x4A81 Tariff #2 register 0-Pmax U3 M_ME R
+... R
++15 0x4A8F Tariff #16 register 0-Pmax U3 M_ME R
+37632-37647 Billing TOU Maximum Demand Register #7
++0 0x5300 Tariff #1 register 0-Pmax U3 M_ME R
++1 0x5301 Tariff #2 register 0-Pmax U3 M_ME R
+... R
++15 0x530F Tariff #16 register 0-Pmax U3 M_ME R
+37760-37765 Billing TOU Maximum Demand Register #8
++0 0x5380 Tariff #1 register 0-Pmax U3 M_ME R
++1 0x5381 Tariff #2 register 0-Pmax U3 M_ME R
+... R
++15 0x538F Tariff #16 register 0-Pmax U3 M_ME R
+37888-37903 Billing TOU Maximum Demand Register #9
++0 0x5400 Tariff #1 register 0-Pmax U3 M_ME R
+36
+IO Address Point ID Description Measurement Range 2 Units and
+Resolution 2
+Type 4 R/W Notes
++1 0x5401 Tariff #2 register 0-Pmax U3 M_ME R
+... R
++15 0x540F Tariff #16 register 0-Pmax U3 M_ME R
+38016-38031 Billing TOU Maximum Demand Register #10
++0 0x5480 Tariff #1 register 0-Pmax U3 M_ME R
++1 0x5481 Tariff #2 register 0-Pmax U3 M_ME R
+... R
++15 0x548F Tariff #16 register 0-Pmax U3 M_ME R
+38144-38159 Billing TOU Maximum Demand Register #11
++0 0x5500 Tariff #1 register 0-Pmax U3 M_ME R
++1 0x5501 Tariff #2 register 0-Pmax U3 M_ME R
+... R
++15 0x550F Tariff #16 register 0-Pmax U3 M_ME R
+38272-38287 Billing TOU Maximum Demand Register #12
++0 0x5580 Tariff #1 register 0-Pmax U3 M_ME R
++1 0x5581 Tariff #2 register 0-Pmax U3 M_ME R
+... R
++15 0x558F Tariff #16 register 0-Pmax U3 M_ME R
+38400-38415 Billing TOU Maximum Demand Register #13
++0 0x5600 Tariff #1 register 0-Pmax U3 M_ME R
++1 0x5601 Tariff #2 register 0-Pmax U3 M_ME R
+... R
++15 0x560F Tariff #16 register 0-Pmax U3 M_ME R
+38528-38543 Billing TOU Maximum Demand Register #14
++0 0x5680 Tariff #1 register 0-Pmax U3 M_ME R
++1 0x5681 Tariff #2 register 0-Pmax U3 M_ME R
+... R
++15 0x568F Tariff #16 register 0-Pmax U3 M_ME R
+38656-38671 Billing TOU Maximum Demand Register #15
++0 0x5700 Tariff #1 register 0-Pmax U3 M_ME R
++1 0x5701 Tariff #2 register 0-Pmax U3 M_ME R
+... R
++15 0x570F Tariff #16 register 0-Pmax U3 M_ME R
+38784-38799 Billing TOU Maximum Demand Register #16
++0 0x5780 Tariff #1 register 0-Pmax U3 M_ME R
++1 0x5781 Tariff #2 register 0-Pmax U3 M_ME R
+... R
+37
+IO Address Point ID Description Measurement Range 2 Units and
+Resolution 2
+Type 4 R/W Notes
++15 0x578F Tariff #16 register 0-Pmax U3 M_ME R
+41984-42046 V1/V12 Harmonic Angles 2, 6
++0 0x6400 H01 Harmonic angle -1800-1800 0.1 M_ME R
++1 0x6401 H02 Harmonic angle -1800-1800 0.1 M_ME R
+...
++62 0x643E H63 Harmonic angle -1800-1800 0.1 M_ME R
+42240-42302 V2/V23 Harmonic Angles 2, 6
++0 0x6500 H01 Harmonic angle -1800-1800 0.1 M_ME R
++1 0x6501 H02 Harmonic angle -1800-1800 0.1 M_ME R
+...
++62 0x653E H63 Harmonic angle -1800-1800 0.1 M_ME R
+42496-42558 V3/V31 Harmonic Angles 2, 6
++0 0x6600 H01 Harmonic angle -1800-1800 0.1 M_ME R
++1 0x6601 H02 Harmonic angle -1800-1800 0.1 M_ME R
+...
++62 0x663E H63 Harmonic angle -1800-1800 0.1 M_ME R
+42752-42814 V4 Harmonic Angles 6
++0 0x6700 H01 Harmonic angle -1800-1800 0.1 M_ME R
++1 0x6701 H02 Harmonic angle -1800-1800 0.1 M_ME R
+...
++62 0x673E H63 Harmonic angle -1800-1800 0.1 M_ME R
+43008-43070 I1 Harmonic Angles 6
++0 0x6800 H01 Harmonic angle -1800-1800 0.1 M_ME R
++1 0x6801 H02 Harmonic angle -1800-1800 0.1 M_ME R
+...
++62 0x683E H63 Harmonic angle -1800-1800 0.1 M_ME R
+43264-43326 I2 Harmonic Angles 6
++0 0x6900 H01 Harmonic angle -1800-1800 0.1 M_ME R
++1 0x6901 H02 Harmonic angle -1800-1800 0.1 M_ME R
+...
++62 0x693E H63 Harmonic angle -1800-1800 0.1 M_ME R
+43520-43582 I3 Harmonic Angles 6
++0 0x6A00 H01 Harmonic angle -1800-1800 0.1 M_ME R
++1 0x6A01 H02 Harmonic angle -1800-1800 0.1 M_ME R
+...
++62 0x6A3E H63 Harmonic angle -1800-1800 0.1 M_ME R
+43776-43838 I4 Harmonic Angles 6
++0 0x6B00 H01 Harmonic angle -1800-1800 0.1 M_ME R
++1 0x6B01 H02 Harmonic angle -1800-1800 0.1 M_ME R
+38
+IO Address Point ID Description Measurement Range 2 Units and
+Resolution 2
+Type 4 R/W Notes
+...
++62 0x6B3E H63 Harmonic angle -1800-1800 0.1 M_ME R
+44032-44058 0.2-Second RMS and Auxiliary Values
++0 0x6C00 V1 voltage 0-Vmax U1 M_ME R 1
++1 0x6C01 V2 voltage 0-Vmax U1 M_ME R 1
++2 0x6C02 V3 voltage 0-Vmax U1 M_ME R 1
++3 0x6C03 V4 voltage 0-V4max U4 M_ME R
++4 0x6C04 V12 voltage 0-Vmax U1 M_ME R
++5 0x6C05 V23 voltage 0-Vmax U1 M_ME R
++6 0x6C06 V31 voltage 0-Vmax U1 M_ME R
++7 0x6C07 I1 current 0-Imax U2 M_ME R
++8 0x6C08 I2 current 0-Imax U2 M_ME R
++9 0x6C09 I3 current 0-Imax U2 M_ME R
++10 0x6C0A I4 current 0-I4max U2 M_ME R
++11 0x6C0B In current 0-Imax U2 M_ME R
++12 0x6C0C I1x current 0-Ixmax U2 M_ME R
++13 0x6C0D I2x current 0-Ixmax U2 M_ME R
++14 0x6C0E I3x current 0-Ixmax U2 M_ME R
++15 0x6C0F I4x current 0-I4xmax U2 M_ME R
++16 0x6C10 Inx current 0-Ixmax U2 M_ME R
++17 0x6C11 Zero-sequence voltage 0-Vmax U1 M_ME R
++18 0x6C12 Zero-sequence current 0-Imax U2 M_ME R
++19 0x6C13 Ix Zero-sequence current 0-Ixmax U2 M_ME R
++20 0x6C14 Voltage unbalance 0-3000 0.1% M_ME R
++21 0x6C15 Current unbalance 0-3000 0.1% M_ME R
++22 0x6C16 Ix current unbalance 0-3000 0.1% M_ME R
++23 0x6C17 Not used R
++24 0x6C18 Frequency 0-10000 0.01Hz M_ME R
++25 0x6C19 Positive-sequence voltage 0-Vmax U1 M_ME R
++26 0x6C1A Zero-sequence voltage unbalance 0-300.0 0.1% M_ME R
+44160-44186 3-Second RMS and Auxiliary Values
++0 0x6C80 V1 voltage 0-Vmax U1 M_ME R 1
++1 0x6C81 V2 voltage 0-Vmax U1 M_ME R 1
++2 0x6C82 V3 voltage 0-Vmax U1 M_ME R 1
++3 0x6C83 V4 voltage 0-V4max U4 M_ME R
++4 0x6C84 V12 voltage 0-Vmax U1 M_ME R
++5 0x6C85 V23 voltage 0-Vmax U1 M_ME R
++6 0x6C86 V31 voltage 0-Vmax U1 M_ME R
++7 0x6C87 I1 current 0-Imax U2 M_ME R
+39
+IO Address Point ID Description Measurement Range 2 Units and
+Resolution 2
+Type 4 R/W Notes
++8 0x6C88 I2 current 0-Imax U2 M_ME R
++9 0x6C89 I3 current 0-Imax U2 M_ME R
++10 0x6C8A I4 current 0-I4max U2 M_ME R
++11 0x6C8B In current 0-Imax U2 M_ME R
++12 0x6C8C I1x current 0-Ixmax U2 M_ME R
++13 0x6C8D I2x current 0-Ixmax U2 M_ME R
++14 0x6C8E I3x current 0-Ixmax U2 M_ME R
++15 0x6C8F I4x current 0-I4xmax U2 M_ME R
++16 0x6C90 Inx current 0-Ixmax U2 M_ME R
++17 0x6C91 Zero-sequence voltage 0-Vmax U1 M_ME R
++18 0x6C92 Zero-sequence current 0-Imax U2 M_ME R
++19 0x6C93 Ix Zero-sequence current 0-Ixmax U2 M_ME R
++20 0x6C94 Voltage unbalance 0-3000 0.1% M_ME R
++21 0x6C95 Current unbalance 0-3000 0.1% M_ME R
++22 0x6C96 Ix current unbalance 0-3000 0.1% M_ME R
++23 0x6C97 Not used R
++24 0x6C98 Frequency 0-10000 0.01Hz M_ME R
++25 0x6C99 Positive-sequence voltage 0-Vmax U1 M_ME R
++26 0x6C9A Zero-sequence voltage unbalance 0-300.0 0.1% M_ME R
+46592-46618 1-Minute RMS and Auxiliary Values (GOST)
++0 0x7600 V1 voltage 0-Vmax U1 M_ME R 1
++1 0x7601 V2 voltage 0-Vmax U1 M_ME R 1
++2 0x7602 V3 voltage 0-Vmax U1 M_ME R 1
++3 0x7603 V4 voltage 0-V4max U4 M_ME R
++4 0x7604 V12 voltage 0-Vmax U1 M_ME R
++5 0x7605 V23 voltage 0-Vmax U1 M_ME R
++6 0x7606 V31 voltage 0-Vmax U1 M_ME R
++7 0x7607 I1 current 0-Imax U2 M_ME R
++8 0x7608 I2 current 0-Imax U2 M_ME R
++9 0x7609 I3 current 0-Imax U2 M_ME R
++10 0x760A I4 current 0-I4max U2 M_ME R
++11 0x760B In current 0-Imax U2 M_ME R
++12 0x760C I1x current 0-Ixmax U2 M_ME R
++13 0x760D I2x current 0-Ixmax U2 M_ME R
++14 0x760E I3x current 0-Ixmax U2 M_ME R
++15 0x760F I4x current 0-I4xmax U2 M_ME R
++16 0x7610 Inx current 0-Ixmax U2 M_ME R
++17 0x7611 Zero-sequence voltage 0-Vmax U1 M_ME R
++18 0x7612 Zero-sequence current 0-Imax U2 M_ME R
+40
+IO Address Point ID Description Measurement Range 2 Units and
+Resolution 2
+Type 4 R/W Notes
++19 0x7613 Ix Zero-sequence current 0-Ixmax U2 M_ME R
++20 0x7614 Voltage unbalance 0-3000 0.1% M_ME R
++21 0x7615 Current unbalance 0-3000 0.1% M_ME R
++22 0x7616 Ix current unbalance 0-3000 0.1% M_ME R
++23 0x7617 DC voltage 0-999900 0.01V M_ME R
++24 0x7618 Frequency 0-10000 0.01Hz M_ME R
++25 0x7619 Positive-sequence voltage 0-Vmax U1 M_ME R
++26 0x761A Zero-sequence voltage unbalance 0-300.0 0.1% M_ME R
+44288-44314 10-Minute RMS and Auxiliary Values
++0 0x6D00 V1 voltage 0-Vmax U1 M_ME R 1
++1 0x6D01 V2 voltage 0-Vmax U1 M_ME R 1
++2 0x6D02 V3 voltage 0-Vmax U1 M_ME R 1
++3 0x6D03 V4 voltage 0-V4max U4 M_ME R
++4 0x6D04 V12 voltage 0-Vmax U1 M_ME R
++5 0x6D05 V23 voltage 0-Vmax U1 M_ME R
++6 0x6D06 V31 voltage 0-Vmax U1 M_ME R
++7 0x6D07 I1 current 0-Imax U2 M_ME R
++8 0x6D08 I2 current 0-Imax U2 M_ME R
++9 0x6D09 I3 current 0-Imax U2 M_ME R
++10 0x6D0A I4 current 0-I4max U2 M_ME R
++11 0x6D0B In current 0-Imax U2 M_ME R
++12 0x6D0C I1x current 0-Ixmax U2 M_ME R
++13 0x6D0D I2x current 0-Ixmax U2 M_ME R
++14 0x6D0E I3x current 0-Ixmax U2 M_ME R
++15 0x6D0F I4x current 0-I4xmax U2 M_ME R
++16 0x6D10 Inx current 0-Ixmax U2 M_ME R
++17 0x6D11 Zero-sequence voltage 0-Vmax U1 M_ME R
++18 0x6D12 Zero-sequence current 0-Imax U2 M_ME R
++19 0x6D13 Ix Zero-sequence current 0-Ixmax U2 M_ME R
++20 0x6D14 Voltage unbalance 0-3000 0.1% M_ME R
++21 0x6D15 Current unbalance 0-3000 0.1% M_ME R
++22 0x6D16 Ix current unbalance 0-3000 0.1% M_ME R
++23 0x6D17 Not used R
++24 0x6D18 Frequency 0-10000 0.01Hz M_ME R
++25 0x6D19 Positive-sequence voltage 0-Vmax U1 M_ME R
++26 0x6D1A Zero-sequence voltage unbalance 0-300.0 0.1% M_ME R
+44416-44442 2-Hour RMS and Auxiliary Values
++0 0x6D80 V1 voltage 0-Vmax U1 M_ME R 1
++1 0x6D81 V2 voltage 0-Vmax U1 M_ME R 1
+41
+IO Address Point ID Description Measurement Range 2 Units and
+Resolution 2
+Type 4 R/W Notes
++2 0x6D82 V3 voltage 0-Vmax U1 M_ME R 1
++3 0x6D83 V4 voltage 0-V4max U4 M_ME R
++4 0x6D84 V12 voltage 0-Vmax U1 M_ME R
++5 0x6D85 V23 voltage 0-Vmax U1 M_ME R
++6 0x6D86 V31 voltage 0-Vmax U1 M_ME R
++7 0x6D87 I1 current 0-Imax U2 M_ME R
++8 0x6D88 I2 current 0-Imax U2 M_ME R
++9 0x6D89 I3 current 0-Imax U2 M_ME R
++10 0x6D8A I4 current 0-I4max U2 M_ME R
++11 0x6D8B In current 0-Imax U2 M_ME R
++12 0x6D8C I1x current 0-Ixmax U2 M_ME R
++13 0x6D8D I2x current 0-Ixmax U2 M_ME R
++14 0x6D8E I3x current 0-Ixmax U2 M_ME R
++15 0x6D8F I4x current 0-I4xmax U2 M_ME R
++16 0x6D90 Inx current 0-Ixmax U2 M_ME R
++17 0x6D91 Zero-sequence voltage 0-Vmax U1 M_ME R
++18 0x6D92 Zero-sequence current 0-Imax U2 M_ME R
++19 0x6D93 Ix Zero-sequence current 0-Ixmax U2 M_ME R
++20 0x6D94 Voltage unbalance 0-3000 0.1% M_ME R
++21 0x6D95 Current unbalance 0-3000 0.1% M_ME R
++22 0x6D96 Ix current unbalance 0-3000 0.1% M_ME R
++23 0x6D97 Not used R
++24 0x6D98 Frequency 0-10000 0.01Hz M_ME R
++25 0x6D99 Positive-sequence voltage 0-Vmax U1 M_ME R
++26 0x6D9A Zero-sequence voltage unbalance 0-300.0 0.1% M_ME R
+44544-44575 0.2-Second Harmonics
++0 0x6E00 V1 THD 0-9999 0.1% M_ME R 2
++1 0x6E01 V2 THD 0-9999 0.1% M_ME R 2
++2 0x6E02 V3 THD 0-9999 0.1% M_ME R 2
++3 0x6E03 V4 THD 0-9999 0.1% M_ME R
++4 0x6E04 I1 THD 0-9999 0.1% M_ME R
++5 0x6E05 I2 THD 0-9999 0.1% M_ME R
++6 0x6E06 I3 THD 0-9999 0.1% M_ME R
++7 0x6E07 I4 THD 0-9999 0.1% M_ME R
++8 0x6E08 V1 interharmonics THD 0-9999 0.1% M_ME R 2
++9 0x6E09 V2 interharmonics THD 0-9999 0.1% M_ME R 2
++10 0x6E0A V3 interharmonics THD 0-9999 0.1% M_ME R 2
++11 0x6E0B V4 interharmonics THD 0-9999 0.1% M_ME R
++12 0x6E0C I1 interharmonics THD 0-9999 0.1% M_ME R
+42
+IO Address Point ID Description Measurement Range 2 Units and
+Resolution 2
+Type 4 R/W Notes
++13 0x6E0D I2 interharmonics THD 0-9999 0.1% M_ME R
++14 0x6E0E I3 interharmonics THD 0-9999 0.1% M_ME R
++15 0x6E0F I4 interharmonics THD 0-9999 0.1% M_ME R
++16 0x6E10 I1 TDD 0-1000 0.1% M_ME R
++17 0x6E11 I2 TDD 0-1000 0.1% M_ME R
++18 0x6E12 I3 TDD 0-1000 0.1% M_ME R
++19 0x6E13 I4 TDD 0-1000 0.1% M_ME R
++20 0x6E14 I1 K-Factor 10-9999 0.1 M_ME R
++21 0x6E15 I2 K-Factor 10-9999 0.1 M_ME R
++22 0x6E16 I3 K-Factor 10-9999 0.1 M_ME R
++23 0x6E17 I4 K-Factor 10-9999 0.1 M_ME R
++24 0x6E18 V1 Crest Factor 0-10000 0.01 M_ME R 2
++25 0x6E19 V2 Crest Factor 0-10000 0.01 M_ME R 2
++26 0x6E1A V3 Crest Factor 0-10000 0.01 M_ME R 2
++27 0x6E1B V4 Crest Factor 0-10000 0.01 M_ME R
++28 0x6E1C I1 Crest Factor 0-10000 0.01 M_ME R
++29 0x6E1D I2 Crest Factor 0-10000 0.01 M_ME R
++30 0x6E1E I3 Crest Factor 0-10000 0.01 M_ME R
++31 0x6E1F I4 Crest Factor 0-10000 0.01 M_ME R
+44672-44703 3-Second Harmonics
++0 0x6E80 V1 THD 0-9999 0.1% M_ME R 2
++1 0x6E81 V2 THD 0-9999 0.1% M_ME R 2
++2 0x6E82 V3 THD 0-9999 0.1% M_ME R 2
++3 0x6E83 V4 THD 0-9999 0.1% M_ME R
++4 0x6E84 I1 THD 0-9999 0.1% M_ME R
++5 0x6E85 I2 THD 0-9999 0.1% M_ME R
++6 0x6E86 I3 THD 0-9999 0.1% M_ME R
++7 0x6E87 I4 THD 0-9999 0.1% M_ME R
++8 0x6E88 V1 interharmonics THD 0-9999 0.1% M_ME R 2
++9 0x6E89 V2 interharmonics THD 0-9999 0.1% M_ME R 2
++10 0x6E8A V3 interharmonics THD 0-9999 0.1% M_ME R 2
++11 0x6E8B V4 interharmonics THD 0-9999 0.1% M_ME R
++12 0x6E6E I1 interharmonics THD 0-9999 0.1% M_ME R
++13 0x6E8D I2 interharmonics THD 0-9999 0.1% M_ME R
++14 0x6E8E I3 interharmonics THD 0-9999 0.1% M_ME R
++15 0x6E8F I4 interharmonics THD 0-9999 0.1% M_ME R
++16 0x6E90 I1 TDD 0-1000 0.1% M_ME R
++17 0x6E91 I2 TDD 0-1000 0.1% M_ME R
++18 0x6E92 I3 TDD 0-1000 0.1% M_ME R
+43
+IO Address Point ID Description Measurement Range 2 Units and
+Resolution 2
+Type 4 R/W Notes
++19 0x6E93 I4 TDD 0-1000 0.1% M_ME R
++20 0x6E94 I1 K-Factor 10-9999 0.1 M_ME R
++21 0x6E95 I2 K-Factor 10-9999 0.1 M_ME R
++22 0x6E96 I3 K-Factor 10-9999 0.1 M_ME R
++23 0x6E97 I4 K-Factor 10-9999 0.1 M_ME R
++24 0x6E98 V1 Crest Factor 0-10000 0.01 M_ME R 2
++25 0x6E99 V2 Crest Factor 0-10000 0.01 M_ME R 2
++26 0x6E9A V3 Crest Factor 0-10000 0.01 M_ME R 2
++27 0x6E9B V4 Crest Factor 0-10000 0.01 M_ME R
++28 0x6E9C I1 Crest Factor 0-10000 0.01 M_ME R
++29 0x6E9D I2 Crest Factor 0-10000 0.01 M_ME R
++30 0x6E9E I3 Crest Factor 0-10000 0.01 M_ME R
++31 0x6E9F I4 Crest Factor 0-10000 0.01 M_ME R
+44800-44831 10-Minute Harmonics
++0 0x6F00 V1 THD 0-9999 0.1% M_ME R 2
++1 0x6F01 V2 THD 0-9999 0.1% M_ME R 2
++2 0x6F02 V3 THD 0-9999 0.1% M_ME R 2
++3 0x6F03 V4 THD 0-9999 0.1% M_ME R
++4 0x6F04 I1 THD 0-9999 0.1% M_ME R
++5 0x6F05 I2 THD 0-9999 0.1% M_ME R
++6 0x6F06 I3 THD 0-9999 0.1% M_ME R
++7 0x6F07 I4 THD 0-9999 0.1% M_ME R
++8 0x6F08 V1 interharmonics THD 0-9999 0.1% M_ME R 2
++9 0x6F09 V2 interharmonics THD 0-9999 0.1% M_ME R 2
++10 0x6F0A V3 interharmonics THD 0-9999 0.1% M_ME R 2
++11 0x6F0B V4 interharmonics THD 0-9999 0.1% M_ME R
++12 0x6F0C I1 interharmonics THD 0-9999 0.1% M_ME R
++13 0x6F0D I2 interharmonics THD 0-9999 0.1% M_ME R
++14 0x6F0E I3 interharmonics THD 0-9999 0.1% M_ME R
++15 0x6F0F I4 interharmonics THD 0-9999 0.1% M_ME R
++16 0x6F10 I1 TDD 0-1000 0.1% M_ME R
++17 0x6F11 I2 TDD 0-1000 0.1% M_ME R
++18 0x6F12 I3 TDD 0-1000 0.1% M_ME R
++19 0x6F13 I4 TDD 0-1000 0.1% M_ME R
++20 0x6F14 I1 K-Factor 10-9999 0.1 M_ME R
++21 0x6F15 I2 K-Factor 10-9999 0.1 M_ME R
++22 0x6F16 I3 K-Factor 10-9999 0.1 M_ME R
++23 0x6F17 I4 K-Factor 10-9999 0.1 M_ME R
++24 0x6F18 V1 Crest Factor 0-10000 0.01 M_ME R 2
+44
+IO Address Point ID Description Measurement Range 2 Units and
+Resolution 2
+Type 4 R/W Notes
++25 0x6F19 V2 Crest Factor 0-10000 0.01 M_ME R 2
++26 0x6F1A V3 Crest Factor 0-10000 0.01 M_ME R 2
++27 0x6F1B V4 Crest Factor 0-10000 0.01 M_ME R
++28 0x6F1C I1 Crest Factor 0-10000 0.01 M_ME R
++29 0x6F1D I2 Crest Factor 0-10000 0.01 M_ME R
++30 0x6F1E I3 Crest Factor 0-10000 0.01 M_ME R
++31 0x6F1F I4 Crest Factor 0-10000 0.01 M_ME R
+44928-44959 2-Hour Harmonics
++0 0x6F80 V1 THD 0-9999 0.1% M_ME R 2
++1 0x6F81 V2 THD 0-9999 0.1% M_ME R 2
++2 0x6F82 V3 THD 0-9999 0.1% M_ME R 2
++3 0x6F83 V4 THD 0-9999 0.1% M_ME R
++4 0x6F84 I1 THD 0-9999 0.1% M_ME R
++5 0x6F85 I2 THD 0-9999 0.1% M_ME R
++6 0x6F86 I3 THD 0-9999 0.1% M_ME R
++7 0x6F87 I4 THD 0-9999 0.1% M_ME R
++8 0x6F88 V1 interharmonics THD 0-9999 0.1% M_ME R 2
++9 0x6F89 V2 interharmonics THD 0-9999 0.1% M_ME R 2
++10 0x6F8A V3 interharmonics THD 0-9999 0.1% M_ME R 2
++11 0x6F8B V4 interharmonics THD 0-9999 0.1% M_ME R
++12 0x6F8C I1 interharmonics THD 0-9999 0.1% M_ME R
++13 0x6F8D I2 interharmonics THD 0-9999 0.1% M_ME R
++14 0x6F8E I3 interharmonics THD 0-9999 0.1% M_ME R
++15 0x6F8F I4 interharmonics THD 0-9999 0.1% M_ME R
++16 0x6F90 I1 TDD 0-1000 0.1% M_ME R
++17 0x6F91 I2 TDD 0-1000 0.1% M_ME R
++18 0x6F92 I3 TDD 0-1000 0.1% M_ME R
++19 0x6F93 I4 TDD 0-1000 0.1% M_ME R
++20 0x6F94 I1 K-Factor 10-9999 0.1 M_ME R
++21 0x6F95 I2 K-Factor 10-9999 0.1 M_ME R
++22 0x6F96 I3 K-Factor 10-9999 0.1 M_ME R
++23 0x6F97 I4 K-Factor 10-9999 0.1 M_ME R
++24 0x6F98 V1 Crest Factor 0-10000 0.01 M_ME R 2
++25 0x6F99 V2 Crest Factor 0-10000 0.01 M_ME R 2
++26 0x6F9A V3 Crest Factor 0-10000 0.01 M_ME R 2
++27 0x6F9B V4 Crest Factor 0-10000 0.01 M_ME R
++28 0x6F9C I1 Crest Factor 0-10000 0.01 M_ME R
++29 0x6F9D I2 Crest Factor 0-10000 0.01 M_ME R
++30 0x6F9E I3 Crest Factor 0-10000 0.01 M_ME R
+45
+IO Address Point ID Description Measurement Range 2 Units and
+Resolution 2
+Type 4 R/W Notes
++31 0x6F9F I4 Crest Factor 0-10000 0.01 M_ME R
+47104-47143 Present PQ Measurements (EN50160)
++0 0x7800 V1 Voltage variation, +/-%Un 0.01% M_ME R Last 10 min measurement
++1 0x7801 V2 Voltage variation, +/-%Un 0.01% M_ME R "
++2 0x7802 V3 Voltage variation, +/-%Un 0.01% M_ME R "
++3 0x7803 Not used R "
++4 0x7804 V1 Voltage change, %Un 0.01% M_ME R Last 1 hour measurement
++5 0x7805 Repetition rate of V1 voltage changes, 1/min 1/min  0.01 M_ME R "
++6 0x7806 V2 Voltage change, %Un 0.01% M_ME R "
++7 0x7807 Repetition rate of V2 voltage changes, 1/min 1/min  0.01 M_ME R "
++8 0x7808 V3 Voltage change, %Un 0.01% M_ME R "
++9 0x7809 Repetition rate of V3 voltage changes, 1/min 1/min  0.01 M_ME R "
++10 0x780A V1 Voltage Pst 0.01 M_ME R Last 10 min measurement
++11 0x780B V2 Voltage Pst 0.01 M_ME R "
++12 0x780C V3 Voltage Pst 0.01 M_ME R "
++13 0x780D V1 Voltage Plt 0.01 M_ME R Last 2 hour measurement
++14 0x780E V2 Voltage Plt 0.01 M_ME R "
++15 0x780F V3 Voltage Plt 0.01 M_ME R "
++16 0x7810 V1 Voltage THD, % 0.1% M_ME R Last 10 min measurement
++17 0x7811 V2 Voltage THD, % 0.1% M_ME R "
++18 0x7812 V3 Voltage THD, % 0.1% M_ME R "
++19 0x7813 Negative-sequence voltage unbalance, % 0.1% M_ME R "
++20 0x7814 Not used R "
++21 0x7815 Frequency variation, +/-Hz 0.01 Hz M_ME R Last 10 s measurement
++22 0x7816 Voltage interruption, residual voltage A/AB, %Un 0.01% M_ME R
++23 0x7817 Voltage interruption, residual voltage B/BC, %Un 0.01% M_ME R
++24 0x7818 Voltage interruption, residual voltage C/CA, %Un 0.01% M_ME R
++25 0x7819 Duration of a polyphase interruption ms M_ME R
++26 0x781A Voltage dip, residual voltage oh phase A/AB, %Un 0.01% M_ME R
++27 0x781B Voltage dip, residual voltage on phase B/BC, %Un 0.01% M_ME R
++28 0x781C Voltage dip, residual voltage on phase C/CA, %Un 0.01% M_ME R
++29 0x781D Voltage dip, duration of a polyphase dip ms M_ME R
++30 0x781E Voltage swell, voltage magnitude on phase A/AB,
+%Un
+0.01% M_ME R
++31 0x781F Voltage swell, voltage magnitude on phase B/BC,
+%Un
+0.01% M_ME R
++32 0x7820 Voltage swell, voltage magnitude on phase C/CA,
+%Un
+0.01% M_ME R
++33 0x7821 Voltage swell, duration of a polyphase swell ms M_ME R
++34 0x7822 Impulsive voltage on phase A/AB, %Un peak 0.01% M_ME R
+46
+IO Address Point ID Description Measurement Range 2 Units and
+Resolution 2
+Type 4 R/W Notes
++35 0x7823 Impulsive voltage, impulse duration on phase A/AB us M_ME R
++36 0x7824 Impulsive voltage on phase B/BC, %Un peak 0.01% M_ME R
++37 0x7825 Impulsive voltage, impulse duration on phase B/BC us M_ME R
++38 0x7826 Impulsive voltage on phase C/CA, %Un peak 0.01% M_ME R
++39 0x7827 Impulsive voltage, impulse duration on phase C/CA us M_ME R
+47104-47143 Present PQ Measurements (GOST 13109)
++0 0x7800 Voltage variation (Uy) on phase A/AB, +/-%Un 0.01% M_ME R Last 1 min measurement
++1 0x7801 Voltage variation (Uy) on phase B/BC, +/-%Un 0.01% M_ME R "
++2 0x7802 Voltage variation (Uy) on phase C/CA, +/-%Un 0.01% M_ME R "
++3 0x7803 Positive sequence voltage variation (Uy), +/-%Un 0.01% M_ME R "
++4 0x7804 Voltage change (Ut) on phase A/AB, %Un 0.01% M_ME R Last 10 min measurement
++5 0x7805 Repetition rate of voltage changes (FUt) A/AB, 1/min 1/min  0.01 M_ME R "
++6 0x7806 Voltage change (Ut) on phase B/BC, %Un 0.01% M_ME R "
++7 0x7807 Repetition rate of voltage changes (FUt) B/BC, 1/min 1/min  0.01 M_ME R "
++8 0x7808 Voltage change (Ut) on phase C/CA, %Un 0.01% M_ME R "
++9 0x7809 Repetition rate of voltage changes (FUt) C/CA, 1/min 1/min  0.01 M_ME R "
++10 0x780A Voltage Pst on phase A/AB 0.01 M_ME R Last 10 min measurement
++11 0x780B Voltage Pst on phase B/BC 0.01 M_ME R "
++12 0x780C Voltage Pst on phase C/CA 0.01 M_ME R "
++13 0x780D Voltage Plt on phase A/AB 0.01 M_ME R Last 2 hour measurement
++14 0x780E Voltage Plt on phase B/BC 0.01 M_ME R "
++15 0x780F Voltage Plt on phase C/CA 0.01 M_ME R "
++16 0x7810 Voltage THD (KU) on phase A/AB, % 0.1% M_ME R Last 3 s measurement
++17 0x7811 Voltage THD (KU) on phase B/BC, % 0.1% M_ME R "
++18 0x7812 Voltage THD (KU) on phase C/CA, % 0.1% M_ME R "
++19 0x7813 Negative-sequence voltage unbalance (K2u), % 0.1% M_ME R "
++20 0x7814 Zero-sequence voltage unbalance (K0u), % 0.1% M_ME R "
++21 0x7815 Frequency variation (f), +/-Hz 0.01 Hz M_ME R Last 20 s measurement
++22 0x7816 Not used R
++23 0x7817 Not used R
++24 0x7818 Not used R
++25 0x7819 Not used R
++26 0x781A Voltage dip, dip depth on phase A/AB, %Un 0.01% M_ME R
++27 0x781B Voltage dip, dip depth on phase B/BC, %Un 0.01% M_ME R
++28 0x781C Voltage dip, dip depth on phase C/CA, %Un 0.01% M_ME R
++29 0x781D Voltage dip, duration of a polyphase dip ms M_ME R
++30 0x781E Overvoltage, voltage magnitude on phase A/AB, %Un 0.01% M_ME R
++31 0x781F Overvoltage, voltage magnitude on phase B/BC, %Un 0.01% M_ME R
++32 0x7820 Overvoltage, voltage magnitude on phase C/CA, %Un 0.01% M_ME R
+47
+IO Address Point ID Description Measurement Range 2 Units and
+Resolution 2
+Type 4 R/W Notes
++33 0x7821 Overvoltage, duration of a polyphase overvoltage ms M_ME R
++34 0x7822 Impulsive voltage on phase A/AB, %Un peak 0.01% M_ME R
++35 0x7823 Impulsive voltage, impulse duration on phase A/AB us M_ME R
++36 0x7824 Impulsive voltage on phase B/BC, %Un peak 0.01% M_ME R
++37 0x7825 Impulsive voltage, impulse duration on phase B/BC us M_ME R
++38 0x7826 Impulsive voltage on phase C/CA, %Un peak 0.01% M_ME R
++39 0x7827 Impulsive voltage, impulse duration on phase C/CA us M_ME R
+47104-47143 Present PQ Measurements (GOST 54149)
++0 0x7800 Voltage variation (Uy) on phase A/AB, +/-%Un 0.01% M_ME R Last 10 min measurement
++1 0x7801 Voltage variation (Uy) on phase B/BC, +/-%Un 0.01% M_ME R "
++2 0x7802 Voltage variation (Uy) on phase C/CA, +/-%Un 0.01% M_ME R "
++3 0x7803 Not used R "
++4 0x7804 Voltage change (Ut) on phase A/AB, %Un 0.01% M_ME R Last 1-60 min measurement
++5 0x7805 Not used R "
++6 0x7806 Voltage change (Ut) on phase B/BC, %Un 0.01% M_ME R "
++7 0x7807 Not used R "
++8 0x7808 Voltage change (Ut) on phase C/CA, %Un 0.01% M_ME R "
++9 0x7809 Not used R "
++10 0x780A Voltage Pst on phase A/AB 0.01 M_ME R Last 10 min measurement
++11 0x780B Voltage Pst on phase B/BC 0.01 M_ME R "
++12 0x780C Voltage Pst on phase C/CA 0.01 M_ME R "
++13 0x780D Voltage Plt on phase A/AB 0.01 M_ME R Last 2 hour measurement
++14 0x780E Voltage Plt on phase B/BC 0.01 M_ME R "
++15 0x780F Voltage Plt on phase C/CA 0.01 M_ME R "
++16 0x7810 Voltage THD (KU) on phase A/AB, % 0.1% M_ME R Last 10 min measurement
++17 0x7811 Voltage THD (KU) on phase B/BC, % 0.1% M_ME R "
++18 0x7812 Voltage THD (KU) on phase C/CA, % 0.1% M_ME R "
++19 0x7813 Negative-sequence voltage unbalance (K2u), % 0.1% M_ME R "
++20 0x7814 Zero-sequence voltage unbalance (K0u), % 0.1% M_ME R "
++21 0x7815 Frequency variation (f), +/-Hz 0.01 Hz M_ME R Last 10 s measurement
++22 0x7816 Voltage interruption, residual voltage A/AB, %Un 0.01% M_ME R
++23 0x7817 Voltage interruption, residual voltage B/BC, %Un 0.01% M_ME R
++24 0x7818 Voltage interruption, residual voltage C/CA, %Un 0.01% M_ME R
++25 0x7819 Duration of a polyphase interruption ms M_ME R
++26 0x781A Voltage dip, residual voltage oh phase A/AB, %Un 0.01% M_ME R
++27 0x781B Voltage dip, residual voltage on phase B/BC, %Un 0.01% M_ME R
++28 0x781C Voltage dip, residual voltage on phase C/CA, %Un 0.01% M_ME R
++29 0x781D Voltage dip, duration of a polyphase dip ms M_ME R
++30 0x781E Voltage swell, voltage magnitude on phase A/AB,
+%Un
+0.01% M_ME R
+48
+IO Address Point ID Description Measurement Range 2 Units and
+Resolution 2
+Type 4 R/W Notes
++31 0x781F Voltage swell, voltage magnitude on phase B/BC,
+%Un
+0.01% M_ME R
++32 0x7820 Voltage swell, voltage magnitude on phase C/CA,
+%Un
+0.01% M_ME R
++33 0x7821 Voltage swell, duration of a polyphase swell ms M_ME R
++34 0x7822 Impulsive voltage on phase A/AB, %Un peak 0.01% M_ME R
++35 0x7823 Impulsive voltage, impulse duration on phase A/AB us M_ME R
++36 0x7824 Impulsive voltage on phase B/BC, %Un peak 0.01% M_ME R
++37 0x7825 Impulsive voltage, impulse duration on phase B/BC us M_ME R
++38 0x7826 Impulsive voltage on phase C/CA, %Un peak 0.01% M_ME R
++39 0x7827 Impulsive voltage, impulse duration on phase C/CA us M_ME R
+NOTES:
+1 When the 4LN3, 4LL3, 3LN3, 3LL3, 3BLN3 or 3BLL3 wiring mode is selected, the voltages will be line-to-neutral; for any other wiring mode, they will be line-to-line.
+2 When the 4LN3, 3LN3 or 3BLN3 wiring mode is selected, the voltages will be line-to-neutral; for any other wiring mode, they will be line-to-line voltages.
+3 For volts, amps, power and frequency scales and units, refer to Section 4 "Data Scales and Units".
+4 On a 0.2-s interval (16-cycle GOST 13109).
+5 On a 3-s interval.
+6 Harmonic angles are referenced to the fundamental voltage harmonic H01 on phase L1.
+3.2.4 Integrated Totals
+IO Address Point ID Description Measurement Range 1 Units and
+Resolution 1
+Type 2 R/W Notes
+18944-18975 Counters
++0 0x0A00 Counter #1 0-999,999,999 M_IT, C_CI R/W
++1 0x0A01 Counter #2 0-999,999,999 M_IT, C_CI R/W
+...
++31 0x0A1F Counter #32 0-999,999,999 M_IT, C_CI R/W
+22272-22293 Total Energies
++0 0x1700 kWh import 0-999,999,999 U5 M_IT, C_CI R
++1 0x1701 kWh export 0-999,999,999 U5 M_IT, C_CI R
++2 0x1702 kWh net -999,999,999-999,999,999 U5 M_IT, C_CI R
++3 0x1703 kWh total 0-999,999,999 U5 M_IT, C_CI R
++4 0x1704 kvarh import 0-999,999,999 U5 M_IT, C_CI R
+49
+IO Address Point ID Description Measurement Range 1 Units and
+Resolution 1
+Type 2 R/W Notes
++5 0x1705 kvarh export 0-999,999,999 U5 M_IT, C_CI R
++6 0x1706 kvarh net -999,999,999-999,999,999 U5 M_IT, C_CI R
++7 0x1707 kvarh total 0-999,999,999 U5 M_IT, C_CI R
++8 0x1708 kVAh total 0-999,999,999 U5 M_IT, C_CI R
++9 0x1709 Vh total 0-999,999,999 1 Vh M_IT, C_CI R
++10 0x170A Ah total 0-999,999,999 1 Ah M_IT, C_CI R
++11 0x170B kVAh import 0-999,999,999 U5 M_IT, C_CI R
++12 0x170C kVAh export 0-999,999,999 U5 M_IT, C_CI R
++13 0x170D Not used M_IT, C_CI R
++14 0x170E Not used M_IT, C_CI R
++15 0x170F Not used M_IT, C_CI R
++16 0x1710 Not used M_IT, C_CI R
++17 0x1711 Not used M_IT, C_CI R
++18 0x1712 kvarh Q1 0-999,999,999 U5 M_IT, C_CI R
++19 0x1713 kvarh Q2 0-999,999,999 U5 M_IT, C_CI R
++20 0x1714 kvarh Q3 0-999,999,999 U5 M_IT, C_CI R
++21 0x1715 kvarh Q4 0-999,999,999 U5 M_IT, C_CI R
+22400-22415 Billing Summary Registers
++0 0x1780 Summary energy register #1 0-999,999,999 U5 M_IT, C_CI R
++1 0x1781 Summary energy register #2 0-999,999,999 U5 M_IT, C_CI R
+...
++15 0x178F Summary energy register #16 0-999,999,999 U5 M_IT, C_CI R
+32000-32015 Billing TOU Register #1
++0 0x3D00 Tariff #1 register 0-999,999,999 U5 M_IT, C_CI R
++1 0x3D01 Tariff #2 register 0-999,999,999 U5 M_IT, C_CI R
+...
++15 0x3D0F Tariff #16 register 0-999,999,999 U5 M_IT, C_CI R
+32256-32271 Billing TOU Register #2
++0 0x3E00 Tariff #1 register 0-999,999,999 U5 M_IT, C_CI R
++1 0x3E01 Tariff #2 register 0-999,999,999 U5 M_IT, C_CI R
+...
++15 0x3E0F Tariff #16 register 0-999,999,999 U5 M_IT, C_CI R
+32512-32527 Billing TOU Register #3
++0 0x3F00 Tariff #1 register 0-999,999,999 U5 M_IT, C_CI R
++1 0x3F01 Tariff #2 register 0-999,999,999 U5 M_IT, C_CI R
+...
++15 0x3F0F Tariff #16 register 0-999,999,999 U5 M_IT, C_CI R
+32768-32783 Billing TOU Register #4
++0 0x4000 Tariff #1 register 0-999,999,999 U5 M_IT, C_CI R
+50
+IO Address Point ID Description Measurement Range 1 Units and
+Resolution 1
+Type 2 R/W Notes
++1 0x4001 Tariff #2 register 0-999,999,999 U5 M_IT, C_CI R
+...
++15 0x400F Tariff #16 register 0-999,999,999 U5 M_IT, C_CI R
+33024-33039 Billing TOU Register #5
++0 0x4100 Tariff #1 register 0-999,999,999 U5 M_IT, C_CI R
++1 0x4101 Tariff #2 register 0-999,999,999 U5 M_IT, C_CI R
+...
++15 0x410F Tariff #16 register 0-999,999,999 U5 M_IT, C_CI R
+33280-33295 Billing TOU Register #6
++0 0x4200 Tariff #1 register 0-999,999,999 U5 M_IT, C_CI R
++1 0x4201 Tariff #2 register 0-999,999,999 U5 M_IT, C_CI R
+...
++15 0x420F Tariff #16 register 0-999,999,999 U5 M_IT, C_CI R
+33536-33551 Billing TOU Register #7
++0 0x4300 Tariff #1 register 0-999,999,999 U5 M_IT, C_CI R
++1 0x4301 Tariff #2 register 0-999,999,999 U5 M_IT, C_CI R
+... R
++15 0x430F Tariff #16 register 0-999,999,999 U5 M_IT, C_CI R
+33792-33807 Billing TOU Register #8
++0 0x4400 Tariff #1 register 0-999,999,999 U5 M_IT, C_CI R
++1 0x4401 Tariff #2 register 0-999,999,999 U5 M_IT, C_CI R
+...
++15 0x440F Tariff #16 register 0-999,999,999 U5 M_IT, C_CI R
+35584-35599 Billing TOU Register #9
++0 0x4B00 Tariff #1 register 0-999,999,999 U5 M_IT, C_CI R
++1 0x4B01 Tariff #2 register 0-999,999,999 U5 M_IT, C_CI R
+...
++15 0x4B0F Tariff #16 register 0-999,999,999 U5 M_IT, C_CI R
+35840-35855 Billing TOU Register #10
++0 0x4C00 Tariff #1 register 0-999,999,999 U5 M_IT, C_CI R
++1 0x4C01 Tariff #2 register 0-999,999,999 U5 M_IT, C_CI R
+...
++15 0x4C0F Tariff #16 register 0-999,999,999 U5 M_IT, C_CI R
+36096-36101 Billing TOU Register #11
++0 0x4D00 Tariff #1 register 0-999,999,999 U5 M_IT, C_CI R
++1 0x4D01 Tariff #2 register 0-999,999,999 U5 M_IT, C_CI R
+...
++15 0x4D0F Tariff #16 register 0-999,999,999 U5 M_IT, C_CI R
+51
+IO Address Point ID Description Measurement Range 1 Units and
+Resolution 1
+Type 2 R/W Notes
+36352-36367 Billing TOU Register #12
++0 0x4E00 Tariff #1 register 0-999,999,999 U5 M_IT, C_CI R
++1 0x4E01 Tariff #2 register 0-999,999,999 U5 M_IT, C_CI R
+...
++15 0x4E0F Tariff #16 register 0-999,999,999 U5 M_IT, C_CI R
+36608-36623 Billing TOU Register #13
++0 0x4F00 Tariff #1 register 0-999,999,999 U5 M_IT, C_CI R
++1 0x4F01 Tariff #2 register 0-999,999,999 U5 M_IT, C_CI R
+...
++15 0x4F0F Tariff #16 register 0-999,999,999 U5 M_IT, C_CI R
+36864-36879 Billing TOU Register #14
++0 0x5000 Tariff #1 register 0-999,999,999 U5 M_IT, C_CI R
++1 0x5001 Tariff #2 register 0-999,999,999 U5 M_IT, C_CI R
+...
++15 0x500F Tariff #16 register 0-999,999,999 U5 M_IT, C_CI R
+37120-37135 Billing TOU Register #15
++0 0x5100 Tariff #1 register 0-999,999,999 U5 M_IT, C_CI R
++1 0x5101 Tariff #2 register 0-999,999,999 U5 M_IT, C_CI R
+...
++15 0x510F Tariff #16 register 0-999,999,999 U5 M_IT, C_CI R
+37376-37391 Billing TOU Register #16
++0 0x5200 Tariff #1 register 0-999,999,999 U5 M_IT, C_CI R
++1 0x5201 Tariff #2 register 0-999,999,999 U5 M_IT, C_CI R
+...
++15 0x520F Tariff #16 register 0-999,999,999 U5 M_IT, C_CI R
+NOTES:
+1 For volts, amps, power and frequency measurement range, resolution and scale factors refer to Section 4 "Data Scales and Units".
+2 Object types: M_ME  measured value, M_SP  single point information, M_DP  double point information, M_IT  integrated total (counter), C_SC  single command, C_CI  counter
+interrogation command. See F3 through F10 in Section 5 for compatible object types.
+52
+3.3 Device Status and Control Parameters
+IO Address Point ID Description Options/Range Units and
+Resolution
+Type R/W Notes
+Device Port Identification
+6144 Active serial port number 0-2 = serial port COM1-COM3, 3
+= IR Port, 4 = Modem port, 5 =
+USB/Modbus port, 6-10 =
+Ethernet/TCP port
+P_ME_NB_1 R
+Device Diagnostics
+6145 Internal device diagnostics (bits 0:15).
+Read: bits set to 1 indicate diagnostics failed at
+least once since last reset.
+Write: preset bits to 0 to clear corresponding
+diagnostics flags; bits set to 1 have no effect.
+F2 P_ME_NB_1 R/W
+6146 Internal device diagnostics (bits 16:32). Not used 0 P_ME_NB_1 R/W
+Reference Meter Time
+6175 Scaled zero value followed by a meter clock time
+For example [6175: 0 Q00 t
+24.03.2015 15:48:50:524]
+0 M_ME_TE_1 R
+Device Reset/Clear Registers
+6176-6186 P_ME_NB_1
+6176 Clear energy registers 0 W
+6177 Clear tmaximum demand 0 = clear all maximum demands
+1 = clear power demands
+2 = clear volt and ampere
+demands
+3 = clear volt demands
+4 = clear ampere demands
+5 = clear harmonic demands
+W
+6178 Clear billing/TOU energy registers 0 W
+6179 Clear billing/TOU maximum demand registers 0 W
+6180 Clear pulse counters 0 = Clear all counters
+1-4 = Clear counter #1-#32
+W
+6181 Clear Min/Max log 0 W
+6182 Clear operation/event counters 0 = clear EN50160/GOST
+13109/GOST 54149 statistics
+6 = clear communication counters
+7 = clear switch operation
+counters
+W
+Device Authorization Register
+6208-6209 Read: 0 = access permitted, -1 = authorization
+required.
+0 - 99999999 (write)
+0/-1 (read)
+P_ME_NB_1
+UI32
+R/W
+53
+IO Address Point ID Description Options/Range Units and
+Resolution
+Type R/W Notes
+Write: 8-digit password.
+54
+3.4 System Parameters
+IO Address Point ID Description Options/Range Units and
+Resolution
+Type R/W Notes
+Device Identification
+4224-4255 P_ME_NB_1
++0,1 Device serial number 0-99999999 UI32 R
++2,3 Device model ID 13030 UI32 R
++4-11 Device model name "PM180" OS128ASCII R Null-terminated octet string
++12-13 Device options (bitmap) 0 UI32 R
++14-19 Reserved R
++20 Device firmware version number 3101-3199 R Two higher decimal digits = major
+version number, two lower decimal
+digits = minor version number
++21 Device firmware build number 1-99 R
++22 Transient recorder firmware version number 3201-3299 R
++23 Transient recorder firmware build number 1-99 R
++24 Boot loader version number R
++25 Boot loader build number R
++26-31 Reserved R
+Factory Device Settings
+4256-4322 P_ME_NB_1
++0 V1-V3 input range 690 V R
++1 V1-V3 input overload 120 % R
++2 V4 input range 690 V R
++3 V4 input overload 120 % R
++4 I1-I3 input range 1, 5 A R
++5 I1-I3 input overload 400 (ANSI), 200 (IEC) % R
++6 I4 input range 1, 5 A R
++7 I4 input overload 400 (ANSI), 200 (IEC) % R
++8 I1x-I3x input range 1, 5 A R
++9 I1x-I3x input overload 2000 % R
++10 I4x input range 1, 5 A R
++11 I4x input overload 2000 % R
++12-63 Reserved R
++64-66 Ethernet MAC address 0x0005F0000000-
+0x0005F000FFFF
+OS48 R
+55
+3.5 Device Setup Parameters
+IO Address Point ID Description Options/Range Units and
+Resolution
+Type R/W Notes
+Communication Ports Setup Parameters
+4096-4127 P_ME_NB_1
++0 Communication protocol 0 = Modbus RTU, 1 = Modbus ASCII,
+2 = DNP3.0, 7=IEC 60870-5
+R/W
++1 Interface 0 = RS-232, 1 = RS-422, 2 = RS-485,
+3 = Infrared, 4 = Modem
+R/W
++2 Device address Modbus: 1-247
+DNP3.0: 065532
+IEC 60870-5: 1-254 (1 octet),
+1-65532 (2 octets)
+R/W
++3 Baud rate 1 = 300 bps, 2 = 600 bps, 3 = 1200
+bps, 4 = 2400 bps, 5 = 4800 bps, 6 =
+9600 bps, 7 = 19200 bps, 8 = 38400
+bps, 9 = 57600 bps, 10 = 115200 bps
+R/W
++4 Data format 0 = 7 bits/even parity,
+1 = 8 bits/no parity,
+2 = 8 bits/even parity
+R/W
++5 CTS mode 0 = not used, 1 = wait for CTS before
+sending data
+R/W N/A for COM2-COM5 (read as
+65535)
++6 RTS mode 0 = not used,
+1 = RTS is asserted during the
+transmission
+R/W N/A for COM2-COM5 (read as
+65535)
++7 Minimum delay before sending data 0-1000 (default = 5) R/W
++8 Inter-character timeout 1-1000 (default = 4) Added to standard 4-character time
++9-15 Reserved R/W
+4096-4111 COM1 Setup
+4112-4127 COM2 Setup Only 8 bits/no parity data format
+4128-4143 COM3 Setup
+4144-4159 COM4 Setup
+4160-4175 COM5 Setup
+Basic Device Setup Parameters
+4352-4372 P_ME_NC_1
++0 Wiring mode F1 R/W
++1 PT ratio (primary to secondary ratio) 10-65000 0.1 R/W
++2 PT secondary (Line-to-Line) 500-7000 0.1 R/W
++3 V4 PT ratio (primary to secondary ratio) 10-65000 0.1 R/W
++4 V4 PT secondary voltage 500-7000 0.1 R/W
+56
+IO Address Point ID Description Options/Range Units and
+Resolution
+Type R/W Notes
++5 CT primary current 1-30000 A R/W
++6 Reserved R/W
++7 I4 CT primary current 1-30000 A R/W
++8-16 Reserved R/W
++17 Nominal line frequency 50, 60 Hz R/W
++18 Phase order 0 = ABC, 1 = CBA R/W
++19-23 Reserved R/W
++24 I maximum demand load current 0-30000 A R/W
++25 I4 maximum demand load current 0-30000 A R/W
++26-31 Reserved R/W
+Device Options Setup
+4384-4398 P_ME_NC_1
++0 Power calculation mode 0 = using reactive power: S = f(P,Q),
+1 = using non-active power:
+Q = f(S,P)
+R/W
++1 Energy roll value 0 = 1104, 1 = 1105, 2 = 1106, 3 =
+1107, 4 = 1108, 5 = 1109
+R/W
++2 Number of energy decimal places 0-3 R/W Default 0
++3 Reserved R/W
++4 Tariff control 0 = via a calendar scheduler, 0x4000
+= via communications, 0x0100-
+0x010F = via tariff inputs DI1-DI16
+(bits 0:3 denote the first digital input
+index used)
+R/W
++5 Number of tariffs 1-16 (does not have effect with a
+calendar tariff control option)
+R/W When read with a calendar tariff
+control option, indicates the actual
+number of tariffs selected in TOU
+profiles
++6 Reserved R/W
++7 Energy LED test mode 0=disabled, 1=Wh test, 2=varh test R/W
++8 Test energy LED pulse rate, Wh/varh per pulse
+(in secondary units)
+1-40 0.01
+Device Data Scales
+4418-4419 P_ME_NC_1
++0 Voltage scale, secondary volts 60-828 1V R/W Default 144V
++1 Current scale, secondary amps 10-100 0.1A R/W Default 2CT secondary
+57
+3.6 Protocol Setup Parameters
+IO Address Point ID Description Options/Range Units and
+Resolution
+Type R/W Notes
+IEC 60870-5 Options Setup
+4480-4514 P_ME_NB_1
++0 Maximum length of variable frame, octets 32-255 R/W Fixed to 253 in IEC 60870-5-104
++1 Link address length, octets 1-2 R/W Not used in IEC 60870-5-104
++2 Cause of transmission length, octets 1-2 R/W Fixed to 2 in IEC 60870-5-104
++3 Length of common address of ASDU, octets 1-2 R/W Fixed to 2 in IEC 60870-5-104
++4 Length of information object address, octets 1-3 R/W Fixed to 3 in IEC 60870-5-104
++5 Select-before-operate timeout, s 0-30 R/W
++6 Short pulse duration, ms 100-3000 ms R/W
++7 Long pulse duration, ms 100-3000 ms R/W
++8,9 Time synchronization period, s 1-86400, 0=not active s UI32 R/W
++10 Local counter freeze period, min 1-60, 0=not active min R/W
++11 Cyclic data transmission period, ms 100-30000, 0=not active ms R/W Effective in IEC 60870-5-104 only
++12,13 Redundant connection IP address #1 0-0xFFFFFE, 0=not active UI32 R/W
++14,15 Redundant connection IP address #2 0-0xFFFFFE, 0=not active UI32 R/W
++16,17 Not used 0 UI32 R/W
++18 Not used 0 R/W
++19 Respond with class 1 data to class 2 requests 0=disabled, 1=enabled R/W
++20 Single point start mapped address 1-4095 R/W
++21 Single point default static object type F3 R/W
++22 Single point default event object type F4 R/W
++23 Double point start mapped address 1-4095 R/W
++24 Double point default static object type F5 R/W
++25 Double point default event object type F6 R/W
++26 Measured value start mapped address 1-4095 R/W
++27 Measured value default static object type F7 R/W
++28 Measured value default event object type F8 R/W
++29 Integrated totals start mapped address 1-4095 R/W
++30 Integrated totals default static object type F9 R/W
++31 Integrated totals default event object type F10 R/W
++32 Voltage units 0=V, 1=kV R/W
++33 Current units 0=A, 1=kA R/W
++34 Power units 0=kW, 1=MW R/W
+IEC 60870-5 Class 2 Data and Counters Setup
+4544-4639 P_ME_NB_1
+58
+IO Address Point ID Description Options/Range Units and
+Resolution
+Type R/W Notes
++0 Information object type and flags Bits 0:7  static object type
+identification (F3, F5, F7, F9),
+Bit 8=1  freeze with reset,
+Bit 9=1  local freeze,
+Bit 10=1  cyclic data transmission,
+Bit 11=1  general interrogation,
+Bits 12:15  interrogation group =
+0-15 (0=no group assigned)
+R/W See Section 3.2 for compatible
+object types.
++1 Start information object address 1-65535 R/W
++2 Number of elements in the range 1-128 R/W
+4544-4546 Object address range #1
+4547-4549 Object address range #2
+... ...
+4637-4639 Object address range #32
+IEC 60870-5 Assignable Point Map and Events Setup
+4736-4927 P_ME_NB_1
++0 Point ID See Section 3.2 R/W
++1 Information object type and flags Bits 0:7  static object type
+identification (F3, F5, F7),
+Bits 8:9  relation (0=delta, 1=
+more than, 2 = less than)
+Bit 10=1  class 1 assignment
+R/W See Section 3.2 for compatible
+object types.
++2 Deadband/threshold See Section 3.2 for the point range
+and resolution
+R/W
+4736-4738 Mapped static/event point #1
+4739-4741 Mapped static/event point #2
+... ...
+4625-4927 Mapped static/event point #64
+59
+4 Data Scales and Units
+Code Condition Value/Range Notes
+Data Scales
+Vmax Voltage Scale  PT Ratio, V 2
+V4max Voltage Scale  V4 PT Ratio, V 2
+Imax Current Scale  CT Ratio1, A, 3
+I4max Current Scale  I4 CT Ratio1, A, 3
+Ixmax 1A secondary 20  CT Ratio1, A (CT card)
+40  CT Ratio1, A (DFRM)
+5A secondary 100  CT Ratio1, A (CT card)
+200  CT Ratio1, A (DFRM)
+I4xmax 1A secondary 20  I4x CT Ratio1, A (CT card)
+40  I4x CT Ratio1, A (DFRM)
+5A secondary 100  I4x CT Ratio1, A (CT card)
+200  I4x CT Ratio1, A (DFRM)
+Pmax PT Ratio = 1 Vmax  Imax  2, W 4
+PT Ratio > 1 (Vmax  Imax  2)/1000, kW
+AImin
+AImax
++/-1mA AImin = -AI full scale  2
+AImax = AI full scale  2
+0-20mA AImin = AI zero scale
+AImax = AI full scale
+4-20mA AImin = AI zero scale
+AImax = AI full scale
+0-1mA AImin = AI zero scale
+AImax = AI full scale
+0-50mA AImin = AI zero scale
+AImax = AI full scale  2
++/-10V AImin = -AI full scale
+AImax = AI full scale
+Data Units
+U1 PT Ratio = 1 0.1V
+PT Ratio > 1 1V
+U2 0.01A
+U3 PT Ratio = 1 1W/Var/VA
+PT Ratio > 1 1kW/kvar/kVA
+U4 V4 PT Ratio = 1 0.1V
+V4 PT Ratio > 1 1V
+U5 0.001, 0.01, 0.1, 1 kWh/kVAh/kvarh (programmable) 5
+1 CT Ratio = CT primary current/CT secondary current
+2 The default Voltage Scale is 828V. 3 The default Current Scale is 4  CT secondary current for devices with a 400% overload
+(ANSI) or 2  CT secondary current for devices with a 200% overload (IEC).
+4 Pmax is rounded to whole kilowatts. If Pmax is greater than 9,999,000 W, it is truncated to 9,999,000 W.
+5 See Energy Decimal Places in the Device Options setup.
+60
+5 Data Formats
+Format Code Value Description Notes
+Wiring Mode
+F1 0 3OP2 - 3-wire open delta using 2 CTs (2 element)
+1 4LN3 - 4-wire WYE using 3 PTs (3 element), line-to-
+neutral voltage readings
+2 3DIR2 - 3-wire direct connection using 2 CTs (2 element)
+3 4LL3 - 4-wire WYE using 3 PTs (3 element), line-to-line
+voltage readings
+4 3OP3 - 3-wire open delta using 3 CTs (2 1/2 element)
+5 3LN3 - 4-wire WYE using 2 PTs (2 1/2 element), line-to-
+neutral voltage readings
+6 3LL3 - 4-wire WYE using 2 PTs (2 1/2 element), line-to-
+line voltage readings
+8 3BLN3 - 3-wire broken delta using 2 PTs (2 1/2 element),
+line-to-neutral voltage readings
+9 3BLL3 - 3-wire broken delta using 2 PTs (2 1/2 element),
+line-to-line voltage readings
+Device Diagnostics
+F2 Bit 0 Reserved
+Bit 1 Reserved
+Bit 2 = 1 RAM/Data error
+Bit 3 = 1 CPU watchdog reset
+Bit 4 = 1 Sampling fault
+Bit 5 = 1 CPU exception
+Bit 6 Reserved
+Bit 7 = 1 Software watchdog reset
+Bit 8 = 1 Power down
+Bit 9 = 1 Device reset
+Bit 10 = 1 Configuration reset
+Bit 11 = 1 RTC fault
+Bit 12 Reserved
+Bit 13 Reserved
+Bit 14 Reserved
+Bit 15 = 1 EEPROM fault
+Single Point Info Static Type
+F3 1 M_SP_NA_1
+2 M_SP_TA_1 (CP24Time2a)
+30 M_SP_TB_1 (CP56Time2a)
+Single Point Info Event Type
+F4 2 M_SP_TA_1 (CP24Time2a)
+30 M_SP_TB_1 (CP56Time2a)
+Double Point Info Static Type
+F5 3 M_DP_NA_1
+4 M_DP_TA_1 (CP24Time2a)
+31 M_DP_TB_1 (CP56Time2a)
+Double Point Info Event Type
+F6 4 M_DP_TA_1 (CP24Time2a)
+31 M_DP_TB_1 (CP56Time2a)
+Measured Value Static Type
+F7 9 M_ME_NA_1
+10 M_ME_NB_1
+11 M_ME_NC_1
+12 M_ME_TA_1 (CP24Time2a)
+13 M_ME_TB_1 (CP24Time2a)
+14 M_ME_TC_1 (CP24Time2a)
+34 M_ME_TD_1 (CP56Time2a)
+35 M_ME_TE_1 (CP56Time2a)
+36 M_ME_TF_1 (CP56Time2a)
+Measured Value Event Type
+F8 12 M_ME_TA_1 (CP24Time2a)
+13 M_ME_TB_1 (CP24Time2a)
+14 M_ME_TC_1 (CP24Time2a)
+34 M_ME_TD_1 (CP56Time2a)
+35 M_ME_TE_1 (CP56Time2a)
+61
+Format Code Value Description Notes
+36 M_ME_TF_1 (CP56Time2a)
+Integrated Totals Static Type
+F9 15 M_IT_NA_1
+16 M_IT_TA_1 (CP24Time2a)
+37 M_IT_TB_1 (CP56Time2a)
+Integrated Totals Event Type
+F10 16 M_IT_TA_1 (CP24Time2a)
+37 M_IT_TB_1 (CP56Time2a)
+62
+6 Configuring IEC 60870-5
+Use the PAS software provided with your meter to configure IEC 60870-5 options. See the
+PM180 Installation and Operation Manual for more information on installation and operating
+PAS on your computer.
+Configuring IEC 60870-5 is available via both Modbus and IEC 60870-5 ports.
+NOTE:
+PAS supports only client connections with the meters via TCP ports. To avoid loss of
+communications via a TCP/IP connection, do not allow sending spontaneous or cyclic
+messages to the IP address of the computer where PAS is currently running.
+6.1 Configuring IEC 60870-5 Options
+To configure the IEC 60870-5 options:
+1. Select IEC 60870-5 Setup from the Meter Setup menu.
+2. Select desired options.
+3. Click Save as... to store your setup in the device site database, and click Send
+to send the setup to the device.
+See the following table for available options.
+63
+Parameter Options Default Description
+General IEC 60870-5 Options
+Maximum frame length 32-255
+octets
+255 The maximum length of the
+transmission frame.
+In IEC 60870-5-104 it is fixed to
+253 octets.
+Link address 1-2 octets 1 Link address length
+Cause of transmission 1-2 octets 1 Cause of transmission length.
+In IEC 60870-5-104 it is fixed to 2
+octets.
+Common address of ASDU 1-2 octets 1 Length of common address of
+ASDU.
+In IEC 60870-5-104 it is fixed to 2
+octets.
+Information object address 1-3 octets 2 Length of information object
+address
+In IEC 60870-5-104 it is fixed to 3
+octets.
+SBO Timeout, s 0-30 s 10 Select-before-operate (SBO)
+timeout for single point
+commands with a select qualifier
+Short pulse duration, ms 100-3000
+ms
+500 Short pulse duration for single
+point commands with a short
+pulse qualifier
+Long pulse duration, ms 100-3000
+ms
+1000 Long pulse duration for single
+point commands with a long pulse
+qualifier
+Time sync period, s 1-86400 s,
+0=not active
+0 The time interval between periodic
+time synchronization requests
+Local counter freeze period, min 1-60 min,
+0=not active
+0 The period of local counter freeze
+and spontaneous transmission of
+integrated totals
+Respond with class 1 data to class 2 0=disabled,
+1=enabled
+Disabled If enabled, the meter will respond
+with class 1 data to class 2
+requests when there is no class 2
+data in transmission
+IEC 60870-5-104 Options
+Maximum unacknowledged
+ASDU
+1-32,
+0=unlimited
+12 The maximum number of
+unacknowledged ASDU allowed
+before suspending data
+transmission. Unlimited when set
+to 0.
+Cyclic transmission period, ms 100-30000
+ms,
+0=not active
+0 The period of cyclic/periodic data
+transmission via the IEC 60870-5-
+104 port
+Redundant connection IP address #1 0.0.0.0 =not
+active
+0.0.0.0 First IP address of the controlling
+station as a member of Redundant
+connection group. See below for
+PM180 Redundancy explanation.
+Redundant connection IP address #2 0.0.0.0 =not
+active
+0.0.0.0 Second IP address of the
+controlling station as a member of
+Redundant connection group. See
+below for PM180 Redundancy
+explanation.
+IEC 60870-5 Information Objects
+Measured value mapped address 1-4095 1 Starting address for mapped static
+measured value objects
+64
+Parameter Options Default Description
+Measured value default type M_ME_NA_1
+M_ME_NB_1
+M_ME_NC_1
+M_ME_TA_1
+M_ME_TB_1
+M_ME_TC_1
+M_ME_TD_1
+M_ME_TE_1
+M_ME_TF_1
+M_ME_NB_1 The default type of static
+measured value objects for Read
+requests
+Measured value event type M_ME_TA_1
+M_ME_TB_1
+M_ME_TC_1
+M_ME_TD_1
+M_ME_TE_1
+M_ME_TF_1
+M_ME_TE_1 The default type of measured
+value objects for event reporting
+Single point mapped address 1-4095 101 Starting address for mapped static
+single point objects
+Single point default type M_SP_NA_1
+M_SP_TA_1
+M_SP_TB_1
+M_SP_NA_1 The default type of static single
+point objects for Read requests
+Single point event type M_SP_TA_1
+M_SP_TB_1
+M_SP_TB_1 The default type of single point
+objects for event reporting
+Double point mapped address 1-4095 201 Starting address for mapped static
+double point objects
+Double point default type M_DP_NA_1
+M_DP_TA_1
+M_DP_TB_1
+M_DP_NA_1 The default type of static double
+point objects for Read requests
+Double point event type M_DP_TA_1
+M_DP_TB_1
+M_DP_TB_1 The default type of double point
+objects for event reporting
+Integrated totals mapped address 1-4095 301 Starting address for mapped static
+integrated totals objects
+Integrated totals default type M_IT_NA_1
+M_IT_TA_1
+M_IT_TB_1
+M_IT_NA_1 The default type of static
+integrated totals for Read
+requests
+Integrated totals event type M_IT_TA_1
+M_IT_TB_1
+M_IT_TB_1 The default type of integrated
+totals for event reporting
+Measurement Units
+Voltage units 0=V,
+1=kV
+V Units of voltage measured values
+Current units 0=A,
+1=kA
+A Units of current measured values
+Power units 0=kW,
+1=MW
+kW Units of power measured values
+NOTES:
+1. In IEC 60870-5-104 the maximum length of the variable frame, the common
+address of ASDU, information object address and cause of transmission length
+are permanently set to values indicated in the table and the optional settings
+are ignored.
+2. Selecting the one-octet information object address length for IEC 60870-5-101
+will limit the range of objects to only mapped points in the range of 1 to 255
+and will make impossible configuring IEC 60870-5 in the device via IEC 60870-
+5-101 ports.
+3. PM180 Redundancy IEC60870-5-104 implementation.
+65
+Redundant connection options using IEC 60870-5-104 can be achieved by
+generating two logical connections between PM180 and two master/redundant
+stations. The station which performs the connection referred to as the control
+station, while the other station, which accepted the connection, called controlled
+station.
+The following general rules apply to redundant connections:
+ The controlling and controlled station should be able to create and maintain
+multiple (in this implementation, 2) logical connections.
+ 2 logical links considered as a redundancy group.
+ Only one logical connection in the group, at a time, may be able to send/
+receive user data.
+ Controlling station decides which of the connection should be in the state of
+send / receive user data.
+ The test frames ("keep alive" frames) used to maintain all redundancy
+connections alive = in active state.
+ All redundancy group connections rely on one process task (one database/event
+buffer).
+The following table describes device behavior for all combination of the two IP
+addresses definitions.
+IP address setting Actions
+Redundant IP
+address #1
+0.0.0.0 (by
+default)
+Any IEC 60870-5-104 master can communicate
+with device. General interrogation, Counter
+interrogation, Clock Synchronization and Read
+commands allowed.
+Spontaneous, Counter Periodic and
+Cyclic data transmissions not
+supported.
+Redundancy not archived.
+Redundant IP
+address #2
+0.0.0.0 (by
+default)
+Redundant IP
+address #1
+192.168.0.119
+(example)
+Redundant IP
+address #2
+0.0.0.0 (by
+default)
+Redundant IP
+address #1
+0.0.0.0 (by
+default)
+Redundant IP
+address #2
+192.168.0.41
+(example)
+Redundant IP
+address #1
+192.168.0.119
+(example)
+This is the only combination which
+allows redundancy. The two valid IP's
+must be set and shall be different
+from each other (IP #1 for the master
+and the IP #2 for the redundant). Both
+IP's must be active and send "Test"
+frames ("keep alive" frames) at a time.
+Each connection can send STARTDT
+frame (or STOPDT).
+When one connection has started data
+transmission it will get all data frames
+that were configured: Spontaneous,
+Cyclic parodic and etc.
+Redundant IP
+address #2
+192.168.0.41
+(example)
+66
+6.2 Remapping Point Addresses and Event Reporting
+NOTE:
+The process measurement scales for most analog values depend on your external PT and CT
+settings and on the voltage and current scales defined in the meter. Configure them in your
+meter and save to the device site database before configuring event deadbands. See Basic
+Setup and Device Options Setup in the PM180 Installation and Operation Manual on how to
+configure these parameters in the meter.
+To remap static object point addresses to the configurable address space and to configure
+corresponding event objects:
+1. Select IEC 60870-5 Setup from the Meter Setup menu, and then click on the
+IEC 60870-5 Mapped Points and Events Setup tab.
+2. Select an object group and parameter for points you wish to remap. Object
+types and addresses are assigned automatically upon the starting mapped
+address and default static type you selected for the type of objects in the IEC
+60870-5 Options Setup (See Section 6.1). When saving the setup to the device
+database or sending to the meter all points are automatically arranged in the
+order: measured values, single point objects, double point objects, integrated
+totals. See Section 3.2 for the entire list of available information objects.
+3. If you wish to use a static point for reporting events, select a relation and an
+operating threshold or a deadband to be used for detecting events and check
+the Class 1 box for the point. See Section 2.8 for more information on event
+reporting. The following options are available:
+ Delta  a new event is reported when
+the absolute value of the difference
+between the last reported point value
+67
+and its current value exceeds the
+specified deadband value, or the status
+of a binary point changes. Measured
+values with a zero deadband will not be
+checked for events;
+ More than (over) - a new event is
+reported when the point value rises
+over the specified threshold, and then
+when it returns below the threshold
+minus a predefined return hysteresis
+applicable for measured values;
+ Less than (under) - a new event is
+reported when the point value drops
+below the specified threshold, and then
+when it returns above the threshold
+plus a predefined return hysteresis
+applicable for measured values.
+Hysteresis of the return threshold for
+measured values is 0.05 Hz for frequency
+and 2% of the operating threshold for other
+points.
+All thresholds/deadbands for measured
+values should be specified in primary units.
+4. Click Save as... to store your setup in the device site database, and click Send
+to send the setup to the device.
+6.3 Configuring Class 2 Data and Counter Transmission
+This setup allows you to configure object address ranges for interrogation, cyclic/periodic
+data transmission, and spontaneous counter transmission with or without local freeze/reset.
+To configure object address ranges for data transmission:
+68
+1. Select IEC 60870-5 Setup from the Meter Setup menu, and then click on the
+IEC 60870-5 Class 2 Data and Counters Setup tab.
+2. Select object type and specify ranges of points to be included into
+interrogation responses or/and cyclic/spontaneous data transmission. Only
+mapped point addresses (see Section 6.2) and general object addresses listed
+in Section 3.2 can be used for interrogation and cyclic/spontaneous
+transmission. See Section 3.2 for compatible object types.
+Up to 32 address ranges can be selected. Fill rows in succession without gaps. The first
+blank row will be taken as the end of a range list.
+NOTE:
+Though double point objects occupy two adjacent addresses, always specify the actual
+number of requested double points as you define other object ranges.
+Class 2 interrogated and cyclic/spontaneous data are always transmitted in the order
+they are listed in the setup. If you put ranges of point of the same type at continuous
+rows, they will be packed together and transmitted using minimum number of frames.
+3. Check the "General Interrog" box for ranges you wish to include into the
+general/station interrogation.
+4. Select appropriate groups in the "Group Interrog" box for ranges you wish to
+include into group interrogation. Each range of points can be allocated for both
+global and group interrogation.
+5. Check the "Cyclic/Spont." box for ranges you wish to include into
+cyclic/spontaneous data transmission.
+69
+Analog and binary data checked for cyclic transmission will be transmitted as cyclic
+messages. The IEC 60870-5-104 cyclic data transmission period is configurable via the
+IEC 60870-5 Options setup (see Section 6.1).
+Integrated totals checked for spontaneous transmission will be transmitted as
+spontaneous messages at configurable local counter freeze/transmission intervals (see
+Section 6.1).
+6. Check the "Local Freeze" box for A and B modes of transmission of integrated
+totals with local freeze. See Section 6.1 on how to set up the local counter
+freeze period. See Section 2.7 for more information on frozen counters
+operation and transmission.
+NOTE:
+Counters checked for spontaneous transmission without local freeze will be periodically
+reported at specified counter freeze/transmission intervals either with the frozen counter
+values if a remote freeze command was issued for counters before (mode D of
+acquisition of integrated totals), or with the actual counter values for counters that were
+not frozen.
+7. Check the "Freeze with Reset" box for integrated totals for which local freeze
+with reset should be applied.
+8. Click Save as... to store your setup in the device site database, and click Send
+to send the setup to the device.
+70
+Appendix A IEC 60870-5 Interoperability
+Profile
+The following sections contain the device interoperability profile in a form derived from IEC
+60870-5-101:2003 and IEC 60870-5-104:2006.
+A.1 IEC 60870-5-101 Protocol Implementation
+Conformance Statement (PICS)
+Excerpt from IEC 60870-5-101:2003, Clause 8:
+This companion standard presents sets of parameters and alternatives from which subsets
+have to be selected to implement particular telecontrol systems. Certain parameter values,
+such as the number of octets in the COMMON ADDRESS of ASDUs represent mutually
+exclusive alternatives. This means that only one value of the defined parameters is
+admitted per system. Other parameters, such as the listed set of different process
+information in command and in monitor direction allow the specification of the complete set
+or subsets, as appropriate for given applications. This Clause summarizes the parameters
+of the previous Clauses to facilitate a suitable selection for a specific application. If a
+system is composed of equipment stemming from different manufacturers, it is necessary
+that all partners agree on the selected parameters.
+The selected parameters should be marked in the white boxes as follows:
+ Function or ASDU is not used
+ Function or ASDU is used as standardized (default)
+Function or ASDU is used in reverse mode
+Function or ASDU is used in standard and reverse mode
+The possible selection (blank, X, R, or B) is specified for each specific Clause or parameter.
+NOTE: In addition, the full specification of a system may require individual selection of certain
+parameters for certain parts of the system, such as the individual selection of scaling factors
+for individually addressable measured values.
+A.1.1 System or device
+(system-specific parameter, indicate the definition of a system or a device by marking one
+of the following with an "")
+ System definition
+ Controlling station definition (master)
+ Controlled station definition (slave)
+A.1.2 Network configuration
+(network-specific parameter, all configurations that are used are to be marked with an "")
+ Point-to-point  Multipoint-partyline
+ Multiple point-to-point  Multipoint-star
+A.1.3 Physical layer
+(network-specific parameter, all interfaces and data rates that are used are to be marked
+with an "")
+R
+B
+71
+Transmission speed (control direction)
+Unbalanced interchange Unbalanced interchange Balanced interchange
+Circuit V.24/V.28 Circuit V.24/V.28 Circuit X.24/X.27
+Standard Recommended if >1 200 bit/s
+ 100 bit/s  2 400 bit/s  2 400 bit/s  56 000 bit/s
+ 200 bit/s  4 800 bit/s  4 800 bit/s  64 000 bit/s
+ 300 bit/s  9 600 bit/s  9 600 bit/s
+ 600 bit/s  19 200 bit/s
+ 1 200 bit/s  38 400 bit/s
+* Additionally supported baud rates: 57600 bit/s, 115200 bit/s.
+Transmission speed (monitor direction)
+Unbalanced interchange Unbalanced interchange Balanced interchange
+Circuit V.24/V.28 Circuit V.24/V.28 Circuit X.24/X.27
+Standard Recommended if >1 200 bit/s
+ 100 bit/s  2 400 bit/s  2 400 bit/s  56 000 bit/s
+ 200 bit/s  4 800 bit/s  4 800 bit/s  64 000 bit/s
+ 300 bit/s  9 600 bit/s  9 600 bit/s
+ 600 bit/s  19 200 bit/s
+ 1 200 bit/s  38 400 bit/s
+* Additionally supported baud rates: 57600 bit/s, 115200 bit/s.
+A.1.4 Link layer
+(network-specific parameter, all options that are used are to be marked with an "".
+Specify the maximum frame length. If a non-standard assignment of class 2 messages is
+implemented for unbalanced transmission, indicate the type ID and COT of all messages
+assigned to class 2.)
+Frame format FT 1.2, single character 1 and the fixed time out interval are used exclusively
+in this companion standard.
+Link transmission procedure Address field of the link
+ Balanced transmission  Not present (balanced transmission only)
+ Unbalanced transmission  One octet
+Frame length  Two octets
+Maximum length L (control direction)  Structured
+Maximum length L (monitor direction)  Unstructured
+Time during which repetitions are permitted (Trp) or number of repetitions
+When using an unbalanced link layer, the following ASDU types are returned in class 2
+messages (low priority) with the indicated causes of transmission:
+ The standard assignment of ASDUs to class 2 messages is used as follows:
+Type identification Cause of transmission
+9, 11, 13, 21 <1>
+255
+255
+72
+ A special assignment of ASDUs to class 2 messages is used as follows:
+Type identification Cause of transmission
+1, 2, 9-16, 30, 34-37 <20> to <35>, <37> to <41>
+NOTE: In response to a class 2 poll, a controlled station may respond with class 1 data
+when there is no class 2 data available.
+A.1.5 Application layer
+Transmission mode for application data
+Mode 1 (least significant octet first), as defined in 4.10 of IEC 60870-5-4, is used
+exclusively in this companion standard.
+Common address of ASDU
+(system-specific parameter, all configurations that are used are to be marked with an "")
+ One octet  Two octets
+Information object address
+(system-specific parameter, all configurations that are used are to be marked with an "")
+ One octet  Structured
+ Two octets  Unstructured
+ Three octets
+Cause of transmission
+(system-specific parameter, all configurations that are used are to be marked with an "")
+ One octet  Two octets (with originator address)
+Originator address is set to zero if not used
+Selection of standard ASDUs
+Process information in monitor direction
+(station-specific parameter, mark each type ID with an "" if it is only used in the standard
+direction, "R" if only used in the reverse direction, and "B" if used in both directions)
+ <1> := Single-point information M_SP_NA_1
+ <2> := Single-point information with time tag M_SP_TA_1
+ <3> := Double-point information M_DP_NA_1
+ <4> := Double-point information with time tag M_DP_TA_1
+ <5> := Step position information M_ST_NA_1
+ <6> := Step position information with time tag M_ST_TA_1
+ <7> := Bitstring of 32 bit M_BO_NA_1
+ <8> := Bitstring of 32 bit with time tag M_BO_TA_1
+ <9> := Measured value, normalized value M_ME_NA_1
+ <10> := Measured value, normalized value with time tag M_ME_TA_1
+ <11> := Measured value, scaled value M_ME_NB_1
+ <12> := Measured value, scaled value with time tag M_ME_TB_1
+ <13> := Measured value, short floating point value M_ME_NC_1
+ <14> := Measured value, short floating point value with time tag M_ME_TC_1
+73
+ <15> := Integrated totals M_IT_NA_1
+ <16> :=Integrated totals with time tag M_IT_TA_1
+ <17> := Event of protection equipment with time tag M_EP_TA_1
+ <18> := Packed start events of protection equipment with time tag M_EP_TB_1
+ <19> := Packed output circuit information of protection equipment with time tag M_EP_TC_1
+ <20> := Packed single-point information with status change detection M_PS_NA_1
+ <21> := Measured value, normalized value without quality descriptor M_ME_ND_1
+ <30> := Single-point information with time tag CP56Time2a M_SP_TB_1
+ <31> := Double-point information with time tag CP56Time2a M_DP_TB_1
+ <32> := Step position information with time tag CP56Time2a M_ST_TB_1
+ <33> := Bitstring of 32 bit with time tag CP56Time2a M_BO_TB_1
+ <34> := Measured value, normalized value with time tag CP56Time2a M_ME_TD_1
+ <35> := Measured value, scaled value with time tag CP56Time2a M_ME_TE_1
+ <36> := Measured value, short floating point value with time tag CP56Time2a M_ME_TF_1
+ <37> := Integrated totals with time tag CP56Time2a M_IT_TB_1
+ <38> := Event of protection equipment with time tag CP56Time2a M_EP_TD_1
+ <39> := Packed start events of protection equipment with time tag CP56Time2a M_EP_TE_1
+ <40> := Packed output circuit information of protection equipment with time tag P56Time2a M_EP_TF_1
+Either ASDUs of the set <2>, <4>, <6>, <8>, <10>, <12>, <14>, <16>, <17>, <18>,
+<19> or of the set <3040> are used.
+Process information in control direction
+(station-specific parameter, mark each type ID with an "" if it is only used in the standard
+direction, "R" if only used in the reverse direction, and "B" if used in both directions)
+ <45> := Single command C_SC_NA_1
+ <46> := Double command C_DC_NA_1
+ <47> := Regulating step command C_RC_NA_1
+ <48> := Set point command, normalized value C_SE_NA_1
+ <49> := Set point command, scaled value C_SE_NB_1
+ <50> := Set point command, short floating point value C_SE_NC_1
+ <51> := Bitstring of 32 bit C_BO_NA_1
+System information in monitor direction
+(station-specific parameter, mark with an "" if it is only used in the standard direction, "R"
+if only used in the reverse direction, and "B" if used in both directions)
+ <70> := End of initialization M_EI_NA_1
+System information in control direction
+(station-specific parameter, mark each type ID with an "" if it is only used in the standard
+direction, "R" if only used in the reverse direction, and "B" if used in both directions)
+ <100> := Interrogation command C_IC_NA_1
+ <101> := Counter interrogation command C_CI_NA_1
+ <102> := Read command C_RD_NA_1
+ <103> := Clock synchronization command C_CS_NA_1
+ <104> := Test command C_TS_NA_1
+74
+ <105> := Reset process command C_RP_NA_1
+ <106> := Delay acquisition command C_CD_NA_1
+Parameter in control direction
+(station-specific parameter, mark each type ID with an "" if it is only used in the standard
+direction, "R" if only used in the reverse direction, and "B" if used in both directions)
+ <110> := Parameter of measured value, normalized value P_ME_NA_1
+ <111> := Parameter of measured value, scaled value P_ME_NB_1
+ <112> := Parameter of measured value, short floating point value P_ME_NC_1
+ <113> := Parameter activation P_AC_NA_1
+File transfer
+(station-specific parameter, mark each type ID with an "" if it is only used in the standard
+direction, "R" if only used in the reverse direction, and "B" if used in both directions)
+ <120> := File ready F_FR_NA_1
+ <121> := Section ready F_SR_NA_1
+ <122> := Call directory, select file, call file, call section F_SC_NA_1
+ <123> := Last section, last segment F_LS_NA_1
+ <124> := Ack file, ack section F_AF_NA_1
+ <125> := Segment F_SG_NA_1
+ <126> := Directory {blank or X, only available in monitor (standard) direction} F_DR_TA_1
+Type identification and cause of transmission assignments
+(station-specific parameters)
+Blank = function or ASDU is not used.
+Mark type identification/cause of transmission combinations:
+"" if used only in the standard direction;
+"R" if used only in the reverse direction;
+"B" if used in both directions.
+Type identification Cause of transmission
+1 2 3 4 5 6 7 8 9 10 11 12 13 20
+to
+36
+37
+to
+41
+44 45 46 47
+<1> M_SP_NA_1
+<2> M_SP_TA_1
+<3> M_DP_NA_1
+<4> M_DP_TA_1
+<5> M_ST_NA_1
+<6> M_ST_TA_1
+<7> M_BO_NA_1
+<8> M_BO_TA_1
+<9> M_ME_NA_1
+<10> M_ME_TA_1
+<11> M_ME_NB_1
+<12> M_ME_TB_1
+<13> M_ME_NC_1
+<14> M_ME_TC_1
+75
+Type identification Cause of transmission
+1 2 3 4 5 6 7 8 9 10 11 12 13 20
+to
+36
+37
+to
+41
+44 45 46 47
+<15> M_IT_NA_1
+<16> M_IT_TA_1
+<17> M_EP_TA_1
+<18> M_EP_TB_1
+<19> M_EP_TC_1
+<20> M_PS_NA_1
+<21> M_ME_ND_1
+<30> M_SP_TB_1
+<31> M_DP_TB_1
+<32> M_ST_TB_1
+<33> M_BO_TB_1
+<34> M_ME_TD_1
+<35> M_ME_TE_1
+<36> M_ME_TF_1
+<37> M_IT_TB_1
+<38> M_EP_TD_1
+<39> M_EP_TE_1
+<40> M_EP_TF_1
+<45> C_SC_NA_1
+<46> C_DC_NA_1
+<47> C_RC_NA_1
+<48> C_SE_NA_1
+<49> C_SE_NB_1
+<50> C_SE_NC_1
+<51> C_BO_NA_1
+<70> M_EI_NA_1
+<100> C_IC_NA_1
+<101> C_CI_NA_1
+<102> C_RD_NA_1
+<103> C_CS_NA_1
+<104> C_TS_NA_1
+<105> C_RP_NA_1
+<106> C_CD_NA_1
+<110> P_ME_NA_1
+<111> P_ME_NB_1
+<112> P_ME_NC_1
+<113> P_AC_NA_1
+<120> F_FR_NA_1
+<121> F_SR_NA_1
+<122> F_SC_NA_1
+<123> F_LS_NA_1
+<124> F_AF_NA_1
+<125> F_SG_NA_1
+<126> F_DR_TA_1
+* Blank or  only
+76
+A.1.6 Basic application functions
+Station initialization
+(station-specific parameter, mark with an "" if function is used)
+ Remote initialization
+Cyclic data transmission
+(station-specific parameter, mark with an "" if function is used only in the standard
+direction, "R" if used only in the reverse direction, and "B" if used in both directions)
+ Cyclic data transmission
+Read procedure
+(station-specific parameter, mark with an "" if function is used only in the standard
+direction, "R" if used only in the reverse direction, and "B" if used in both directions)
+ Read procedure
+Spontaneous transmission
+(station-specific parameter, mark with an "" if function is used only in the standard
+direction, "R" if used only in the reverse direction, and "B" if used in both directions)
+ Spontaneous transmission
+Double transmission of information objects with cause of transmission spontaneous
+(station-specific parameter, mark each information type with an "X" where both a type ID
+without time and corresponding type ID with time are issued in response to a single
+spontaneous change of a monitored object)
+The following type identifications may be transmitted in succession caused by a single
+status change of an information object. The particular information object addresses for
+which double transmission is enabled are defined in a project-specific list.
+ Single-point information M_SP_NA_1, M_SP_TA_1, M_SP_TB_1 and M_PS_NA_1
+ Double-point information M_DP_NA_1, M_DP_TA_1 and M_DP_TB_1
+ Step position information M_ST_NA_1, M_ST_TA_1 and M_ST_TB_1
+ Bitstring of 32 bit M_BO_NA_1, M_BO_TA_1 and M_BO_TB_1 (if defined for a specific project, see 7.2.1.1)
+ Measured value, normalized value M_ME_NA_1, M_ME_TA_1, M_ME_ND_1 and M_ME_TD_1
+ Measured value, scaled value M_ME_NB_1, M_ME_TB_1 and M_ME_TE_1
+ Measured value, short floating point number M_ME_NC_1, M_ME_TC_1 and M_ME_TF_1
+Station interrogation
+(station-specific parameter, mark with an "" if function is used only in the standard
+direction, "R" if used only in the reverse direction, and "B" if used in both directions)
+ global
+ group 1  group 7  group 13
+ group 2  group 8  group 14
+ group 3  group 9  group 15
+ group 4  group 10  group 16
+ group 5  group 11
+Information object addresses assigned to each
+group are configurable (see Section 6.3 in this
+guide)
+ group 6  group 12
+77
+Clock synchronization
+(station-specific parameter, mark with an "" if function is used only in the standard
+direction, "R" if used only in the reverse direction, and "B" if used in both directions)
+ Clock synchronization
+ Day of week used
+ RES1, GEN (time tag substituted/ not substituted) used
+ SU-bit (summertime) used
+Command transmission
+(object-specific parameter, mark with an "" if function is used only in the standard
+direction, "R" if used only in the reverse direction, and "B" if used in both directions)
+ Direct command transmission
+ Direct set point command transmission
+ Select and execute command
+ Select and execute set point command
+ C_SE ACTTERM used
+ No additional definition
+ Short-pulse duration (duration determined by a system parameter in the controlled station)
+ Long-pulse duration (duration determined by a system parameter in the controlled station)
+ Persistent output
+Transmission of integrated totals
+(station- or object-specific parameter, mark with an "" if function is used only in the
+standard direction, "R" if used only in the reverse direction, and "B" if used in both
+directions)
+ Mode A: local freeze with spontaneous transmission
+ Mode B: local freeze with counter interrogation
+ Mode C: freeze and transmit by counter interrogation commands
+ Mode D: freeze by counter-interrogation command, frozen values reported spontaneously
+ Counter read
+ Counter freeze without reset
+ Counter freeze with reset
+ Counter reset
+ General request counter
+ Request counter group 1
+ Request counter group 2
+ Request counter group 3
+ Request counter group 4
+Parameter loading
+(object-specific parameter, mark with an "" if function is used only in the standard
+direction, "R" if used only in the reverse direction, and "B" if used in both directions)
+ Threshold value
+ Smoothing factor
+78
+ Low limit for transmission of measured value
+ High limit for transmission of measured
+Parameter activation
+(object-specific parameter, mark with an "" if function is used only in the standard
+direction, "R" if used only in the reverse direction, and "B" if used in both directions)
+ Act/deact of persistent cyclic or periodic transmission of the addressed object
+Test procedure
+(station-specific parameter, mark with an "" if function is used only in the standard
+direction, "R" if used only in the reverse direction, and "B" if used in both directions)
+ Test procedure
+File transfer
+(station-specific parameter, mark with an "" if function is used)
+File transfer in monitor direction
+ Transparent file
+ Transmission of disturbance data of protection equipment
+ Transmission of sequences of events
+ Transmission of sequences of recorded analogue values
+File transfer in control direction
+ Transparent file
+Background scan
+(station-specific parameter, mark with an "" if function is used only in the standard
+direction, "R" if used only in the reverse direction, and "B" if used in both directions)
+ Background scan
+Acquisition of transmission delay
+(station-specific parameter, mark with an "" if function is used only in the standard
+direction, "R" if used only in the reverse direction, and "B" if used in both directions)
+ Acquisition of transmission delay
+79
+A.2 IEC 60870-5-104 Protocol Implementation
+Conformance Statement (PICS)
+Excerpt from IEC 60870-5-104:2006, Clause 9:
+This companion standard presents sets of parameters and alternatives from which subsets
+must be selected to implement particular telecontrol systems. Certain parameter values,
+such as the choice of "structured" or "unstructured" fields of the INFORMATION OBJECT
+ADDRESS of ASDUs represent mutually exclusive alternatives. This means that only one
+value of the defined parameters is admitted per system. Other parameters, such as the
+listed set of different process information in command and in monitor direction allow the
+specification of the complete set or subsets, as appropriate for given applications. This
+clause summarizes the parameters of the previous clauses to facilitate a suitable selection
+for a specific application. If a system is composed of equipment stemming from different
+manufacturers, it is necessary that all partners agree on the selected parameters.
+The interoperability list is defined as in IEC 60870-5-101 and extended with parameters
+used in this standard. The text descriptions of parameters, which are not applicable to this
+companion standard, are strike-through (corresponding check box is marked black).
+NOTE: In addition, the full specification of a system may require individual selection of
+certain parameters for certain parts of the system, such as the individual selection of
+scaling factors for individually addressable measured values.
+The selected parameters should be marked in the white boxes as follows:
+ Function or ASDU is not used
+ Function or ASDU is used as standardized (default)
+Function or ASDU is used in reverse mode
+Function or ASDU is used in standard and reverse mode
+The possible selection (blank, X, R, or B) is specified for each specific clause or parameter.
+A black check box indicates that the option cannot be selected in this companion standard.
+A.2.1 System or device
+(system-specific parameter, indicate definition of a system or a device by marking one of
+the following with "X")
+ System definition
+ Controlling station definition (master)
+ Controlled station definition (slave)
+A.2.2 Network configuration
+(network-specific parameter, all configurations that are used are to be marked "")
+ Point-to-point  Multipoint-partyline
+ Multiple point-to-point  Multipoint-star
+A.2.3 Physical layer
+(network-specific parameter, all interfaces and data rates that are used are to be marked
+"")
+R
+B
+80
+Transmission speed (control direction)
+Unbalanced interchange Unbalanced interchange Balanced interchange
+Circuit V.24/V.28 Circuit V.24/V.28 Circuit X.24/X.27
+Standard Recommended if >1 200 bit/s
+ 100 bit/s  2 400 bit/s  2 400 bit/s  56 000 bit/s
+ 200 bit/s  4 800 bit/s  4 800 bit/s  64 000 bit/s
+ 300 bit/s  9 600 bit/s  9 600 bit/s
+ 600 bit/s  19 200 bit/s
+ 1 200 bit/s  38 400 bit/s
+Transmission speed (monitor direction)
+Unbalanced interchange Unbalanced interchange Balanced interchange
+Circuit V.24/V.28 Circuit V.24/V.28 Circuit X.24/X.27
+Standard Recommended if >1 200 bit/s
+ 100 bit/s  2 400 bit/s  2 400 bit/s  56 000 bit/s
+ 200 bit/s  4 800 bit/s  4 800 bit/s  64 000 bit/s
+ 300 bit/s  9 600 bit/s  9 600 bit/s
+ 600 bit/s  19 200 bit/s
+ 1 200 bit/s  38 400 bit/s
+A.2.4 Link layer
+(network-specific parameter, all options that are used are to be marked "". Specify the
+maximum frame length. If a non-standard assignment of class 2 messages is implemented
+for unbalanced transmission, indicate the Type ID and COT of all messages assigned to
+class 2.)
+Frame format FT 1.2, single character 1 and the fixed time out interval are used exclusively
+in this companion standard.
+Link transmission Address field of the link
+ Balanced transmission  Not present (balanced transmission only)
+ Unbalanced transmission  One octet
+Frame length  Two octets
+Maximum length L (number of octets)  Structured
+ Unstructured
+When using an unbalanced link layer, the following ASDU types are returned in class 2
+messages (low priority) with the indicated causes of transmission:
+ The standard assignment of ASDUs to class 2 messages is used as follows:
+Type identification Cause of transmission
+9, 11, 13, 21 <1>
+ A special assignment of ASDUs to class 2 messages is used as follows:
+Type identification Cause of transmission
+Note: (In response to a class 2 poll, a controlled station may respond with class 1 data
+when there is no class 2 data available).
+81
+A.2.5 Application layer
+Transmission mode for application data
+Mode 1 (Least significant octet first), as defined in 4.10 of IEC 60870-5-4, is used
+exclusively in this companion standard.
+Common address of ASDU
+(system-specific parameter, all configurations that are used are to be marked "")
+ One octet  Two octets
+Information object address
+(system-specific parameter, all configurations that are used are to be marked "")
+ One octet  Structured
+ Two octets  Unstructured
+ Three octets
+Cause of transmission
+(system-specific parameter, all configurations that are used are to be marked "")
+ One octet  Two octets (with originator address)
+Originator address is set to zero if not used
+Length of APDU
+(system-specific parameter, specify the maximum length of the APDU per system)
+The maximum length of APDU for both directions is 253. It is a fixed system parameter.
+Maximum length of APDU per system in control direction
+Maximum length of APDU per system in monitor direction
+Selection of standard ASDUs
+Process information in monitor direction
+(station-specific parameter, mark each Type ID "" if it is only used in the standard
+direction, "R" if only used in the reverse direction, and "B" if used in both directions).
+ <1> := Single-point information M_SP_NA_1
+ <2> := Single-point information with time tag M_SP_TA_1
+ <3> := Double-point information M_DP_NA_1
+ <4> := Double-point information with time tag M_DP_TA_1
+ <5> := Step position information M_ST_NA_1
+ <6> := Step position information with time tag M_ST_TA_1
+ <7> := Bitstring of 32 bit M_BO_NA_1
+ <8> := Bitstring of 32 bit with time tag M_BO_TA_1
+ <9> := Measured value, normalized value M_ME_NA_1
+ <10> := Measured value, normalized value with time tag M_ME_TA_1
+ <11> := Measured value, scaled value M_ME_NB_1
+ <12> := Measured value, scaled value with time tag M_ME_TB_1
+ <13> := Measured value, short floating point value M_ME_NC_1
+253
+253
+82
+ <14> := Measured value, short floating point value with time tag M_ME_TC_1
+ <15> := Integrated totals M_IT_NA_1
+ <16> :=Integrated totals with time tag M_IT_TA_1
+ <17> := Event of protection equipment with time tag M_EP_TA_1
+ <18> := Packed start events of protection equipment with time tag M_EP_TB_1
+ <19> := Packed output circuit information of protection equipment with time tag M_EP_TC_1
+ <20> := Packed single-point information with status change detection M_PS_NA_1
+ <21> := Measured value, normalized value without quality descriptor M_ME_ND_1
+ <30> := Single-point information with time tag CP56Time2a M_SP_TB_1
+ <31> := Double-point information with time tag CP56Time2a M_DP_TB_1
+ <32> := Step position information with time tag CP56Time2a M_ST_TB_1
+ <33> := Bitstring of 32 bit with time tag CP56Time2a M_BO_TB_1
+ <34> := Measured value, normalized value with time tag CP56Time2a M_ME_TD_1
+ <35> := Measured value, scaled value with time tag CP56Time2a M_ME_TE_1
+ <36> := Measured value, short floating point value with time tag CP56Time2a M_ME_TF_1
+ <37> := Integrated totals with time tag CP56Time2a M_IT_TB_1
+ <38> := Event of protection equipment with time tag CP56Time2a M_EP_TD_1
+ <39> := Packed start events of protection equipment with time tag CP56Time2a M_EP_TE_1
+ <40> := Packed output circuit information of protection equipment with time tag P56Time2a M_EP_TF_1
+In this companion standard only the use of the set <30>  <40> for ASDUs with time tag
+is permitted.
+Process information in control direction
+(station-specific parameter, mark each Type ID "" if it is only used in the standard
+direction, "R" if only used in the reverse direction, and "B" if used in both directions).
+ <45> := Single command C_SC_NA_1
+ <46> := Double command C_DC_NA_1
+ <47> := Regulating step command C_RC_NA_1
+ <48> := Set point command, normalized value C_SE_NA_1
+ <49> := Set point command, scaled value C_SE_NB_1
+ <50> := Set point command, short floating point value C_SE_NC_1
+ <51> := Bitstring of 32 bit C_BO_NA_1
+ <58> := Single command with time tag CP56Time2a C_SC_TA_1
+ <59> := Double command with time tag CP56Time2a C_DC_TA_1
+ <60> := Regulating step command with time tag CP56Time2a C_RC_TA_1
+ <61> := Set point command, normalized value with time tag CP56Time2a C_SE_TA_1
+ <62> := Set point command, scaled value with time tag CP56Time2a C_SE_TB_1
+ <63> := Set point command, short floating point value with time tag CP56Time2a C_SE_TC_1
+ <64> := Bitstring of 32 bit with time tag CP56Time2a C_BO_TA_1
+Either the ASDUs of the set <45>  <51> or of the set <58>  <64> are used.
+System information in monitor direction
+(station-specific parameter, mark with an "" if it is only used in the standard direction,
+"R" if only used in the reverse direction, and "B" if used in both directions).
+83
+ <70> := End of initialization M_EI_NA_1
+System information in control direction
+(station-specific parameter, mark each Type ID "X" if it is only used in the standard
+direction, "R" if only used in the reverse direction, and "B" if used in both directions).
+ <100> := Interrogation command C_IC_NA_1
+ <101> := Counter interrogation command C_CI_NA_1
+ <102> := Read command C_RD_NA_1
+ <103> := Clock synchronization command C_CS_NA_1
+ <104> := Test command C_TS_NA_1
+ <105> := Reset process command C_RP_NA_1
+ <106> := Delay acquisition command C_CD_NA_1
+ <107> := Test command with time tag CP56Time2a C_TS_TA_1
+Parameter in control direction
+(station-specific parameter, mark each Type ID "" if it is only used in the standard
+direction, "R" if only used in the reverse direction, and "B" if used in both directions).
+ <110> := Parameter of measured value, normalized value P_ME_NA_1
+ <111> := Parameter of measured value, scaled value P_ME_NB_1
+ <112> := Parameter of measured value, short floating point value P_ME_NC_1
+ <113> := Parameter activation P_AC_NA_1
+File transfer
+(station-specific parameter, mark each Type ID "" if it is only used in the standard
+direction, "R" if only used in the reverse direction, and "B" if used in both directions).
+ <120> := File ready F_FR_NA_1
+ <121> := Section ready F_SR_NA_1
+ <122> := Call directory, select file, call file, call section F_SC_NA_1
+ <123> := Last section, last segment F_LS_NA_1
+ <124> := Ack file, ack section F_AF_NA_1
+ <125> := Segment F_SG_NA_1
+ <126> := Directory {blank or X, only available in monitor (standard) direction} F_DR_TA_1
+ <127> := Query Log  Request archive file F_SC_NB_1
+Type identifier and cause of transmission assignments
+(station-specific parameters)
+Blank: functions or ASDU not used.
+Mark Type Identification/Cause of transmission combinations:
+"" if only used in the standard direction;
+"R" if only used in the reverse direction;
+"B" if used in both directions.
+84
+Type identification Cause of transmission
+1 2 3 4 5 6 7 8 9 10 11 12 13 20
+to
+36
+37
+to
+41
+44 45 46 47
+<1> M_SP_NA_1
+<2> M_SP_TA_1
+<3> M_DP_NA_1
+<4> M_DP_TA_1
+<5> M_ST_NA_1
+<6> M_ST_TA_1
+<7> M_BO_NA_1
+<8> M_BO_TA_1
+<9> M_ME_NA_1
+<10> M_ME_TA_1
+<11> M_ME_NB_1
+<12> M_ME_TB_1
+<13> M_ME_NC_1
+<14> M_ME_TC_1
+<15> M_IT_NA_1
+<16> M_IT_TA_1
+<17> M_EP_TA_1
+<18> M_EP_TB_1
+<19> M_EP_TC_1
+<20> M_PS_NA_1
+<21> M_ME_ND_1
+<30> M_SP_TB_1
+<31> M_DP_TB_1
+<32> M_ST_TB_1
+<33> M_BO_TB_1
+<34> M_ME_TD_1
+<35> M_ME_TE_1
+<36> M_ME_TF_1
+<37> M_IT_TB_1
+<38> M_EP_TD_1
+<39> M_EP_TE_1
+<40> M_EP_TF_1
+<45> C_SC_NA_1
+<46> C_DC_NA_1
+<47> C_RC_NA_1
+<48> C_SE_NA_1
+<49> C_SE_NB_1
+<50> C_SE_NC_1
+<51> C_BO_NA_1
+<58> C_SC_TA_1
+<59> C_DC_TA_1
+<60> C_RC_TA_1
+<61> C_SE_TA_1
+<62> C_SE_TB_1
+<63> C_SE_TC_1
+<64> C_BO_TA_1
+<70> M_EI_NA_1*
+<100> C_IC_NA_1
+85
+Type identification Cause of transmission
+1 2 3 4 5 6 7 8 9 10 11 12 13 20
+to
+36
+37
+to
+41
+44 45 46 47
+<101> C_CI_NA_1
+<102> C_RD_NA_1
+<103> C_CS_NA_1
+<104> C_TS_NA_1
+<105> C_RP_NA_1
+<106> C_CD_NA_1
+<107> C_TS_TA_1
+<110> P_ME_NA_1
+<111> P_ME_NB_1
+<112> P_ME_NC_1
+<113> P_AC_NA_1
+<120> F_FR_NA_1
+<121> F_SR_NA_1
+<122> F_SC_NA_1
+<123> F_LS_NA_1
+<124> F_AF_NA_1
+<125> F_SG_NA_1
+<126> F_DR_TA_1*
+<127> F_SC_NB_1*
+* Blank or  only
+A.2.6 Basic application functions
+Station initialization
+(station-specific parameter, mark "" if function is used)
+ Remote initialization
+Cyclic data transmission
+(station-specific parameter, mark "" if function is only used in the standard direction, "R"
+if only used in the reverse direction, and "B" if used in both directions)
+ Cyclic data transmission
+Read procedure
+(station-specific parameter, mark "" if function is only used in the standard direction, "R"
+if only used in the reverse direction, and "B" if used in both directions)
+ Read procedure
+Spontaneous transmission
+(station-specific parameter, mark "" if function is only used in the standard direction, "R"
+if only used in the reverse direction, and "B" if used in both directions)
+ Spontaneous transmission
+86
+Double transmission of information objects with cause of transmission spontaneous
+(station-specific parameter, mark each information type "" where both a Type ID without
+time and corresponding Type ID with time are issued in response to a single spontaneous
+change of a monitored object)
+The following type identifications may be transmitted in succession caused by a single status
+change of an information object. The particular information object addresses for which double
+transmission is enabled are defined in a project-specific list.
+ Single-point information M_SP_NA_1, M_SP_TA_1, M_SP_TB_1 and M_PS_NA_1
+ Double-point information M_DP_NA_1, M_DP_TA_1 and M_DP_TB_1
+ Step position information M_ST_NA_1, M_ST_TA_1 and M_ST_TB_1
+ Bitstring of 32 bit M_BO_NA_1, M_BO_TA_1 and M_BO_TB_1 (if defined for a specific project, see 7.2.1.1)
+ Measured value, normalized value M_ME_NA_1, M_ME_TA_1, M_ME_ND_1 and M_ME_TD_1
+ Measured value, scaled value M_ME_NB_1, M_ME_TB_1 and M_ME_TE_1
+ Measured value, short floating point number M_ME_NC_1, M_ME_TC_1 and M_ME_TF_1
+Station interrogation
+(station-specific parameter, mark "" if function is only used in the standard direction, "R" if only used
+in the reverse direction, and "B" if used in both directions).
+ global
+ group 1  group 7  group 13
+ group 2  group 8  group 14
+ group 3  group 9  group 15
+ group 4  group 10  group 16
+ group 5  group 11
+Information object addresses assigned to each
+group are configurable (see Section 6.3 in this
+guide)
+ group 6  group 12
+Clock synchronization
+(station-specific parameter, mark "" if function is only used in the standard direction, "R"
+if only used in the reverse direction, and "B" if used in both directions).
+ Clock synchronization
+ Day of week used
+ RES1, GEN (time tag substituted/ not substituted) used
+ SU-bit (summertime) used
+optional, see 7.6
+Command transmission
+(object-specific parameter, mark "" if function is only used in the standard direction, "R"
+if only used in the reverse direction, and "B" if used in both directions).
+ Direct command transmission
+ Direct set point command transmission
+ Select and execute command
+ Select and execute set point command
+ C_SE ACTTERM used
+ No additional definition
+87
+ Short-pulse duration (duration determined by a system parameter in the controlled station)
+ Long-pulse duration (duration determined by a system parameter in the controlled station)
+ Persistent output
+ Supervision of maximum delay in command direction of commands and set point commands
+Maximum allowable delay of commands and set point commands
+Transmission of integrated totals
+(station- or object-specific parameter, mark "" if function is only used in the standard
+direction, "R" if only used in the reverse direction, and "B" if used in both directions).
+ Mode A: local freeze with spontaneous transmission
+ Mode B: local freeze with counter interrogation
+ Mode C: freeze and transmit by counter interrogation commands
+ Mode D: freeze by counter-interrogation command, frozen values reported spontaneously
+ Counter read
+ Counter freeze without reset
+ Counter freeze with reset
+ Counter reset
+ General request counter
+ Request counter group 1
+ Request counter group 2
+ Request counter group 3
+ Request counter group 4
+Parameter loading
+(object-specific parameter, mark "" if function is only used in the standard direction, "R"
+if only used in the reverse direction, and "B" if used in both directions).
+ Threshold value
+ Smoothing factor
+ Low limit for transmission of measured value
+ High limit for transmission of measured
+Parameter activation
+(object-specific parameter, mark "" if function is only used in the standard direction, "R"
+if only used in the reverse direction, and "B" if used in both directions).
+ Act/deact of persistent cyclic or periodic transmission of the addressed object
+Test procedure
+(station-specific parameter, mark "" if function is only used in the standard direction, "R"
+if only used in the reverse direction, and "B" if used in both directions).
+ Test procedure
+30 s
+88
+File transfer
+(station-specific parameter, mark "" if function is used).
+File transfer in monitor direction
+ Transparent file
+ Transmission of disturbance data of protection equipment
+ Transmission of sequences of events
+ Transmission of sequences of recorded analogue values
+File transfer in control direction
+ Transparent file
+Background scan
+(station-specific parameter, mark "" if function is only used in the standard direction, "R"
+if only used in the reverse direction, and "B" if used in both directions).
+ Background scan
+Acquisition of transmission delay
+(station-specific parameter, mark "" if function is only used in the standard direction, "R"
+if only used in the reverse direction, and "B" if used in both directions).
+ Acquisition of transmission delay
+Definition of time outs
+Parameter Default value Remarks Selected value
+t0 30 s Time-out of connection establishment Not used
+t1 15 s Time-out of send or test APDUs Not used
+t2 10 s Time-out for acknowledges in case of no data
+messages t2 < t1
+Not used
+t3 20 s Time-out for sending test frames in case of a long
+idle state
+5 min
+Maximum range for timeouts t0 to t2: 1 s to 255 s, accuracy 1 s.
+Recommended range for timeout t3: 1 s to 48 h, resolution 1 s.
+Long timeouts for t3 may be needed in special cases where satellite links or dialup
+connections are used (for instance to establish connection and collect values only once per
+day or week).
+Maximum number of outstanding I format APDUs k and latest acknowledge APDUs (w)
+Parameter Default value Remarks Selected value
+k 12 APDUs Maximum difference receive sequence number to
+send state variable
+Configurable from 1 to 32.
+Can be set to 0 for unlimited
+number of ASDUs.
+w 8 APDUs Latest acknowledge after receiving w I format
+APDUs
+Not used
+Maximum range of values k: 1 to 32767 (2151) APDUs, accuracy 1 APDU
+Maximum range of values w: 1 to 32767 APDUs, accuracy 1 APDU (Recommendation: w
+should not exceed two-thirds of k).
+89
+Port number
+Parameter Value Remarks
+Portnumber 2404 In all cases
+Redundant connections
+Number N of redundancy group connections used
+RFC 2200 suite
+RFC 2200 is an official Internet Standard, which describes the state of standardization of
+protocols used in the Internet as determined by the Internet Architecture Board (IAB). It
+offers a broad spectrum of actual standards used in the Internet. The suitable selection of
+documents from RFC 2200 defined in this standard for given projects has to be chosen by
+the user of this standard.
+ Ethernet 802.3
+ Serial X.21 interface
+ Other selection from RFC 2200:
+List of valid documents from RFC 2200
+1. .....................................................
+2. .....................................................
+3. .....................................................
+4. .....................................................
+5. .....................................................
+6. .....................................................
+2
+

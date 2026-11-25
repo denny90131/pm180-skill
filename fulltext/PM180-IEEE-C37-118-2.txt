@@ -1,0 +1,477 @@
+expertmeterTM
+High Performance Analyzer
+PM180
+IEEE C37.118.2 Synchrophasor Data
+Transfer Protocol
+Reference Guide
+BG0627 Rev. A5
+2
+Every effort has been made to ensure that the material herein is complete and accurate.
+However, the manufacturer is not responsible for any mistakes in printing or faulty
+instructions contained in this book. Notification of any errors or misprints will be received
+with appreciation.
+For further information regarding a particular installation, operation or maintenance of
+equipment, contact the manufacturer or your local representative or distributor.
+REVISION HISTORY
+A1 June 2019 Release
+A2 Sep 2021 Added UTC synchronization options.
+Added M performance class selection.
+A3 June 2022 Added positive sequence phasors, CFG-3 frame and spontaneous/unsolicited
+transmission of CFG frames.
+A4 Oct 2024 Added configurable channel names and second commanded TCP/UDP and spontaneous
+UDP data streams.
+A5 Nov 2024 Updated IEEE C37.118.2 configuration data.
+3
+Table of Contents
+1 General.................................................................................................................................................4
+2 Protocol Implementation......................................................................................................................5
+2.1 IEEE C37.118.2 Data Communications ................................................................................5
+2.1.1 Commanded Unicast TCP and UDP Data Transmission....................................................5
+2.1.2 Spontaneous UDP Data Transmission................................................................................6
+2.2 IEEE C37.118.2 Message Frames........................................................................................7
+2.2.1 Data Frames........................................................................................................................7
+2.2.2 Configuration Frames..........................................................................................................7
+2.2.3 Header Frame .....................................................................................................................8
+2.3 UTC Time Synchronization....................................................................................................9
+2.3.1 IRIG-B Time Synchronization..............................................................................................9
+2.3.2 IEEE 1588 PTP Time Synchronization................................................................................9
+3 Configuring IEEE C37.118.2 .............................................................................................................11
+3.1.1 Configuring IEEE C37.118.2 Options................................................................................11
+3.1.2 Configuring the IEEE 1588 Port ........................................................................................15
+4
+1 General
+This document describes protocol implementation features and configuring of the IEEE
+C37.118.2 synchrophasor data transfer protocol in the PM180 phasor measurement unit
+(PMU).
+The PM180 PMU supports commanded client-server UDP and TCP data transmission and
+spontaneous UDP data transmission over IP protocol. Serial communication is not supported
+as obsolete and rarely used for synchrophasor data transfer.
+Streaming of synchrophasor data is also available over Ethernet via the IEC 61850 protocol
+by mapping the IEEE C37.118.2 synchrophasor data stream to IEC 61850-9-2 sampled
+values service (see the PM180 IEC 61850 communication protocol reference guide for more
+information).
+Reference documents:
+IEEE Std C37.118.1-2011, IEEE Standard for Synchrophasor Measurements for Power
+Systems
+IEEE Std C37.118.1a-2014, IEEE Standard for Synchrophasor Measurements for Power
+Systems, Amendment 1: Modification of Selected Performance Requirements
+IEEE Std C37.118.2-2011, IEEE Standard for Synchrophasor Data Transfer for Power
+Systems
+IEEE Std 1588-2008, IEEE Standard for a Precision Clock Synchronization Protocol for
+Networked Measurement and Control Systems
+IEEE C37.238-2017, IEEE Standard Profile for Use of IEEE 1588 Precision Time Protocol
+in Power System Applications
+5
+2 Protocol Implementation
+The IEEE C37.118.2 protocol is implemented in the PM180 in a flexible manner. Most of IEEE
+C37.118.2 features are user-configurable allowing easy adaptation for use in different
+installations. To keep maximum interoperability with phasor data concentrators (PDC) and
+controlling stations, the PM180 supports all standard frame types for synchrophasor data
+interrogation and streaming.
+The PAS configuration software supplied with the PM180 provides all necessary tools for
+remote configuration of the device.
+See Chapter 3 for instructions on how to configure IEEE C37.118.2 options in the device for
+your particular installation.
+See the PM180 Operation Manual for more information on configuring the meter via PAS.
+The protocol implementation details are explained in the following sections.
+2.1 IEEE C37.118.2 Data Communications
+The PM180 PMU provides commanded unicast client-server UDP and TCP data transmission
+and spontaneous multicast or unicast UDP data transmission using two data streams with
+programmable data rates. The data stream ID number assigned to PMU streams uniquely
+identifies each data stream. Only requests with matching data stream ID numbers are
+responded by the PMU.
+The synchrophasor measurement data reporting rate can be configured in submultiples of the
+nominal power line frequency from 1 to 60 frames per second.
+Each data stream can be individually configured to any data rate that is submultiple of the
+PMU reporting rate.
+NOTE
+Devices with firmware earlier than V31.XX.60 provide only one commanded unicast
+TCP/UDP data stream and one spontaneous multicast/unicast UDP data stream
+with the same ID number and a data rate fixed at the PMU reporting rate.
+2.1.1 Commanded Unicast TCP and UDP Data Transmission
+Commanded unicast data transfer is controlled by commands sent by the client over a
+unicast TCP or UDP connection to the PMU's local TCP or UDP port, respectively.
+Configuration and header frames are always sent to the IP address and port from which the
+corresponding command was received, while data frames are sent to the IP address and port
+from which the start command was sent. This does not necessarily have to be the same port.
+Streaming Data Slots
+The PMU provides up to 5 simultaneous unicast TCP and/or UDP connections for streaming
+synchrophasor data at a user-programmable data rate using one of two commanded data
+streams. The transmission start command should indicate the selected stream identifier.
+The stream data rate must be a submultiple of the PMU reporting rate. If it is not, the device
+will set it to the PMU reporting rate.
+Although the UDP server responds to commands from unlimited number of UDP clients and
+the TCP server can support more client connections, commands to turn on data transmission
+for new connections after all 5 data streams have started will be ignored.
+TCP Connection Timeout
+The PM180 uses TCP_KEEPALIVE probes by default to check that the link with the client is
+operating and closes the connection if the link is broken for more than 30 seconds.
+An idling TCP connection is also closed if there is no activity on both sides, i.e. there are no
+master commands received or no streaming data transmission, within a programmable
+connection idle timeout. You can change or disable the TCP connection idling timeout via the
+device Network Setup (see the PM180 Operation Manual for details).
+6
+Uncontrollable Commanded UDP Data Flow
+In case of the commanded UDP transmission, IEEE C37.118.2 does not provide tools for
+probing whether a client who initiated transmission is still alive and listening to the
+synchrophasor data stream.
+Abnormal termination of client operations without explicit turning off the data transmission
+may leave the streaming slot active forever and thus limit the number of slots available for
+new data streams.
+The PM180 provides a command you can send to the device via the IEEE C37.118.2 setup
+dialog (see Section 3) that stops all active commanded UDP streams and releases the
+corresponding data streaming slots.
+You can check which data streams are currently active via the device Telnet server. Run a
+Telnet client on your PC, log on to the device, type "enet" on the main menu command
+prompt, and then type "proto". See the PM180 Operation Manual for more information on
+operating Telnet. The following picture shows what the active data stream list may look like.
+2.1.2 Spontaneous UDP Data Transmission
+Unlike commanded data transfer, spontaneous data frames are sent to a user-configured IP
+address and destination port. The PMU provides two data streams for simultaneous
+transmission of synchrophasor data frames to two different destinations at user-
+programmable data rates.
+Spontaneous data transfer must be enabled or disabled explicitly by the user through the
+IEEE C37.118.2 settings (see Section 3 for details) or over an alternate client-server TCP or
+UDP connection to a local PMU TCP or UDP port, respectively, by referring to the appropriate
+spontaneous data stream identifier. Regardless of how the data stream is enabled, its state is
+stored in non-volatile memory, so that if it is enabled, data transfer is automatically started
+after the device reboots.
+Configuration and header frames can be requested and received over an alternate TCP or
+UDP connection by referencing the appropriate data stream identifier, just as in a regular
+7
+client-server connection. Configuration frames can also be sent spontaneously to a user-
+configured destination port without an explicit command, like spontaneous data frames are
+sent (see Spontaneous Configuration Frames below).
+Spontaneous UDP data transmission can operate in unicast, multicast or broadcast mode
+depending on the destination IP address the user specified. If the UDP clients have an ability
+to join a multicast group, you can select one from the multicast address range of 225.0.0.0
+through 239.255.255.255.
+For broadcast transmission within your local network, set the host part of the network
+address to 255. Use a routable broadcast address to expand the broadcast transmission
+beyond your local network.
+2.2 IEEE C37.118.2 Message Frames
+2.2.1 Data Frames
+Synchrophasor data frames transmit a time stamped set of measurements that include
+phasor estimates, frequency deviation from the nominal power line frequency and the rate of
+change of frequency. In addition, the data frame can be expanded to contain analog data
+(total active, reactive and apparent power, power factor, voltage and current THD) and
+digital input status information (up to 32 inputs can be included).
+The phasor data can represent single phase phasors (tree phase voltage and tree phase
+currents) or 3-phase positive sequence voltage and current, or both in a single frame.
+The complex phasor values can be sent in a rectangular coordinates format (real and
+imaginary) or in polar coordinates (magnitude and angle). The phasor and frequency data
+can be represented in 32-bit IEEE floating-point format or as 16-bit scaled integer numbers.
+In case of using integer format, the data conversion factors are provided via the IEEE
+C37.118.2 configuration frames.
+See Section 3 for information on configuring IEEE C37.118.2 data frames.
+2.2.2 Configuration Frames
+IEEE C37.118.2 configuration frames provide information about a synchrophasor data stream
+in binary format. The PM180 PMU supports CFG-1, CFG-2 and CFG-3 configuration frames.
+The configuration frame contents correspond to the specification given by IEEE C37.118.2. In
+CFG-3 frames, the PMU GUID is not supported and is transmitted as a null string.
+Channel Names
+The names of the phasor, analog data and digital status channels are user configurable. The
+channel name can be up to 16 characters long. The default channel names are listed in the
+following table.
+Channel name Description
+VA V1 phase phasor
+VB V2 phase phasor
+VC V3 phase phasor
+IA I1 phase phasor
+IB I2 phase phasor
+IC I3 phase phasor
+V1 Positive sequence voltage phasor
+I1 Positive sequence current phasor
+P Total active power (analog channel)
+Q Total reactive power (analog channel)
+S Total apparent power (analog channel)
+8
+Channel name Description
+PF Total power factor (analog channel)
+VTHDA V1 phase THD (analog channel)
+VTHDB V2 phase THD (analog channel)
+VTHDC V3 phase THD (analog channel)
+ITHDA I1 phase THD (analog channel)
+ITHDB I2 phase THD (analog channel)
+ITHDC I3 phase THD (analog channel)
+DI1 Digital status channel 1
+...
+DI32 Digital status channel 32
+Conversion Factors
+In case of transmission data in 16-bit integer format, conversion factors for phasor channels
+in the CFG-2 frame are represented as an unsigned 24-bit word in 105 volts or amperes per
+bit to scale.
+Conversion factors for analog channels in CFG-2 frames are represented as an unsigned 24-
+bit word in 103 per bit to scale. Power readings are transmitted in kW/kvar/kVA units.
+If transmitted data is in floating-point format, this 24-bit value will represent a unity scale
+factor and shall be ignored.
+Spontaneous Configuration Frames
+In spontaneous UDP data transmission mode, CFG-2 or CFG-3 configuration frames can be
+sent spontaneously without an explicit user command. When enabled, a configuration frame
+is sent periodically every 30 seconds.
+2.2.3 Header Frame
+A header frame gives information about a synchrophasor data stream in human-readable
+format. An example header frame for positive sequence phasor data is shown below.
+Station Name: My Station
+ID Code: 7000
+UTC Time: 2019-06-03 05:31:51.786
+Time Quality: Locked
+Time Base: 1000000
+Revision Count: 4
+Data Rate: 50
+Total Phasors: 6
+Total Analogs: 0
+Total Digitals: 0
+Phasor Coordinate Format: Rectangular
+Phasor Data Format: Integer
+Frequency Data Format: Integer
+V1 Conversion Factor: 5.05387
+I1 Conversion Factor: 0.61037
+Angle Conversion Factor: 0.0001
+Frequency Conversion Factor: 0.001
+df/dt Conversion Factor: 0.01
+Nominal Frequency: 50 Hz
+9
+2.3 UTC Time Synchronization
+The PMU clock can be synchronized to UTC using an IRIG-B timecode source or an IEEE 1588
+PTPv2 master clock source.
+2.3.1 IRIG-B Time Synchronization
+Connect the IRIG-B signal wires to the 1pps/CM terminals on the PM180 CPU module.
+The PM180 IRIG-B port uses an unmodulated (pulse-width coded) timecode signal
+(unbalanced 5V level) according to the IRIG 200-04 standard. It supports B000/B001 and
+B004/B005 timecode formats with time code extentions specified for the IRIG-B profle in
+Annex D of IEEE Std C37.118.1-2011.
+The PMU IRIG-B port can synchronize to the IRIG-B timecode source with sub-microsecond
+accuracy.
+To enable the IRIG-B port as a UTC source, select the IRIG-B time synchronization option in
+the IEEE C37.118.2 setup (see Section 3.1.1 for details).
+NOTE: The "PMU OK" LED on the PMU module flashes yellow ones a second when the PMU
+clock is not in sync with the UTC/IRIG-B clock, and flashes green when synchronized.
+2.3.2 IEEE 1588 PTP Time Synchronization
+To use an IEEE 1588 master clock as a UTC source, your PMU must be provided with the
+IEEE 1588 Ethernet port.
+The IEEE 1588 PMU port must be connected to an IEEE 1588 grandmaster clock
+through a PTPv2 peer-to-peer transparent clock switch compliant with IEEE Std
+1588-2008.
+The IEEE 1588 PMU port implements an ordinary PTPv2 clock complying with IEEE Std 1588-
+2008 and uses the IEEE C37.238 power profile per IEEE C37.238-2011 and IEC/IEEE 61850-
+9-3 as follows:
+1. PTP version 2.
+2. PTP transport over Layer 2 Ethernet (IEEE 802.3), IEEE 1588-2008, Annex F.
+3. Multicast addressing.
+4. Peer-to-peer (P2P) path delay measurement mechanism.
+5. Announce interval = 1 s
+6. Sync interval = 1 s
+7. Capable of working with one-step and two-step master clocks.
+8. Responds to peer path delay requests with two-step peer delay responses (Pdelay_Resp,
+Pdelay_Resp_Follow_Up messages).
+The IEEE 1588 PMU port can synchronize to the PTP grandmaster clock with sub-microsecond
+accuracy, which can be degraded by network topology, PTP switch accuracy, or transmission
+media asymmetry.
+To enable the IEEE 1588 port as a UTC source, select the IEEE 1588 time synchronization
+option in the IEEE C37.118.2 setup, and configure the port network addresses (for details,
+see Sections 3.1.1 and 3.1.2).
+NOTE: The "PMU OK" LED on the PMU module flashes yellow ones a second when the PMU
+clock is not in sync with the IEEE 1588 grandmaster clock, and flashes green when
+synchronized.
+The PMU comes with a Telnet server that can be used to check the PMU clock status and time
+accuracy, as shown in the following picture. Connect with a Windows Telnet client to the PMU
+using the IP address of the IEEE 1588 PMU port, login with the password "1588" and enter
+"ptp".
+10
+11
+3 Configuring IEEE C37.118.2
+Use the PAS configuration software provided with your device to configure IEEE C37.118.2
+options. See the PM180 Operation Manual for more information on installation and operating
+PAS on your computer.
+3.1.1 Configuring IEEE C37.118.2 Options
+To configure the IEEE C37.118.2 options:
+1. Ensure that the selected connection protocol to communicate with your device is set to
+Modbus RTU or Modbus ASCII.
+2. Select Communications Setup from the Meter Setup menu and then click on the IEEE
+C37.118.2 tab.
+3. Select the desired PMU and data frame parameters. See the table below for the available
+options and their explanations.
+4. To select phasor and analog data components and/or change the default phasor, analog,
+and digital channel names, click the appropriate Tags button on the right, check the
+channels you want to include in the data frames and enter custom channel names, then
+click OK. Channel names can be up to 16 characters long.
+12
+5. Click the TCP/UDP Communication button to configure IEEE C37.118.2 data streams.
+13
+6. Configure device's local TCP and UDP port numbers for client connections, and the
+destination addresses and ports for spontaneous transmission as desired. The default
+port numbers are set to the values recommended by IEEE C37.118.2.
+7. Configure the data stream parameters as required for your application. Avoid assigning
+the same identifier to multiple streams, as this will make streams following the
+first one unavailable to client commands.
+8. Click Save as... to store your setup in the device site database, and click Send to send
+the setup to the device.
+The following table provides information on the available options.
+Parameter Options Default Description
+IEEE C37.118.2 Setup
+Station Name Up to 19 ASCII
+characters
+station_name Identifies the station
+PMU ID (data source ID) 0, 1-65534 0 (Note 4) Data source ID number
+Global PMU ID [hex] 128-bit string (16 raw
+bytes in hexadecimal
+notation)
+Identifies the PMU in a system
+that has more than 65535
+PMUs.
+PMU Latitude, degrees -90.00000 to
+90.00000
+0.00000 PMU latitude (WGS84)
+PMU Longitude, degrees -180.00000 to
+180.00000
+0.00000 PMU longitude (WGS84)
+Phasor Type Phasor components VA,VB,VC,IA,IB,
+IC
+See Channel Names in Section
+2.2.2.
+Phasor Coordinate Format Rectangular (Re/Im)
+Polar (Mag/Ang)
+Rectangular Vector data format:
+Rectangular  real and
+imaginary, Polar  magnitude
+and angle
+Phasor/Frequency Data
+Format
+16-bit integer, 32-bit
+floating point, 32-bit
+floating point (actual
+FREQ)
+32-bit floating
+point with
+actual
+frequency
+Data type for phasor and
+frequency data (Note 1)
+Analog Data Format 16-bit integer, 32-bit
+floating point
+32-bit floating
+point
+Data format for analog data
+Analog Data Analog components None See Channel Names in Section
+2.2.2.
+Digital Data None, 16 DI, 32 DI None Digital status words to be
+included in data frames (Note
+5)
+Reporting Rate, frames/s 1, 2, 3, 4, 5, 6, 10,
+12, 15, 20, 25, 30,
+50, 60
+10 Synchrophasor measurement
+rate (Note 2)
+Service Class P, M P PMU performance class
+Time Synchronization IRIG-B,
+IEEE 1588 (PTPv2)
+IRIG-B UTC time source
+Spontaneous CFG Frames NO, CFG-2, CFG-3 NO Enables spontaneous
+configuration frames
+Power Units kW, W, MW kW Analog power channels units
+Configuration Change
+Count
+0-65535 0 Configuration change count
+Client-server UDP/TCP Transmission
+Data Stream ID 1 1-65534 7000 Commanded data stream 1 ID
+number
+Data Rate 1, frames/s Submultiple of the
+PMU reporting rate
+10 Commanded data stream 1
+transmission rate
+Data Stream ID 2 1-65534 7001 Commanded data stream 2 ID
+number
+Data Rate 2, frames/s Submultiple of the
+PMU reporting rate
+10 Commanded data stream 2
+transmission rate
+14
+Parameter Options Default Description
+Local UDP Port 1024-49151 4713 Device UDP port number for
+client-server connections
+Local TCP Port 1024-49151 4712 Device TCP port number for
+client-server connections
+Stop UDP Streams NO, YES NO Stops all active controlled UDP
+streams
+Spontaneous UDP Transmission
+Transmission Enabled 1 Disabled, Enabled Disabled Enables spontaneous data
+stream 1 transmission
+Data Stream ID 1 1-65534 7002 Spontaneous data stream 1 ID
+number
+Data Rate 1, frames/s Submultiple of the
+PMU reporting rate
+10 Spontaneous data stream 1
+transmission rate
+Destination UDP Port 1 1024-49151 4713 Destination port number for
+spontaneous data stream 1
+transmission
+Destination IP Address 1
+(unicast/multicast)
+225.100.100.1 Destination IP address for
+spontaneous data stream 1
+transmission
+Transmission Enabled 2 Disabled, Enabled Disabled Enables spontaneous data
+stream 2 transmission
+Data Stream ID 2 1-65534 7003 Spontaneous data stream 2 ID
+number
+Data Rate 2, frames/s Submultiple of the
+PMU reporting rate
+10 Spontaneous data stream 2
+transmission rate
+Destination UDP Port 2 1024-49151 4713 Destination port number for
+spontaneous data stream 2
+transmission
+Destination IP Address 2
+(unicast/multicast)
+225.100.100.2 Destination IP address for
+spontaneous data stream 2
+transmission
+NOTES:
+1. When 32-bit floating point (actual FREQ) is selected, the measured frequency is
+transmitted as the actual frequency, otherwise it is transmitted as the deviation from the
+nominal frequency.
+2. The selected PMU reporting rate is automatically rounded up to the nearest sub-multiple
+of the nominal frequency. In case of using both IEEE C37.118.2 and IEC 61850
+synchrophasor data communications, the new data rate is applied to both protocols.
+3. A stream data rate must be a submultiple of the PMU reporting rate, otherwise it will be
+automatically set to the PMU reporting rate.
+4. If the PMU data source ID number is set to 0 (default), the PMU ID repeats the data
+stream ID number in configuration messages.
+5. When custom digital channel names are used, only channels with assigned custom
+names are indicated as valid inputs in configuration frames.
+6. Configure the synchrophasor data frame properties and local port settings before turning
+on the data transmission. Changing either invalidates all active data streams and stops
+data transmission in progress.
+7. Changing the local TCP port causes closing all active connections and restarting the
+network services. If you make changes via an Internet connection, wait a couple of
+seconds until the network is ready for operation before sending a new connection
+request.
+8. Changing the synchrophasor data frame properties advances the configuration change
+count. You can set it to any desired number by explicit writing the count value.
+15
+9. If you are using a TCP connection as an alternate channel for spontaneous stream
+control rather than for streaming synchrophasor data and want to keep the connection
+open, disable the TCP connection idle timeout via the device's network setup.
+10. Devices with firmware earlier than V31.XX.60 provide only one commanded
+TCP/UDP data stream and one spontaneous UDP data stream with the same ID
+number and a data rate fixed at the PMU reporting rate. Although the second
+data stream settings are accepted by the device, they will not take effect.
+3.1.2 Configuring the IEEE 1588 Port
+To configure the PMU IEEE 1588 Ethernet port:
+1. Select Communications Setup from the Meter Setup menu and then click on the PMU
+IEEE 1588 Port tab.
+2. Setup the required static IP address, subnet mask and default gateway for the IEEE 1588
+Ethernet port, or enable the DHCP option to dynamically assign network addresses by a
+DHCP server.
+3. Click Save as... to store your setup in the device site database, and click Send to send
+the setup to the device.
+16
+NOTES:
+1. Use the DHCP option with caution, especially if the network is managed by the Microsoft
+Network server. Since the PMU is not a client for the Microsoft network, the address that
+the PMU can receive may already be assigned to one of the PCs on the network.
+2. If you selected DHCP, the assigned network addresses will be displayed on this tab under
+the Current IEEE 1588 Port Settings section. It may take a couple of minutes for the PMU
+to acquire new network addresses.
+

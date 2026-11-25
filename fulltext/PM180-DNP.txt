@@ -1,0 +1,2560 @@
+expertmeterTM
+High Performance Analyzer
+PM180
+DNP3 Communications Protocol
+Reference Guide
+BG0524 Rev. A3
+2
+Every effort has been made to ensure that the material herein is complete and
+accurate. However, the manufacturer is not responsible for any mistakes in printing
+or faulty instructions contained in this book. Notification of any errors or misprints
+will be received with appreciation.
+For further information regarding a particular installation, operation or maintenance
+of equipment, contact the manufacturer or your local representative or distributor.
+REVISION HISTORY
+A1 Oct 2012 Initial release.
+A2 Mar 2014 Added file transfer objects.
+A3 May 2016 Added fault distance indication objects.
+3
+Table of Contents
+1 GENERAL ..........................................................................................................5
+2 DNP 3.0 PROTOCOL IMPLEMENTATION ........................................................6
+2.1 Deviations from Standard........................................................................................6
+2.2 DNP Implementation...............................................................................................6
+2.2.1 Class 0 Response ...............................................................................................6
+2.2.2 Event Objects ....................................................................................................7
+2.2.3 Device Address ..................................................................................................8
+2.2.4 Transaction Timing .............................................................................................8
+2.2.5 Scaling 16-bit Analog Inputs ................................................................................8
+2.2.6 Scaling 16-bit Binary Counters .............................................................................9
+2.3 Password Protection ...............................................................................................9
+2.4 File Transfer............................................................................................................9
+2.4.1 General File Operations .......................................................................................9
+2.4.2 Reading Directory Files ..................................................................................... 10
+2.4.3 Reading Event Data Files................................................................................... 11
+2.4.4 Processing errors ............................................................................................. 13
+3 DNP POINT MAP..............................................................................................14
+3.1 Analog Inputs - Basic Set......................................................................................14
+3.2 Binary Inputs - Basic Set.......................................................................................15
+Relays............................................................................................................... 15
+Digital Inputs ..................................................................................................... 15
+3.3 Binary Counters - Basic Set..................................................................................15
+3.4 Frozen Binary Counters ........................................................................................16
+Total Energies  Basic Set.................................................................................... 16
+Counters  Extended Set ..................................................................................... 16
+Total Energies - Extended Set............................................................................... 16
+3.5 Analog Inputs, Binary Inputs and Counters  Extended Set .................................17
+Special Inputs .................................................................................................... 17
+Digital Inputs ..................................................................................................... 17
+Relay Outputs .................................................................................................... 17
+Static Event Flags ............................................................................................... 17
+Counters ........................................................................................................... 17
+Total Energies .................................................................................................... 17
+1-Cycle Phase Values .......................................................................................... 18
+1-Cycle Low Phase Values .................................................................................... 18
+1-Cycle High Phase Values ................................................................................... 19
+1-Cycle Total Values............................................................................................ 19
+1-Cycle Auxiliary Values....................................................................................... 19
+1-Second Phase Values........................................................................................ 20
+1-Second Low Phase Values ................................................................................. 20
+1-Second High Phase Values................................................................................. 21
+1-Second Total Values ......................................................................................... 21
+1-Second Auxiliary Values.................................................................................... 22
+Present Volt, Ampere and Power Demands ............................................................. 22
+Minimum 1-Cycle Phase Values............................................................................. 23
+Minimum 1-Cycle Total Values .............................................................................. 23
+Minimum 1-Cycle Auxiliary Values ......................................................................... 24
+Maximum 1-Cycle Phase Values ............................................................................ 24
+Maximum 1-Cycle Total Values ............................................................................. 25
+Maximum 1-Cycle Auxiliary Values ........................................................................ 25
+Maximum Demands ............................................................................................ 25
+4
+Analog Inputs..................................................................................................... 26
+Distance to fault ................................................................................................. 26
+3.6 Factory Device Settings and Identification............................................................27
+Device Identification............................................................................................ 27
+Factory Device Settings ....................................................................................... 27
+Port Identification ............................................................................................... 27
+3.7 Device Control.......................................................................................................28
+Device Authorization Register ............................................................................... 28
+Remote Relay Control.......................................................................................... 28
+Device Reset/Clear.............................................................................................. 28
+Device Diagnostics.............................................................................................. 28
+3.8 Device Setup.........................................................................................................32
+Basic Setup........................................................................................................ 32
+Demand Setup ................................................................................................... 32
+Device Options Setup .......................................................................................... 33
+Communication Ports Setup ................................................................................. 33
+3.9 DNP Protocol Setup..............................................................................................35
+DNP Options Setup ............................................................................................. 35
+DNP Events Setup............................................................................................... 36
+DNP Class 0 Point Assignments ............................................................................. 36
+3.10 Generic Data.........................................................................................................38
+Generic Data...................................................................................................... 38
+4 DATA SCALES AND UNITS ............................................................................41
+Data Scales........................................................................................................ 41
+Data Units ......................................................................................................... 41
+5 DATA FORMATS .............................................................................................42
+Wiring Mode....................................................................................................... 42
+DNP Object Variations ......................................................................................... 42
+DNP Class 0 Objects............................................................................................ 42
+Timestamp ........................................................................................................ 43
+Event Source/Point ID ......................................................................................... 43
+Event Effect ID ................................................................................................... 43
+Data/Function Point ID ........................................................................................ 44
+Data Location..................................................................................................... 44
+Event Type ID .................................................................................................... 45
+6 CONFIGURING DNP3......................................................................................46
+6.1 DNP Options .........................................................................................................46
+6.2 Configuring DNP Class 0 Response.....................................................................48
+6.3 Configuring DNP Event Classes ...........................................................................49
+APPENDIX A DNP APPLICATION MESSAGES ................................................51
+APPENDIX B DNP DEVICE PROFILE ................................................................53
+5
+1 General
+This document specifies a subset of the DNP3 communications protocol used to transfer
+data between a master computer station and the PM180. The document provides the
+complete information necessary to develop third-party communications software capable of
+communication with the PM180. Additional information concerning communications
+operation, configuring the communications parameters, and communications connections is
+found in the PM180 Installation and Operation Manual.
+6
+2 DNP 3.0 Protocol Implementation
+DNP3 (Distributed Network Protocol) is an open standard designed by Harris Control
+Division. DNP defines a command-response method of communicating digital information
+between a master and slave device. Detailed information regarding DNP3 is available in the
+"Basic 4 Document Set" which can be obtained from the DNP User Group.
+2.1 Deviations from Standard
+The PM180 implements Level 2 of the DNP3 communication protocol. The device does not
+support unsolicited requests or hardware collision avoidance.
+The data link layer differs from the Basic 4 specifications because of the master-slave
+relationship between devices. When the device receives a request, no further requests can
+be sent until after the device makes the appropriate response.
+2.2 DNP Implementation
+The PM180, like most devices, allows retrieving regular analog and binary data from the
+device by executing directed (non-broadcast) Read requests.
+Binary-Output-Status objects and Analog-Output-Status objects are sent with flags that
+always indicate ONLINE.
+A Binary-Output-Status object that indicates the current state of a control digital point
+(relay) uses remote forced data as well as local forced data bits. The value of a state bit
+indicates the current state of the digital output point.
+The PM180 executes the parameter clear function and demands resets using the Direct-
+Operate, SBO/Operate or Direct-Operate-No-Acknowledge command to specified points of
+the Control-Relay-Output-Block object.
+Issuing the Direct-Operate, SBO/Operate or Direct-Operate-No-Acknowledge command to
+appropriative points of the Analog-Output-Block object can change the setup parameters.
+The device also supports the DNP functions Write, Cold-Restart and Delay Measurement.
+Refer to Appendix A for specific requests and responses. Appendix B contains the standard
+DNP Device Profile Document.
+The device attempts to respond with the same object variation and qualifier as those in the
+request. Exceptions to this rule include changing variation 0 to a specific variation and
+changing qualifier code 6 to 1.
+If the device receives an invalid request, it sets the internal indication to the error code.
+The following internal indication bits are supported:
+Octet
+Position
+Bit
+Position
+Description
+0 0 Set when a request received with a broadcast destination address. Cleared after next
+response.
+0 7 Device restart - set when the device powers up or after executing Cold Restart, cleared by
+writing zero to object 80.
+0 4 Time-synchronization required from the master. Cleared when master sets the time.
+0 5 Set when the device is in the Local state. Cleared when the device is in the Remote state.
+1 5 Set when the current configuration in the device is corrupted. May also be set as a result
+of the legal changes in the setup configuration whenever another setup is affected by the
+changes made. Cleared by resetting the device diagnostics.
+2.2.1 Class 0 Response
+The PM180 DNP implementation supports a wide variety of messages. The most common
+method of getting static object information from the device via DNP is to issue a read Class
+0 request.
+7
+The PM130 allows you to configure the Class 0 response by assigning ranges of points to
+be polled via Class 0 requests (see Section 3.9, DNP Protocol setup).
+2.2.2 Event Objects
+The PM180 allows you to assign any static object point to a predefined object change event
+point for Class 1, Class 2 or Class 3 event polling. A total of 64 change event points are
+available. You can assign any of the Analog Input, Binary Input or Binary Counter static
+points to the corresponding change event point through the DNP Event setup (see Section
+3.9). You can also link any point to Class 1, Class 2 or Class 3 object polling.
+By default, a change event point index is the same as for the corresponding static object
+point. The PM180 gives you an option to re-map a static point index for the corresponding
+event point starting with index 0, separately for each object type - Analog Input, Binary
+Input or Binary Counter change events. For example, if the re-mapping option is active and
+you first assign static point AI:23 (1-sec frequency) to an event Class 1 point, the
+corresponding Analog Input change event point will be identified as point 0 in the Class 1
+poll response.
+Each point assigned to an event class can be separately enabled or disabled for scanning.
+The conditions for Analog Input change events can be specified by either an operating
+threshold, or a deadband, using one of the following three relations:
+Delta  a new event is generated when the absolute value of the difference between the
+last reported value of the point and its current value exceeds the specified deadband
+value;
+More than (Over) - a new event is generated when the point value rises over the
+specified threshold, and then when the point value returns below the threshold taking
+into consideration a predefined hysteresis;
+Less than (Under) - a new event is generated when the point value drops below the
+specified threshold, and then when the point value returns above the threshold taking
+into consideration a predefined hysteresis.
+For Binary Counter and Binary Input change events, a Delta relation is only applicable.
+The number of event points for each object type (Analog Input, Binary Input or Binary
+Counter) is limited through the DNP Options setup (see Section 3.9). Every time you
+change the number of points for any of the objects, the device clears all event buffers and
+links the default set of static points to each event object type.
+The scan time rates for polling events of different types are as follows:
+- 1 cycle for Binary Input points
+- 200 ms for Binary Counter and Analog Input points
+The memory consumption for keeping events depends on the event objects variation, or
+DNP object size. For each event object type and event class, the device uses a separate
+buffer. The maximum buffer size (MBS) per DNP event object/event class is 512 bytes. The
+maximum number of events per class that the device can hold can be calculated as
+follows:
+Maximum number of events = MBS/(DNP Event Object Size + 1)
+For example, the device can hold up to 512/12=40 measures of the 32-bit Analog change
+event with Time objects, or up to 512/8=64 measures of the 8-bit Binary change event
+with Time objects.
+To disable change event objects, explicitly set all registers that specify the number of the
+Analog Input, Binary Input and Binary Counter objects to generate events to 0. In this
+case, the device will support only static objects.
+8
+2.2.3 Device Address
+Each device on a DNP link must have a unique address. The PM180 allows a device address
+in the range of 0 to 65532 to be selected. The DNP master can use addresses 65533 to
+65535 for broadcast requests. A broadcast request never generates a DNP response.
+2.2.4 Transaction Timing
+The PM180 response time to master requests via serial ports is indicated in Table 2-1. It
+includes the receive termination delay - 4 character times plus a default 4-ms character
+timeout (user-programmable from 1 to 1000 ms), and a default 5-ms response delay
+(user-programmable from 0 to 1000 ms).
+Table 2-1 Response Time
+Response Time, ms
+(including a 5-ms response delay)
+Baud Rate, bps
+Min Max Typical
+9600 13 15 13
+19200 11 12 11
+57600 9 10 9
+115200 9 10 9
+The Direct-Operate, SBO/Operate or Direct-Operate-No-Acknowledge requests for
+reset/clear registers and setpoint changing are immediately confirmed.
+2.2.5 Scaling 16-bit Analog Inputs
+Any of the variations 1 through 4 can be used with the Analog Input objects. Variations
+specified in Sections 3.1 and 3.5 show those that can be used to read a full-range value
+without a possible over-range error when no scaling is used to accommodate the value to
+the requested object size.
+When over-range occurs, a positive value is reported as 32767 and a negative value as
+-32768, with the over-range bit in the flag octet being set to 1 if a variation 2 is requested.
+To avoid over-range errors when a variation 2 or 4 is required, a liner scaling may be used
+to scale 32-bit analog readings to 16-bit Analog Input objects (see Section 3.9, DNP
+Options setup). Scaling is enabled in the device by default.
+When scaling is enabled, either analog input requested with variation 2 or 4 will be scaled
+to the range of -32768 to 32767 for bi-directional parameters (such as power and power
+factor), and to the range of 0 to 32767 for single-ended positive parameters (voltage,
+current, frequency, etc.). To get a true reading, the reverse conversion should be done
+using the following formula:
+Y = ((X  DNP_LO)  (HI - LO)) /(DNP_HI  DNP_LO) + LO
+where:
+Y - True reading in engineering units
+X - Raw input data in the range of DNP_LO  DNP_HI
+LO, HI - Data low and high scales in engineering units (for device data scales, see
+Section 4)
+DNP_LO - DNP low conversion scale: DNP_LO = -32768 for a point with a negative LO
+scale
+DNP_LO = 0 for a point with a zero or positive LO scale
+DNP_HI - DNP high conversion scale: DNP_HI = 32767
+EXAMPLE
+If you have read a value of 201 for point AI:3 that shows the I1 current (see Section 3.1)
+and the CT primary current is 200A (the high current scale is 2200 = 400A), then the
+current reading in engineering units is as follows:
+9
+(201 - 0)  (400 - 0)/(32767 - 0) + 0 = 2.45A
+2.2.6 Scaling 16-bit Binary Counters
+Binary counters are stored in the device in 32-bit integer format. Using 16-bit Binary
+Counter objects can cause over-range errors if the counter value exceeds 32767.
+Scaling binary counters (see DNP Options setup in Section 3.9) allows changing a binary
+counter unit from 1 to 1000 in powers of 10 to accommodate a 32-bit counter value to 16-
+bit object format. If the scaling unit is greater than 1, the counter value is reported being
+divided by the scaling unit. To get the actual value, multiply the counter reading by the
+selected scaling unit.
+2.3 Password Protection
+The PM180 has a password protection option allowing you to protect your setups,
+cumulative registers and logs from being changed or cleared through communications. You
+can disable or enable password protection through communications or via the front display.
+For details, refer to your instrument Installation and Operation Manual.
+When password protection is enabled, the user password you set in your instrument should
+be written into the device authorization register (point AO:192) before another write
+request is issued. If the correct password is not supplied while password protection is
+enabled, the instrument will respond to all write requests with the exception response
+"Control operation not supported for this point". It is recommended to clear the password
+register after you have completed your changes in order to activate password protection.
+2.4 File Transfer
+The PM180 supports file transfer operations for reading recorded disturbance waveforms
+and event-related data for general device events, power quality events and fault recorder
+events.
+Notice that the physical file organization in the PM180 is different from that seen via the
+DNP3 file transfer objects. See the PM180 Operation Manual for more information on the
+actual file organization and configuring waveform and event recorders in the device.
+2.4.1 General File Operations
+Remote file access via DNP3 is implemented by DNP functions OPEN_FILE, READ and
+CLOSE_FILE with object 70, variations 3, 4, 5, 6 and 7. See DNP3 Specification, Volume 6, Part
+2 DNP3 Object Library for detailed information on using file transfer objects.
+The following table lists supported file transfer functions:
+Function code Function name Function Description
+1 Read Read a data block
+25 Open Open a file
+26 Close Close a file
+129 Response Open, Read and Close response
+Via DNP3, each event data file represents data collected for a single event. Data files are
+grouped in 12 directories (as shown in the following section) where each file can be
+uniquely identified by the event type, event sequence number and the time of occurrence.
+To read a data file from the device:
+1. Read the corresponding directory file to get a list of available event files as
+described in Section 2.4.2.
+2. Browse the contents of the retrieved directory and select a file entry of interest.
+10
+3. Read the data file using a file name from the chosen directory entry.
+The following limitations should be observed:
+1. Only one file, either a directory, or a data file, can be open in any time. Close a
+directory file before reading a data file.
+2. The block size in Read responses never exceeds 240 bytes.
+2.4.2 Reading Directory Files
+Directory file names are listed in the following table with the description of the directory
+contents.
+Directory Name Directory Contents
+DR1 Disturbance recorder #1 waveform files
+DR2 Disturbance recorder #2 waveform files
+DR3 Disturbance recorder #3 waveform files
+DR4 Disturbance recorder #4 waveform files
+DR5 Disturbance recorder #5 waveform files
+DR6 Disturbance recorder #6 waveform files
+DR7 Disturbance recorder #7 waveform files
+DR8 Disturbance recorder #8 waveform files
+EV Device event log files
+SE Sequence-of-Events log files
+PQ Power quality log files
+FT Fault recorder log files
+To read a directory file:
+1. Issue the OPEN_FILE command to open a directory file with the desired directory
+name (function 25, object 70, variation 3; response  function 129, object 70,
+variation 4). Use the received file handle as a file identifier in the following file
+transfer commands.
+2. Read and store the directory file blocks in succession until the last block is read,
+using the READ command (function 1, object 70, variation 5; response  function
+129, object 70, variation 5).
+3. Close the open directory file with the CLOSE_FILE command (function 26, object 70,
+variation 4; response  function 129, object 70, variation 4).
+NOTES:
+1. Directory entries are transferred beginning from the most recent record.
+2. Though a physical event file in the device may contain thousands of records, the
+number of entries in a DNP3 directory is limited to the user selectable value from 10
+to 100 most recent events (the default value is 20). See DNP Options in Section 6.1
+on how to define the maximum directory size in your device.
+3. A disturbance waveform directory contains two file entries for each disturbance
+record with the same file name and extensions .cfg and .dat that are considered a
+single event when compared to the directory limit.
+4. Preparing a directory list for a disturbance waveform directory takes an amount of
+time so that the response to a directory OPEN_FILE command may be significantly
+delayed. The response delay may be up to 0.4 seconds per 10 disturbance records.
+11
+2.4.3 Reading Event Data Files
+To read an event data file:
+1. Issue the OPEN_FILE command to open a file with the desired file name (function
+25, object 70, variation 3; response  function 129, object 70, variation 4). Use the
+received file handle as a file identifier in the following file transfer commands.
+2. Read and store the file blocks in succession until the last block is read, using the
+READ command (function 1, object 70, variation 5; response  function 129, object
+70, variation 5).
+3. Close the open file with the CLOSE_FILE command (function 26, object 70, variation
+4; response  function 129, object 70, variation 4).
+NOTE
+All 16-bit and 32-bit data is encoded in little-endian notation.
+The following paragraphs describe the file structures for different file types. The following
+designations are used in filename templates:
+eeeee  event ID that caused an event, 2 to 6 ASCII characters (see Event Type ID,
+F22, in Section 5 for the event type codes)
+nnnnn  event sequence number, 1 to 5 ASCII characters from 1 to 65535 (may be
+omitted with the preceding "-" delimiter)
+YYYY - year coded by 4 ASCII characters
+MM - month coded by 2 ASCII characters from 01 to 12
+DD - day coded by 2 ASCII characters from 01 to 31
+hh - hour coded by 2 ASCII characters from 00 to 23
+mm - minutes coded by 2 ASCII characters from 00 to 59
+sssss - milliseconds coded by 5 ASCII characters from 00000 to 59999
+Disturbance Waveform Files
+File directory name: DR1, DR2, ... DR8
+File name templates:
+eeeee-nnnnn$YYYY-MM-DD-hh-mm-sssss.cfg
+eeeee-nnnnn$YYYY-MM-DD-hh-mm-sssss.dat
+Disturbance waveform data is transferred by two files in COMTRADE (IEEE Std. C37.111-
+1999) format: an ASCII configuration file with the .cfg extension and a binary data file with
+the .dat extension.
+The name of the substation location in the COMTARDE .cfg file can be configured via the
+DNP Options setup (see Section 6.1).
+Device Event Log Files
+File directory name: EV
+File name template: EV-nnnnn$YYYY-MM-DD-hh-mm-sssss
+An event file represents an array of 1 to 12 binary structures with the following attributes:
+Field Description Range Units Type Size, bytes
+Trigger time, seconds since 1/1/1970 sec UINT32 4
+Trigger time, fractional seconds in sec sec UINT32 4
+Logged/triggered value INT32 4
+Event number 1-65535 UINT16 2
+Event point/source ID See F19 in Section 5 UINT16 2
+12
+Field Description Range Units Type Size, bytes
+Event effect See F20 in Section 5 UINT16 2
+Not used UINT16 2
+A file may contain more than one record per event in case the event was triggered by a
+compound logical expression with multiple conditions or multiple actions were taken.
+For the triggered value range and units, see Section 3 in the PM180 Modbus Reference Guide.
+For volt, amps, power and frequency scales and units, refer to Section 4.
+Sequence-of-Events Log Files
+File directory name: SE
+File name template: eeeee-nnnnn$YYYY-MM-DD-hh-mm-sssss
+A sequence-of-event file represents an array of one or two binary structures with the
+following attributes:
+Field Description Range Units Type Size, bytes
+Trigger time, seconds since 1/1/1970 sec UINT32 4
+Trigger time, fractional seconds in sec sec UINT32 4
+Event type See F22 in Section 5 UINT16 2
+Event number 1-65535 UINT16 2
+Event point status Bit 0 - source point
+status:
+0 = Open/Off
+1 = Closed/On
+Bit 8 - GPS clock sync
+status:
+0 = time unlocked
+1 = time locked
+UINT16 2
+Not used UINT16 2
+Two records may be included in a file in the event that the consequent status changes of a
+source point immediately follow each other in the original log file without being interleaved with
+other events.
+Power Quality Event Log Files
+File directory name: PQ
+File name template: eeeee-nnnnn$YYYY-MM-DD-hh-mm-sssss
+A power quality event file represents an array of 1 to 3 binary structures with the following
+attributes:
+Field Description Range Units Type Size, bytes
+Start time, seconds since 1/1/1970 sec UINT32 4
+Start time, fractional seconds in sec sec UINT32 4
+End time, seconds since 1/1/1970 sec UINT32 4
+End time, fractional seconds in sec sec UINT32 4
+Value reference (base), primary units See Section 3.10 INT32 4
+Value magnitude, primary units See Section 3.10 INT32 4
+PQ event type See F22 in Section 5 UINT16 2
+PQ event number 1-65535 UINT16 2
+Point ID (generic) See Section 3.10 UINT16 2
+Not used UINT16 2
+Depending on the number of voltage phases where an event has occurred, the file may contain
+1, 2 or 3 records, one per affected phase. Follow the received file size to discover the actual
+number of records in the file.
+13
+Fault Event Log Files
+File directory name: FT
+File name template: eeeee-nnnnn$YYYY-MM-DD-hh-mm-sssss
+A fault event file represents an array of three binary structures, one for each phase of
+current in the order A-B-C, with the following attributes:
+Field Description Range Units Type Size, bytes
+Start time, seconds since 1/1/1970 sec UINT32 4
+Start time, fractional seconds in sec sec UINT32 4
+End time, seconds since 1/1/1970 sec UINT32 4
+End time, fractional seconds in sec sec UINT32 4
+Fault event type See F22 in Section 5 UINT16 2
+Fault event number 1-65535 UINT16 2
+Current reference (base), primary units See Section 3.10 U2 INT32 4
+Current magnitude, primary units See Section 3.10 U2 INT32 4
+Volts reference (base), primary units See Section 3.10 U1 INT32 4
+Volts magnitude, primary units See Section 3.10 U1 INT32 4
+Current phase point ID (generic) See Section 3.10 UINT16 2
+Volts phase point ID (generic) See Section 3.10 UINT16 2
+Not used UINT32 4
+2.4.4 Processing errors
+Any error or timeout that occurs while reading a file causes the file to be automatically
+closed.
+Block Number Sequence
+Data blocks are numbered starting at 0. Blocks must be read in ascending order. You can
+read the same block several times as long as no request has been sent for the following
+block. An error in the requested block number generates a negative Read Block response
+where the status field contains a code that means that the block number did not have the
+expected sequence number.
+Inactivity Timeout
+The inactivity timer is set in the device to 60 seconds. An open file is automatically closed
+whenever the time between two consecutive file transfer requests exceeds the inactivity
+timeout. In this case the device generates a fixed DNP event Obj 70 Var 6 with the status
+field that means that the file is closed due to inactivity timeout. The fixed events can be
+polled via the event Class 3.
+14
+3 DNP Point Map
+3.1 Analog Inputs - Basic Set
+Object : Var. Object : Point Description Options/Range2
+Units2 Type R/W Notes
+30:3 AI:0 V1/V12 voltage 0-Vmax U1 UINT32 R 1
+30:3 AI:1 V2/V23 voltage 0-Vmax U1 UINT32 R 1
+30:3 AI:2 V3/V31 voltage 0-Vmax U1 UINT32 R 1
+30:3 AI:3 I1 current 0-Imax U2 UINT32 R
+30:3 AI:4 I2 current 0-Imax U2 UINT32 R
+30:3 AI:5 I3 current 0-Imax U2 UINT32 R
+30:3 AI:6 kW L1 -Pmax-Pmax U3 INT32 R
+30:3 AI:7 kW L2 -Pmax-Pmax U3 INT32 R
+30:3 AI:8 kW L3 -Pmax-Pmax U3 INT32 R
+30:3 AI:9 kvar L1 -Pmax-Pmax U3 INT32 R
+30:3 AI:10 kvar L2 -Pmax-Pmax U3 INT32 R
+30:3 AI:11 kvar L3 -Pmax-Pmax U3 INT32 R
+30:3 AI:12 kVA L1 0-Pmax U3 UINT32 R
+30:3 AI:13 kVA L2 0-Pmax U3 UINT32 R
+30:3 AI:14 kVA L3 0-Pmax U3 UINT32 R
+30:4 AI:15 Power factor L1 -1000-1000 0.001 INT16 R
+30:4 AI:16 Power factor L2 -1000-1000 0.001 INT16 R
+30:4 AI:17 Power factor L3 -1000-1000 0.001 INT16 R
+30:4 AI:18 Total PF -1000-1000 0.001 INT16 R
+30:3 AI:19 Total kW -Pmax-Pmax U3 INT32 R
+30:3 AI:20 Total kvar -Pmax-Pmax U3 INT32 R
+30:3 AI:21 Total kVA 0-Pmax U3 UINT32 R
+30:3 AI:22 In (neutral) current 0-Imax U2 UINT32 R
+30:4 AI:23 Frequency 0-10000 0.01Hz UINT16 R
+30:3 AI:24 Maximum kW import sliding window demand 0-Pmax U3 UINT32 R
+30:3 AI:25 kW import accumulated demand 0-Pmax U3 UINT32 R
+30:3 AI:26 Maximum kVA sliding window demand 0-Pmax U3 UINT32 R
+30:3 AI:27 kVA accumulated demand 0-Pmax U3 UINT32 R
+30:3 AI:28 I1 Maximum ampere demand 0-Imax U2 UINT32 R
+30:3 AI:29 I2 Maximum ampere demand 0-Imax U2 UINT32 R
+30:3 AI:30 I3 Maximum ampere demand 0-Imax U2 UINT32 R
+30:3 AI:31 Present kW import sliding window demand 0-Pmax U3 UINT32 R
+30:3 AI:32 Present kVA sliding window demand 0-Pmax U3 UINT32 R
+30:4 AI:33 PF (import) at Max. kVA sliding window demand 0-1000 0.001 UINT16 R
+30:4 AI:34 V1/V12 voltage THD 0-9999 0.1% UINT16 R 1, 3
+30:4 AI:35 V2/V23 voltage THD 0-9999 0.1% UINT16 R 1, 3
+30:4 AI:36 V3/V31 voltage THD 0-9999 0.1% UINT16 R 1, 3
+15
+Object : Var. Object : Point Description Options/Range2
+Units2 Type R/W Notes
+30:4 AI:37 I1 current THD 0-9999 0.1% UINT16 R 3
+30:4 AI:38 I2 current THD 0-9999 0.1% UINT16 R 3
+30:4 AI:39 I3 current THD 0-9999 0.1% UINT16 R 3
+30:4 AI:40 I1 current TDD 0-1000 0.1% UINT16 R 3
+30:4 AI:41 I2 current TDD 0-1000 0.1% UINT16 R 3
+30:4 AI:42 I3 current TDD 0-1000 0.1% UINT16 R 3
+30:3 AI:43 Reserved 0 UINT16 R
+NOTES:
+1
+When the 4LN3, 3LN3, or 3BLN3 wiring mode is selected, the voltages will be line-to-neutral; for any other wiring mode, they will be line-to-line voltages.
+2 All analog input points except of harmonics are 1-second average values. For volts, amps and power scales and units, refer to Section 4 "Data Scales and Units". For analog input scaling
+formulas and examples, see Section 2.2.5, " Scaling Analog Input Objects".
+3 On a 3-s interval.
+3.2 Binary Inputs - Basic Set
+Object : Var. Object : Point Description Range Units Type R/W Notes
+Relays
+01:1 BI:0 Relay #1 status 0-1 R
+01:1 BI:1 Relay #2 status 0-1 R
+... ... ... 0-1 R
+01:1 BI:63 Relay #64 status 0-1 R
+Digital Inputs
+01:1 BI:64 Digital input #1 0-1 R
+01:1 BI:65 Digital input #2 0-1 R
+... ... ...
+01:1 BI:191 Digital input #128 0-1 R
+3.3 Binary Counters - Basic Set
+Object : Var. Object : Point Description Range Units Type R/W Notes
+20:5 BC:0 kWh import 0-999,999,999 U5 UINT32 R
+20:5 BC:1 kWh export 0-999,999,999 U5 UINT32 R
+20:5 BC:2 kvarh net -999,999,999-999,999,999 U5 UINT32 R
+20:5 BC:3 kVAh 0-999,999,999 U5 UINT32 R
+20:5 BC:4 kvarh import 0-999,999,999 U5 UINT32 R
+20:5 BC:5 kvarh export 0-999,999,999 U5 UINT32 R
+16
+3.4 Frozen Binary Counters
+Object : Var. 1 Object : Point Description Range Units Type R/W Notes
+Total Energies  Basic Set
+21:var FBC:0 kWh import 0-999,999,999 U5 UINT32 R
+21:var FBC:1 kWh export 0-999,999,999 U5 UINT32 R
+21:var FBC:2 kvarh net -999,999,999-999,999,999 U5 UINT32 R
+21:var FBC:3 kVAh 0-999,999,999 U5 UINT32 R
+21:var FBC:4 kvarh import 0-999,999,999 U5 UINT32 R
+21:var FBC:5 kvarh export 0-999,999,999 U5 UINT32 R
+Counters  Extended Set
+21:var FBC:35328 Counter #1 0-999,999,999 UINT32 R
+21:var FBC:35329 Counter #2 0-999,999,999 UINT32 R
+21:var FBC:35330 Counter #3 0-999,999,999 UINT32 R
+21:var FBC:35331 Counter #4 0-999,999,999 UINT32 R
+21:var FBC:35332 Counter #5 0-999,999,999 UINT32 R
+21:var FBC:35333 Counter #6 0-999,999,999 UINT32 R
+21:var FBC:35334 Counter #7 0-999,999,999 UINT32 R
+21:var FBC:35335 Counter #8 0-999,999,999 UINT32 R
+21:var FBC:35336 Counter #9 0-999,999,999 UINT32 R
+21:var FBC:35337 Counter #10 0-999,999,999 UINT32 R
+21:var FBC:35338 Counter #11 0-999,999,999 UINT32 R
+21:var FBC:35339 Counter #12 0-999,999,999 UINT32 R
+21:var FBC:35340 Counter #13 0-999,999,999 UINT32 R
+21:var FBC:35341 Counter #14 0-999,999,999 UINT32 R
+21:var FBC:35342 Counter #15 0-999,999,999 UINT32 R
+21:var FBC:35343 Counter #16 0-999,999,999 UINT32 R
+Total Energies - Extended Set
+21:var FBC:38656 kWh import 0-999,999,999 U5 UINT32 R
+21:var FBC:38657 kWh export 0-999,999,999 U5 UINT32 R
+21:var FBC:38658 KWh net -999,999,999-999,999,999 U5 UINT32 R
+21:var FBC:38659 KWh total 0-999,999,999 U5 UINT32 R
+21:var FBC:38660 kvarh import 0-999,999,999 U5 UINT32 R
+21:var FBC:38661 kvarh export 0-999,999,999 U5 UINT32 R
+21:var FBC:38662 kvarh net -999,999,999-999,999,999 U5 UINT32 R
+21:var FBC:38663 kvarh total 0-999,999,999 U5 UINT32 R
+21:var FBC:38664 kVAh total 0-999,999,999 U5 UINT32 R
+NOTE
+1
+For object variation, see DNP Options setup (see Section 3.9).
+2
+Issuing a freeze and clear request (or freeze and clear - No acknowledgement) to object 20 variation 0 using function code 0x09 (or 0x10) and the data qualifier 0x06 causes all counters to
+be reset to zero.
+17
+3.5 Analog Inputs, Binary Inputs and Counters  Extended Set
+Object : Var. Object : Point Description Options/Range3
+Units3 Type R/W Notes
+30:4 AI:32768 None 0 UINT16 R
+Special Inputs R
+30:4 BI:33024 Voltage disturbance 0-100 % Un R
+30:4 BI:33025 Phase rotation order 0=ERR, 1=POS, 2=NEG R
+Digital Inputs R
+01:1 BI:34304 DI1 0-1 R
+01:1 BI:34305 DI2 0-1 R
+... R
+01:1 BI:34431 DI128 0-1 R
+Relay Outputs R
+01:1 BI:34816 Relay #1 0-1 R
+01:1 BI:34817 Relay #2 0-1 R
+... R
+01:1 BI:34879 Relay #64 0-1 R
+Static Event Flags R
+01:1 BI:35072 Phase order error 0-1 R
+01:1 BI:35073 Positive phase order 0-1 R
+01:1 BI:35074 Negative phase order 0-1 R
+01:1 BI:35075 PQ event 0-1 R
+01:1 BI:35076 General fault event 0-1 R
+01:1 BI:35077 Fault detected 0-1 R
+01:1 BI:35078 External fault trigger 0-1 R
+01:1 BI:35079 Device fault (non-critical error) 0-1 R
+01:1 BI:35080 No voltage 0-1 R
+01:1 BI:35081 Remote control 0-1 R
+Counters
+20:5 BC:35328 Counter #1 0-999,999,999 UINT32 R
+20:5 BC:35329 Counter #2 0-999,999,999 UINT32 R
+... R
+20:5 BC:35343 Counter #16 0-999,999,999 UINT32 R
+Total Energies
+20:5 BC:38656 kWh import 0-999,999,999 U5 UINT32 R
+20:5 BC:38657 kWh export 0-999,999,999 U5 UINT32 R
+20:5 BC:38658 kWh net -999,999,999-999,999,999 U5 INT32 R
+20:5 BC:38659 kWh total 0-999,999,999 U5 UINT32 R
+20:5 BC:38660 kvarh import 0-999,999,999 U5 UINT32 R
+20:5 BC:38661 kvarh export 0-999,999,999 U5 UINT32 R
+20:5 BC:38662 kvarh net -999,999,999-999,999,999 U5 INT32 R
+20:5 BC:38663 kvarh total 0-999,999,999 U5 UINT32 R
+20:5 BC:38664 kVAh total 0-999,999,999 U5 UINT32 R
+18
+Object : Var. Object : Point Description Options/Range3
+Units3 Type R/W Notes
+1-Cycle Phase Values
+30:3 AI:35840 V1/V12 voltage 0-Vmax U1 UINT32 R 1
+30:3 AI:35841 V2/V23 voltage 0-Vmax U1 UINT32 R 1
+30:3 AI:35842 V3/V31 voltage 0-Vmax U1 UINT32 R 1
+30:3 AI:35843 I1 current 0-Imax U2 UINT32 R
+30:3 AI:35844 I2 current 0-Imax U2 UINT32 R
+30:3 AI:35845 I3 current 0-Imax U2 UINT32 R
+30:3 AI:35846 kW L1 -Pmax-Pmax U3 INT32 R
+30:3 AI:35847 kW L2 -Pmax-Pmax U3 INT32 R
+30:3 AI:35848 kW L3 -Pmax-Pmax U3 INT32 R
+30:3 AI:35849 kvar L1 -Pmax-Pmax U3 INT32 R
+30:3 AI:35850 kvar L2 -Pmax-Pmax U3 INT32 R
+30:3 AI:35851 kvar L3 -Pmax-Pmax U3 INT32 R
+30:3 AI:35852 kVA L1 0-Pmax U3 UINT32 R
+30:3 AI:35853 kVA L2 0-Pmax U3 UINT32 R
+30:3 AI:35854 kVA L3 0-Pmax U3 UINT32 R
+30:4 AI:35855 Power factor L1 -1000-1000 0.001 INT16 R
+30:4 AI:35856 Power factor L2 -1000-1000 0.001 INT16 R
+30:4 AI:35857 Power factor L3 -1000-1000 0.001 INT16 R
+30:4 AI:35858 V1/V12 voltage THD 0-9999 0.1% UINT16 R 2, 4
+30:4 AI:35859 V2/V23 voltage THD 0-9999 0.1% UINT16 R 2, 4
+30:4 AI:35860 V3/V31 voltage THD 0-9999 0.1% UINT16 R 2, 4
+30:4 AI:35861 I1 current THD 0-9999 0.1% UINT16 R 4
+30:4 AI:35862 I2 current THD 0-9999 0.1% UINT16 R 4
+30:4 AI:35863 I3 current THD 0-9999 0.1% UINT16 R 4
+30:4 AI:35864 I1 K-Factor 10-9999 0.1 UINT16 R 4
+30:4 AI:35865 I2 K-Factor 10-9999 0.1 UINT16 R 4
+30:4 AI:35866 I3 K-Factor 10-9999 0.1 UINT16 R 4
+30:4 AI:35867 I1 current TDD 0-1000 0.1% UINT16 R 4
+30:4 AI:35868 I2 current TDD 0-1000 0.1% UINT16 R 4
+30:4 AI:35869 I3 current TDD 0-1000 0.1% UINT16 R 4
+30:3 AI:35870 V12 voltage 0-Vmax U1 UINT32 R
+30:3 AI:35871 V23 voltage 0-Vmax U1 UINT32 R
+30:3 AI:35872 V31 voltage 0-Vmax U1 UINT32 R
+30:3 AI:35873 I1x current 0-Ixmax U2 UINT32 R
+30:3 AI:35874 I2x current 0-Ixmax U2 UINT32 R
+30:3 AI:35875 I3x current 0-Ixmax U2 UINT32 R
+1-Cycle Low Phase Values
+30:3 AI:36096 Low L-N voltage 0-Vmax U1 UINT32 R
+30:3 AI:36097 Low current 0-Imax U2 UINT32 R
+30:3 AI:36098 Low kW -Pmax-Pmax U3 INT32 R
+30:3 AI:36099 Low kvar -Pmax-Pmax U3 INT32 R
+30:3 AI:36100 Low kVA 0-Pmax U3 UINT32 R
+19
+Object : Var. Object : Point Description Options/Range3
+Units3 Type R/W Notes
+30:4 AI:36101 Low PF Lag 0-1000 0.001 UINT32 R
+30:4 AI:36102 Low PF Lead 0-1000 0.001 UINT32 R
+30:4 AI:36103 Low voltage THD 0-9999 0.1% UINT32 R 2, 4
+30:4 AI:36104 Low current THD 0-9999 0.1% UINT32 R 4
+30:4 AI:36105 Low K-Factor 10-9999 0.1 UINT32 R 4
+30:4 AI:36106 Low current TDD 0-1000 0.1% UINT32 R 4
+30:3 AI:36107 Low L-L voltage 0-Vmax U1 UINT32 R
+30:4 AI:36108 Low voltage interharmonics THD 0-9999 0.1% UINT32 R 2, 4
+30:4 AI:36109 Low current interharmonics THD 0-9999 0.1% UINT32 R 4
+1-Cycle High Phase Values
+30:3 AI:36352 High L-N voltage 0-Vmax U1 UINT32 R
+30:3 AI:36353 High current 0-Imax U2 UINT32 R
+30:3 AI:36354 High kW -Pmax-Pmax U3 INT32 R
+30:3 AI:36355 High kvar -Pmax-Pmax U3 INT32 R
+30:3 AI:36356 High kVA 0-Pmax U3 UINT32 R
+30:4 AI:36357 High PF Lag 0-1000 0.001 UINT32 R
+30:4 AI:36358 High PF Lead 0-1000 0.001 UINT32 R
+30:4 AI:36359 High voltage THD 0-9999 0.1% UINT32 R 2, 4
+30:4 AI:36360 High current THD 0-9999 0.1% UINT32 R 4
+30:4 AI:36361 High K-Factor 10-9999 0.1 UINT32 R 4
+30:4 AI:36362 High current TDD 0-1000 0.1% UINT32 R 4
+30:3 AI:36363 High L-L voltage 0-Vmax U1 UINT32 R
+30:4 AI:36364 High voltage interharmonics THD 0-9999 0.1% UINT32 R 2, 4
+30:4 AI:36365 High current interharmonics THD 0-9999 0.1% UINT32 R 4
+1-Cycle Total Values
+30:3 AI:36608 Total kW -Pmax-Pmax U3 INT32 R
+30:3 AI:36609 Total kvar -Pmax-Pmax U3 INT32 R
+30:3 AI:36610 Total kVA 0-Pmax U3 UINT32 R
+30:4 AI:36611 Total PF -1000-1000 0.001 INT16 R
+30:4 AI:36612 Total PF lag 0-1000 0.001 UINT16 R
+30:4 AI:36613 Total PF lead 0-1000 0.001 UINT16 R
+30:3 AI:36614 Total kW import 0-Pmax U3 UINT32 R
+30:3 AI:36615 Total kW export 0-Pmax U3 UINT32 R
+30:3 AI:36616 Total kvar import 0-Pmax U3 UINT32 R
+30:3 AI:36617 Total kvar export 0-Pmax U3 UINT32 R
+30:3 AI:36618 3-phase average L-N/L-L voltage 0-Vmax U1 UINT32 R 1
+30:3 AI:36619 3-phase average L-L voltage 0-Vmax U1 UINT32 R
+30:3 AI:36620 3-phase average current 0-Imax U2 UINT32 R
+1-Cycle Auxiliary Values
+30:3 AI:36864 I4 Current 0-I4max U2 UINT32 R
+30:3 AI:36865 In (neutral) current 0-Imax U2 UINT32 R
+30:4 AI:36866 Frequency 0-10000 0.01Hz UINT16 R
+30:4 AI:36867 Voltage unbalance 0-3000 0.1% UINT16 R
+20
+Object : Var. Object : Point Description Options/Range3
+Units3 Type R/W Notes
+30:4 AI:36868 Current unbalance 0-3000 0.1% UINT16 R
+30:3 AI:36869 Reserved 0 UINT32 R
+30:3 AI:36870 V4 voltage 0-V4max U4 UINT32 R
+30:3 AI:36871 I4x current 0-I4xmax U2 UINT32 R
+1-Second Phase Values
+30:3 AI:37120 V1/V12 voltage 0-Vmax U1 UINT32 R 1
+30:3 AI:37121 V2/V23 voltage 0-Vmax U1 UINT32 R 1
+30:3 AI:37122 V3/V31 voltage 0-Vmax U1 UINT32 R 1
+30:3 AI:37123 I1 current 0-Imax U2 UINT32 R
+30:3 AI:37124 I2 current 0-Imax U2 UINT32 R
+30:3 AI:37125 I3 current 0-Imax U2 UINT32 R
+30:3 AI:37126 kW L1 -Pmax-Pmax U3 INT32 R
+30:3 AI:37127 kW L2 -Pmax-Pmax U3 INT32 R
+30:3 AI:37128 kW L3 -Pmax-Pmax U3 INT32 R
+30:3 AI:37129 kvar L1 -Pmax-Pmax U3 INT32 R
+30:3 AI:37130 kvar L2 -Pmax-Pmax U3 INT32 R
+30:3 AI:37131 kvar L3 -Pmax-Pmax U3 INT32 R
+30:3 AI:37132 kVA L1 0-Pmax U3 UINT32 R
+30:3 AI:37133 kVA L2 0-Pmax U3 UINT32 R
+30:3 AI:37134 kVA L3 0-Pmax U3 UINT32 R
+30:4 AI:37135 Power factor L1 -1000-1000 0.001 INT16 R
+30:4 AI:37136 Power factor L2 -1000-1000 0.001 INT16 R
+30:4 AI:37137 Power factor L3 -1000-1000 0.001 INT16 R
+30:4 AI:37138 V1/V12 voltage THD 0-9999 0.1% UINT16 R 2, 5
+30:4 AI:37139 V2/V23 voltage THD 0-9999 0.1% UINT16 R 2, 5
+30:4 AI:37140 V3/V31 voltage THD 0-9999 0.1% UINT16 R 2, 5
+30:4 AI:37141 I1 current THD 0-9999 0.1% UINT16 R 5
+30:4 AI:37142 I2 current THD 0-9999 0.1% UINT16 R 5
+30:4 AI:37143 I3 current THD 0-9999 0.1% UINT16 R 5
+30:4 AI:37144 I1 K-Factor 10-9999 0.1 UINT16 R 5
+30:4 AI:37145 I2 K-Factor 10-9999 0.1 UINT16 R 5
+30:4 AI:37146 I3 K-Factor 10-9999 0.1 UINT16 R 5
+30:4 AI:37147 I1 current TDD 0-1000 0.1% UINT16 R 5
+30:4 AI:37148 I2 current TDD 0-1000 0.1% UINT16 R 5
+30:4 AI:37149 I3 current TDD 0-1000 0.1% UINT16 R 5
+30:3 AI:37150 V12 voltage 0-Vmax U1 UINT32 R
+30:3 AI:37151 V23 voltage 0-Vmax U1 UINT32 R
+30:3 AI:37152 V31 voltage 0-Vmax U1 UINT32 R
+30:3 AI:37153 I1x current 0-Ixmax U2 UINT32 R
+30:3 AI:37154 I2x current 0-Ixmax U2 UINT32 R
+30:3 AI:37155 I3x current 0-Ixmax U2 UINT32 R
+1-Second Low Phase Values
+30:3 AI:37376 Low L-N voltage 0-Vmax U1 UINT32 R
+21
+Object : Var. Object : Point Description Options/Range3
+Units3 Type R/W Notes
+30:3 AI:37377 Low current 0-Imax U2 UINT32 R
+30:3 AI:37378 Low kW -Pmax-Pmax U3 INT32 R
+30:3 AI:37379 Low kvar -Pmax-Pmax U3 INT32 R
+30:3 AI:37380 Low kVA 0-Pmax U3 UINT32 R
+30:4 AI:37381 Low PF Lag 0-1000 0.001 UINT32 R
+30:4 AI:37382 Low PF Lead 0-1000 0.001 UINT32 R
+30:4 AI:37383 Low voltage THD 0-9999 0.1% UINT32 R 2, 5
+30:4 AI:37384 Low current THD 0-9999 0.1% UINT32 R 5
+30:4 AI:37385 Low K-Factor 10-9999 0.1 UINT32 R 5
+30:4 AI:37386 Low current TDD 0-1000 0.1% UINT32 R 5
+30:3 AI:37387 Low L-L voltage 0-Vmax U1 UINT32 R
+30:4 AI:37388 Low voltage interharmonics THD 0-9999 0.1% UINT32 R 2, 5
+30:4 AI:37389 Low current interharmonics THD 0-9999 0.1% UINT32 R 5
+1-Second High Phase Values
+30:3 AI:37632 High L-N voltage 0-Vmax U1 UINT32 R
+30:3 AI:37633 High current 0-Imax U2 UINT32 R
+30:3 AI:37634 High kW -Pmax-Pmax U3 INT32 R
+30:3 AI:37635 High kvar -Pmax-Pmax U3 INT32 R
+30:3 AI:37636 High kVA 0-Pmax U3 UINT32 R
+30:4 AI:37637 High PF Lag 0-1000 0.001 UINT32 R
+30:4 AI:37638 High PF Lead 0-1000 0.001 UINT32 R
+30:4 AI:37639 High voltage THD 0-9999 0.1% UINT32 R 2, 5
+30:4 AI:37640 High current THD 0-9999 0.1% UINT32 R 5
+30:4 AI:37641 High K-Factor 10-9999 0.1 UINT32 R 5
+30:4 AI:37642 High current TDD 0-1000 0.1% UINT32 R 5
+30:3 AI:37643 High L-L voltage 0-Vmax U1 UINT32 R
+30:4 AI:37644 High voltage interharmonics THD 0-9999 0.1% UINT32 R 2, 5
+30:4 AI:37645 High current interharmonics THD 0-9999 0.1% UINT32 R 5
+1-Second Total Values
+30:3 AI:37888 Total kW -Pmax-Pmax U3 INT32 R
+30:3 AI:37889 Total kvar -Pmax-Pmax U3 INT32 R
+30:3 AI:37890 Total kVA 0-Pmax U3 UINT32 R
+30:4 AI:37891 Total PF -1000-1000 0.001 INT16 R
+30:4 AI:37892 Total PF lag 0-1000 0.001 UINT16 R
+30:4 AI:37893 Total PF lead 0-1000 0.001 UINT16 R
+30:3 AI:37894 Total kW import 0-Pmax U3 UINT32 R
+30:3 AI:37895 Total kW export 0-Pmax U3 UINT32 R
+30:3 AI:37896 Total kvar import 0-Pmax U3 UINT32 R
+30:3 AI:37897 Total kvar export 0-Pmax U3 UINT32 R
+30:3 AI:37898 3-phase average L-N/L-L voltage 0-Vmax U1 UINT32 R 1
+30:3 AI:37899 3-phase average L-L voltage 0-Vmax U1 UINT32 R
+30:3 AI:37900 3-phase average current 0-Imax U2 UINT32 R
+22
+Object : Var. Object : Point Description Options/Range3
+Units3 Type R/W Notes
+1-Second Auxiliary Values
+30:3 AI:38144 I4 Current 0-I4max U2 UINT32 R
+30:3 AI:38145 In (neutral) current 0-Imax U2 UINT32 R
+30:4 AI:38146 Frequency 0-10000 0.01Hz UINT16 R
+30:4 AI:38147 Voltage unbalance 0-3000 0.1% UINT16 R
+30:4 AI:38148 Current unbalance 0-3000 0.1% UINT16 R
+30:3 AI:38149 Reserved 0 UINT32 R
+30:3 AI:38150 V4 voltage 0-V4max U4 UINT32 R
+30:3 AI:38151 I4x current 0-I4xmax U2 UINT32 R
+Present Volt, Ampere and Power Demands
+30:3 AI:38400 V1/V12 Volt demand 0-Vmax U1 UINT32 R 2
+30:3 AI:38401 V2/V23 Volt demand 0-Vmax U1 UINT32 R 2
+30:3 AI:38402 V3/V31 Volt demand 0-Vmax U1 UINT32 R 2
+30:3 AI:38403 I1 Ampere demand 0-Imax U2 UINT32 R
+30:3 AI:38404 I2 Ampere demand 0-Imax U2 UINT32 R
+30:3 AI:38405 I3 Ampere demand 0-Imax U2 UINT32 R
+30:3 AI:38406 kW import block demand 0-Pmax U3 UINT32 R
+30:3 AI:38407 kvar import block demand 0-Pmax U3 UINT32 R
+30:3 AI:38408 kVA block demand 0-Pmax U3 UINT32 R
+30:3 AI:38409 kW import sliding window demand 0-Pmax U3 UINT32 R
+30:3 AI:38410 kvar import sliding window demand 0-Pmax U3 UINT32 R
+30:3 AI:38411 kVA sliding window demand 0-Pmax U3 UINT32 R
+30:3 AI:38412 Not used 0 UINT32 R
+30:3 AI:38413 Not used 0 UINT32 R
+30:3 AI:38414 Not used 0 UINT32 R
+30:3 AI:38415 kW import accumulated demand 0-Pmax U3 UINT32 R
+30:3 AI:38416 kvar import accumulated demand 0-Pmax U3 UINT32 R
+30:3 AI:38417 kVA accumulated demand 0-Pmax U3 UINT32 R
+30:3 AI:38418 kW import predicted sliding window demand 0-Pmax U3 UINT32 R
+30:3 AI:38419 kvar import predicted sliding window demand 0-Pmax U3 UINT32 R
+30:3 AI:38420 kVA predicted sliding window demand 0-Pmax U3 UINT32 R
+30:4 AI:38421 PF (import) at Max. kVA sliding window demand 0-1000 0.001 UINT16 R
+30:3 AI:38422 kW export block demand 0-Pmax U3 UINT32 R
+30:3 AI:38423 kvar export block demand 0-Pmax U3 UINT32 R
+30:3 AI:38424 kW export sliding window demand 0-Pmax U3 UINT32 R
+30:3 AI:38425 kvar export sliding window demand 0-Pmax U3 UINT32 R
+30:3 AI:38426 kW export accumulated demand 0-Pmax U3 UINT32 R
+30:3 AI:38427 kvar export accumulated demand 0-Pmax U3 UINT32 R
+30:3 AI:38428 kW export predicted sliding window demand 0-Pmax U3 UINT32 R
+30:3 AI:38429 kvar export predicted sliding window demand 0-Pmax U3 UINT32 R
+30:3 AI:38430 Not used 0 UINT32 R
+30:3 AI:38431 Not used 0 UINT32 R
+30:3 AI:38432 V4 volt demand 0-Vmax U4 UINT32 R
+23
+Object : Var. Object : Point Description Options/Range3
+Units3 Type R/W Notes
+30:3 AI:38433 I4 ampere demand 0-Imax U2 UINT32 R
+30:3 AI:38434 In ampere demand 0-Imax U2 UINT32 R
+Minimum 1-Cycle Phase Values
+30:3 AI:44032 V1 voltage 0-Vmax U1 UINT32 R 1
+30:3 AI:44033 V2 voltage 0-Vmax U1 UINT32 R 1
+30:3 AI:44034 V3 voltage 0-Vmax U1 UINT32 R 1
+30:3 AI:44035 I1 current 0-Imax U2 UINT32 R
+30:3 AI:44036 I2 current 0-Imax U2 UINT32 R
+30:3 AI:44037 I3 current 0-Imax U2 UINT32 R
+30:3 AI:44038 kW L1 -Pmax-Pmax U3 INT32 R
+30:3 AI:44039 kW L2 -Pmax-Pmax U3 INT32 R
+30:3 AI:44040 kW L3 -Pmax-Pmax U3 INT32 R
+30:3 AI:44041 kvar L1 -Pmax-Pmax U3 INT32 R
+30:3 AI:44042 kvar L2 -Pmax-Pmax U3 INT32 R
+30:3 AI:44043 kvar L3 -Pmax-Pmax U3 INT32 R
+30:3 AI:44044 kVA L1 0-Pmax U3 UINT32 R
+30:3 AI:44045 kVA L2 0-Pmax U3 UINT32 R
+30:3 AI:44046 kVA L3 0-Pmax U3 UINT32 R
+30:4 AI:44047 Power factor L1 0-1000 0.001 UINT32 R Absolute value
+30:4 AI:44048 Power factor L2 0-1000 0.001 UINT32 R Absolute value
+30:4 AI:44049 Power factor L3 0-1000 0.001 UINT32 R Absolute value
+30:4 AI:44050 V1 voltage THD 0-9999 0.1% UINT32 R 2, 4
+30:4 AI:44051 V2 voltage THD 0-9999 0.1% UINT32 R 2, 4
+30:4 AI:44052 V3 voltage THD 0-9999 0.1% UINT32 R 2, 4
+30:4 AI:44053 I1 current THD 0-9999 0.1% UINT32 R 4
+30:4 AI:44054 I2 current THD 0-9999 0.1% UINT32 R 4
+30:4 AI:44055 I3 current THD 0-9999 0.1% UINT32 R 4
+30:4 AI:44056 I1 K-Factor 10-9999 0.1 UINT32 R 4
+30:4 AI:44057 I2 K-Factor 10-9999 0.1 UINT32 R 4
+30:4 AI:44058 I3 K-Factor 10-9999 0.1 UINT32 R 4
+30:4 AI:44059 I1 current TDD 0-1000 0.1% UINT32 R 4
+30:4 AI:44060 I2 current TDD 0-1000 0.1% UINT32 R 4
+30:4 AI:44061 I3 current TDD 0-1000 0.1% UINT32 R 4
+30:3 AI:44062 V12 voltage 0-Vmax U1 UINT32 R
+30:3 AI:44063 V23 voltage 0-Vmax U1 UINT32 R
+30:3 AI:44064 V31 voltage 0-Vmax U1 UINT32 R
+30:3 AI:44065 I1x current 0-Ixmax U2 UINT32 R
+30:3 AI:44066 I2x current 0-Ixmax U2 UINT32 R
+30:3 AI:44067 I3x current 0-Ixmax U2 UINT32 R
+Minimum 1-Cycle Total Values
+30:3 AI:44288 Total kW -Pmax-Pmax U3 INT32 R
+30:3 AI:44289 Total kvar -Pmax-Pmax U3 INT32 R
+30:3 AI:44290 Total kVA 0-Pmax U3 UINT32 R
+24
+Object : Var. Object : Point Description Options/Range3
+Units3 Type R/W Notes
+30:4 AI:44291 Total PF 0-1000 0.001 UINT32 R Absolute value
+30:4 AI:44292 Total PF lag 0-1000 0.001 UINT32 R
+30:4 AI:44293 Total PF lead 0-1000 0.001 UINT32 R
+Minimum 1-Cycle Auxiliary Values
+30:3 AI:44544 I4 current 0-Imax U2 UINT32 R
+30:3 AI:44545 In current 0-Imax U2 UINT32 R
+30:4 AI:44546 Frequency 0-10000 0.01Hz UINT32 R
+30:4 AI:44547 Voltage unbalance 0-3000 0.1% UINT32 R
+30:4 AI:44548 Current unbalance 0-3000 0.1% UINT32 R
+30:3 AI:44549 Reserved 0 UINT32 R
+30:3 AI:44550 V4 voltage 0-V4max U4 UINT32 R
+30:3 AI:44551 I4x current 0-Ixmax U2 UINT32 R
+30:4 AI:44552 V4 THD 0-9999 0.1% UINT32 R 4
+30:4 AI:44553 I4x THD 0-9999 0.1% UINT32 R 4
+30:4 AI:44554 I4x TDD 0-1000 0.1% UINT32 R 4
+Maximum 1-Cycle Phase Values
+30:3 AI:46080 V1 voltage 0-Vmax U1 UINT32 R 1
+30:3 AI:46081 V2 voltage 0-Vmax U1 UINT32 R 1
+30:3 AI:46082 V3 voltage 0-Vmax U1 UINT32 R 1
+30:3 AI:46083 I1 current 0-Imax U2 UINT32 R
+30:3 AI:46084 I2 current 0-Imax U2 UINT32 R
+30:3 AI:46085 I3 current 0-Imax U2 UINT32 R
+30:3 AI:46086 kW L1 -Pmax-Pmax U3 INT32 R
+30:3 AI:46087 kW L2 -Pmax-Pmax U3 INT32 R
+30:3 AI:46088 kW L3 -Pmax-Pmax U3 INT32 R
+30:3 AI:46089 kvar L1 -Pmax-Pmax U3 INT32 R
+30:3 AI:46090 kvar L2 -Pmax-Pmax U3 INT32 R
+30:3 AI:46091 kvar L3 -Pmax-Pmax U3 INT32 R
+30:3 AI:46092 kVA L1 0-Pmax U3 UINT32 R
+30:3 AI:46093 kVA L2 0-Pmax U3 UINT32 R
+30:3 AI:46094 kVA L3 0-Pmax U3 UINT32 R
+30:4 AI:46095 Power factor L1 0-1000 0.001 UINT32 R Absolute value
+30:4 AI:46096 Power factor L2 0-1000 0.001 UINT32 R Absolute value
+30:4 AI:46097 Power factor L3 0-1000 0.001 UINT32 R Absolute value
+30:4 AI:46098 V1 voltage THD 0-9999 0.1% UINT32 R 2, 4
+30:4 AI:46099 V2 voltage THD 0-9999 0.1% UINT32 R 2, 4
+30:4 AI:46100 V3 voltage THD 0-9999 0.1% UINT32 R 2, 4
+30:4 AI:46101 I1 current THD 0-9999 0.1% UINT32 R 4
+30:4 AI:46102 I2 current THD 0-9999 0.1% UINT32 R 4
+30:4 AI:46103 I3 current THD 0-9999 0.1% UINT32 R 4
+30:4 AI:46104 I1 K-Factor 10-9999 0.1 UINT32 R 4
+30:4 AI:46105 I2 K-Factor 10-9999 0.1 UINT32 R 4
+30:4 AI:46106 I3 K-Factor 10-9999 0.1 UINT32 R 4
+25
+Object : Var. Object : Point Description Options/Range3
+Units3 Type R/W Notes
+30:4 AI:46107 I1 current TDD 0-1000 0.1% UINT32 R 4
+30:4 AI:46108 I2 current TDD 0-1000 0.1% UINT32 R 4
+30:4 AI:46109 I3 current TDD 0-1000 0.1% UINT32 R 4
+30:3 AI:46110 V12 voltage 0-Vmax U1 UINT32 R
+30:3 AI:46111 V23 voltage 0-Vmax U1 UINT32 R
+30:3 AI:46112 V31 voltage 0-Vmax U1 UINT32 R
+30:3 AI:46113 I1x current 0-Ixmax U2 UINT32 R
+30:3 AI:46114 I2x current 0-Ixmax U2 UINT32 R
+30:3 AI:46115 I3x current 0-Ixmax U2 UINT32 R
+Maximum 1-Cycle Total Values
+30:3 AI:46336 Total kW -Pmax-Pmax U3 INT32 R
+30:3 AI:46337 Total kvar -Pmax-Pmax U3 INT32 R
+30:3 AI:46338 Total kVA 0-Pmax U3 UINT32 R
+30:4 AI:46339 Total PF 0-1000 0.001 UINT32 R Absolute value
+30:4 AI:46340 Total PF lag 0-1000 0.001 UINT32 R
+30:4 AI:46341 Total PF lead 0-1000 0.001 UINT32 R
+Maximum 1-Cycle Auxiliary Values
+30:3 AI:46592 I4 Current 0-Imax U2 UINT32 R
+30:3 AI:46593 In Current 0-Imax U2 UINT32 R
+30:4 AI:46594 Frequency 0-10000 0.01Hz UINT32 R
+30:4 AI:46595 Voltage unbalance 0-3000 0.1% UINT32 R
+30:4 AI:46596 Current unbalance 0-3000 0.1% UINT32 R
+30:3 AI:46597 Reserved 0 UINT32 R
+30:3 AI:46598 V4 Voltage 0-V4max U4 UINT32 R
+30:3 AI:46599 I4x Current 0-Ixmax U2 UINT32 R
+30:4 AI:46600 V4 THD 0-9999 0.1% UINT32 R 4
+30:4 AI:46601 I4x THD 0-9999 0.1% UINT32 R 4
+30:4 AI:46602 I4x TDD 0-1000 0.1% UINT32 R 4
+Maximum Demands
+30:3 AI:46848 V1 Maximum volt demand 0-Vmax U1 UINT32 R 2
+30:3 AI:46849 V2 Maximum volt demand 0-Vmax U1 UINT32 R 2
+30:3 AI:46850 V3 Maximum volt demand 0-Vmax U1 UINT32 R 2
+30:3 AI:46851 I1 Maximum ampere demand 0-Imax U2 UINT32 R
+30:3 AI:46852 I2 Maximum ampere demand 0-Imax U2 UINT32 R
+30:3 AI:46853 I3 Maximum ampere demand 0-Imax U2 UINT32 R
+30:4 AI:46854 Not used 0 UINT32 R
+30:4 AI:46855 Not used 0 UINT32 R
+30:4 AI:46856 Not used 0 UINT32 R
+30:3 AI:46857 Maximum kW import sliding window demand 0-Pmax U3 UINT32 R
+30:3 AI:46858 Maximum kvar import sliding window demand 0-Pmax U3 UINT32 R
+30:3 AI:46859 Maximum kVA sliding window demand 0-Pmax U3 UINT32 R
+30:4 AI:46860 Not used 0 UINT32 R
+30:4 AI:46861 Not used 0 UINT32 R
+26
+Object : Var. Object : Point Description Options/Range3
+Units3 Type R/W Notes
+30:4 AI:46862 Not used 0 UINT32 R
+30:3 AI:46863 Maximum kW export sliding window demand 0-Pmax U3 UINT32 R
+30:3 AI:46864 Maximum kvar export sliding window demand 0-Pmax U3 UINT32 R
+30:3 AI:46865 Not used 0 UINT32 R
+30:3 AI:46866 Not used 0 UINT32 R
+30:3 AI:46867 V4 Maximum volt demand 0-Vmax U4 UINT32 R
+30:3 AI:46868 I4 Maximum ampere demand 0-I4max U2 UINT32 R
+30:3 AI:46869 In Maximum ampere demand 0-Imax U2 UINT32 R
+Analog Inputs 3
+30:3 AI:47872 Analog input AI1 AI1min-AI1max UINT32 R
+30:3 AI:47873 Analog input AI2 AI2min-AI2max UINT32 R
+R
+30:3 AI:47887 Analog input AI16 AI16min-AI16max UINT32 R
+Distance to fault
+30:3 AI:25536 Fault timestamp, seconds, FltTm F5 sec UINT32 R
+30:3 AI:25537 Fault timestamp, fractional seconds, FltTmmcs sec UINT32 R
+30:3 AI:25538 Fault loop type, FltLoop 0=unqualified, 1=AG, 2=BG, 3=CG,
+4=AB, 5=BC, 6=CA, 7=ABG,
+8=BCG, 9=CAG, 10=ABC
+UINT32 R
+30:3 AI:25539 Fault distance, FltDis 0-45000 km/ml x0.01 UINT32 R
+30:3 AI:25540 Fault resistance, FltR 0-20000 Ohm x0.01 UINT32 R
+30:3 AI:25541 Fault reactance, FltX 0-20000 Ohm x0.01 UINT32 R
+30:3 AI:25542 Fault location mode/status, FltMod 0=single-ended fault location,
+1=two-ended fault location,
+2=forced single-ended location
+(remote unit didn't respond),
+3=forced single-ended location (no
+remote match found),
+4=forced single-ended location
+(unsuccessful two-ended location)
+UINT32 R
+NOTES:
+1
+When the 4LN3, 4LL3, 3LN3, 3LL3, 3BLN3 or 3BLL3 wiring mode is selected, the voltages will be line-to-neutral; for any other wiring mode, they will be line-to-line.
+2
+When the 4LN3, 3LN3 or 3BLN3 wiring mode is selected, the voltages will be line-to-neutral; for any other wiring mode, they will be line-to-line voltages.
+3 For volts, amps, power and frequency scales and units: refer to Section 4 "Data Scales and Units". For analog input scaling formulas and examples, see Section 2.2.5, " Scaling Analog Input
+Objects".
+4 On a 0.2-s interval.
+5 On a 3-s interval.
+27
+3.6 Factory Device Settings and Identification
+Object:Var. Object:Point Description Options/Range Units Type R/W Notes
+Device Identification
+30:3 AI:256 Device serial number 0-999999 UINT32 R
+30:3 AI:257 Device model ID 180000 UINT32 R
+30:3 AI:258-AI:261 Device model name "PM180" UINT32 R Null-terminated string. Each four
+characters are packed into a 32-bit
+word.
+30:3 AI:262-AI:265 Reserved UINT32 R
+30:4 AI:266 Device firmware version number 3101-3199 UINT16 R Two higher decimal digits = major
+version number, two lower decimal
+digits = minor version number
+30:4 AI:267 Device firmware build number 1-99 UINT16 R
+30:4 AI:268 Reserved UINT16 R
+30:4 AI:269 Reserved UINT16 R
+30:4 AI:270 Boot loader version number UINT16 R Two higher decimal digits = major
+version number, two lower decimal
+digits = minor version number
+30:4 AI:271 Boot loader build number 1-99 UINT16 R
+30:3 AI:272-AI:274 Reserved UINT32 R
+Factory Device Settings
+30:4 AI:275 V1-V3 input range 690 V UINT16 R
+30:4 AI:276 V1-V3 input overload 120 % UINT16 R
+30:4 AI:277 V4 input range 690 V UINT16 R
+30:4 AI:278 V4 input overload 120 % UINT16 R
+30:4 AI:279 I1-I3 input range 1, 5 A UINT16 R
+30:4 AI:280 I1-I3 input overload 400 % UINT16 R
+30:4 AI:281 I4 input range 1, 5 A UINT16 R
+30:4 AI:282 I4 input overload 400 % UINT16 R
+30:4 AI:283 I1x-I3x input range 1, 5 A UINT16 R
+30:4 AI:284 I1x-I3x input overload 3000 % UINT16 R
+30:4 AI:285 I4x input range 1, 5 A UINT16 R
+30:4 AI:286 I4x input overload 3000 % UINT16 R
+Port Identification
+30:4 AI:320 Active port number 0-2 = serial port COM1-COM3, 3 =
+IR Port, 4 = Modem port, 5 =
+USB/Modbus port, 6-10 =
+Ethernet/TCP port 1-99
+UINT16 R
+28
+3.7 Device Control
+Object : Var. Object : Point Description Options/Range Units Type R/W Notes
+Device Authorization Register
+40:1(read)
+41:1(write)
+AO:192 When write: 8-digit password. When read:
+0 = access permitted, -1 = authorization
+required.
+0/-1 (Read)
+0-99999999(Write)
+R/W
+Remote Relay Control
+10:2(read)
+12:1(write)
+BO:0
+CROB:0
+Relay #1 Force operate/Force release/Normal 0/1 = state OFF/ON R/W 4
+10:2(read)
+12:1(write)
+BO:1
+CROB:1
+Relay #2 Force operate/Force release/Normal 0/1 = state OFF/ON R/W 4
+...
+10:2(read)
+12:1(write)
+BO:63
+CROB:63
+Relay #64 Force operate/Force release/Normal 0/1 = state OFF/ON R/W 4
+Device Reset/Clear
+10:2(read)
+12:1(write)
+BO:64
+CROB:64
+Clear total energy registers 0/1 = state OFF/ON R/W Returns zero
+PULSE ON 1
+10:2(read)
+12:1(write)
+BO:65
+CROB:65
+Clear total maximum demand registers (all
+demands)
+0/1 = state OFF/ON R/W Returns zero
+PULSE ON 1
+10:2(read)
+12:1(write)
+BO:66
+CROB:66
+Clear power demands 0/1 = state OFF/ON R/W Returns zero
+PULSE ON 1
+10:2(read)
+12:1(write)
+BO:67
+CROB:67
+Clear volt/ampere/harmonic demands 0/1 = state OFF/ON R/W Returns zero
+PULSE ON 1
+10:2(read)
+12:1(write)
+BO:68-75
+CROB:68-75
+Reserved 0/1 = state OFF/ON R/W Returns zero
+PULSE ON 1
+10:2(read)
+12:1(write)
+BO:76
+CROB:76
+Clear pulse counters (all counters) 0/1 = state OFF/ON R/W Returns zero
+PULSE ON 1
+10:2(read)
+12:1(write)
+BO:77-84
+CROB:77-84
+Clear pulse counter#1-#8 0/1 = state OFF/ON R/W Returns zero
+PULSE ON 1
+10:2(read)
+12:1(write)
+BO:85
+CROB:85
+Clear Min/Max log 0/1 = state OFF/ON R/W Returns zero
+PULSE ON 1
+10:2(read)
+12:1(write)
+BO:86-93
+CROB:86-93
+Reserved 0/1 = state OFF/ON R/W Returns zero
+PULSE ON 1
+10:2(read)
+12:1(write)
+BO:94-101
+CROB:94-101
+Clear pulse counter#9-#16 0/1 = state OFF/ON R/W Returns zero
+PULSE ON 1
+Device Diagnostics
+10:2(read)
+12:1(write)
+BO:128
+CROB:128
+Critical error 0/1 = state OFF/ON R/W 2
+10:2(read)
+12:1(write)
+BO:129
+CROB:129
+Permanent fault (critical error) 0/1 = state OFF/ON R/W 2
+10:2(read)
+12:1(write)
+BO:130
+CROB:130
+RAM/Data error 0/1 = state OFF/ON R/W 2
+10:2(read)
+12:1(write)
+BO:131
+CROB:131
+CPU watchdog reset 0/1 = state OFF/ON R/W 2
+29
+Object : Var. Object : Point Description Options/Range Units Type R/W Notes
+10:2(read)
+12:1(write)
+BO:132
+CROB:132
+DSP/Sampling fault 0/1 = state OFF/ON R/W 2
+10:2(read)
+12:1(write)
+BO:133
+CROB:133
+CPU exception 0/1 = state OFF/ON R/W 2
+10:2(read)
+12:1(write)
+BO:134
+CROB:134
+Reserved 0/1 = state OFF/ON R/W 2
+10:2(read)
+12:1(write)
+BO:135
+CROB:135
+Software watchdog reset 0/1 = state OFF/ON R/W 2
+10:2(read)
+12:1(write)
+BO:136
+CROB:136
+Power down 0/1 = state OFF/ON R/W 2
+10:2(read)
+12:1(write)
+BO:137
+CROB:137
+Device reset 3 0/1 = state OFF/ON R/W 2
+10:2(read)
+12:1(write)
+BO:138
+CROB:138
+Configuration reset 3 0/1 = state OFF/ON R/W 2
+10:2(read)
+12:1(write)
+BO:139
+CROB:139
+RTC fault (critical error) 0/1 = state OFF/ON R/W 2
+10:2(read)
+12:1(write)
+BO:140
+CROB:140
+Configuration fault (critical error) 0/1 = state OFF/ON R/W 2
+10:2(read)
+12:1(write)
+BO:141
+CROB:141
+Reserved 0/1 = state OFF/ON R/W 2
+10:2(read)
+12:1(write)
+BO:142
+CROB:142
+Expanded memory fault 0/1 = state OFF/ON R/W 2
+10:2(read)
+12:1(write)
+BO:143
+CROB:143
+CPU EEPROM fault 0/1 = state OFF/ON R/W 2
+10:2(read)
+12:1(write)
+BO:144
+CROB:144
+AC board EEPROM fault 0/1 = state OFF/ON R/W 2
+10:2(read)
+12:1(write)
+BO:145
+CROB:145
+I/O board EEPROM fault 0/1 = state OFF/ON R/W 2
+10:2(read)
+12:1(write)
+BO:146
+CROB:146
+Reserved 0/1 = state OFF/ON R/W 2
+10:2(read)
+12:1(write)
+BO:147
+CROB:147
+Reserved 0/1 = state OFF/ON R/W 2
+10:2(read)
+12:1(write)
+BO:148
+CROB:148
+C Library error 0/1 = state OFF/ON R/W 2
+10:2(read)
+12:1(write)
+BO:149
+CROB:149
+RTOS Kernel error 0/1 = state OFF/ON R/W 2
+10:2(read)
+12:1(write)
+BO:150
+CROB:150
+Task error 0/1 = state OFF/ON R/W 2
+10:2(read)
+12:1(write)
+BO:151
+CROB:151
+Reserved 0/1 = state OFF/ON R/W 2
+10:2(read)
+12:1(write)
+BO:152
+CROB:152
+IRIG-B signal lost 0/1 = state OFF/ON R/W 2
+10:2(read)
+12:1(write)
+BO:153
+CROB:153
+IRIG-B time unlocked 0/1 = state OFF/ON R/W 2
+30
+NOTES:
+1 The following restriction should be noted when using object 12 to control the listed points.
+ The Count byte is ignored.
+ The Control Code byte is checked:
+- Pulse On (1) is valid for all points; other codes are invalid and will be rejected.
+ The On Time and Off Time fields are ignored.
+ The status byte in the response will reflect the success or failure of the control operation:
+- Request Accepted (0) will be returned if the command was accepted;
+- Request not Accepted due to Formatting Errors (3) is returned if the Control Code byte was incorrectly formatted or if an invalid code was present in the command;
+- Control Operation not Supported for this Point (4) is returned if the Control Point was out of control.
+2 The device diagnostics points indicate possible problems with the device hardware or setup configuration. The hardware problems are indicated by the appropriate points, which are set
+whenever the instrument fails self-test diagnostics, or in the event of loss of power. The dedicated binary point indicates the setup configuration problems, which is set when either
+configuration register is corrupted. In this event, the instrument will use the default configuration. The configuration corrupt bit may also be set as a result of the legal changes in the setup
+configuration since the instrument might implicitly change or clear other setups if they are affected by the changes made.
+Issuing the Direct-Operate, SBO/Operate or Direct-Operate-No-Acknowledge command using the Control-Relay-Output-Block object (with the code operation Latch-Off) to points 128-153
+resets device diagnostics points.
+The following restrictions should be noted when using Object 12 to control these points:
+ The Count byte is ignored.
+ The Control Code byte is checked:
+- Latch Off is valid for all points; other codes are invalid and will be rejected.
+ The On Time and Off Time fields are ignored.
+ The status byte in the response will reflect the success or failure of the control operation:
+- Request Accepted (0) is returned if the command was accepted;
+- Request not Accepted due to Formatting Errors (3) is returned if the Control Code byte was incorrectly formatted or if an invalid Code was present in the command.
+3 These self-check alarms are doubled with the corresponding internal indication bits.
+4 To manually operate relays, use the Direct-Operate, SBO/Operate or Direct-Operate-No-Acknowledge command to points 0-31 of the Control-Relay-Output-Block object with the Control
+Code value Latch On. To manually release relays, use the Direct-Operate (or SBO/Operate or Direct-Operate-No-Acknowledge) command to point 0-31 of the Control-Relay-Output-Block
+object with the Control Code value Latch Off. To revert relays to normal operation, use the Direct-Operate, SBO/Operate or Direct-Operate-No-Acknowledge command to the corresponding
+points of the Control-Relay-Output-Block object with the Control Code value Null Operation and the Clear sub-field set to 1.
+To operate a relay in pulse mode with the Pulse On or Pulse Off control code, put the relay in pulse mode and select a required pulse polarity via the Relay Outputs setup (use the
+supplemental PAS software to change the relay properties). The actual pulse width will be taken from the On Time/Off Time fields of the Control-Relay-Output-Block object.
+The following restrictions should be noted when using object 12 to control these points:
+ The Count byte is ignored.
+ The Control Code byte is checked:
+- Pulse On, Pulse Off, Latch On (Pulse On/Close) and Latch Off (Pulse On/Trip) are valid for all points; other codes are invalid and will be rejected;
+31
+- Clear sub-field is valid; other sub-fields are ignored.
+ The On Time specifies in ms the amount of time the digital point is to be turned on. The minimal value of the On Time is 500 ms and the actual value may differ from the specified value
+by up to 10 ms.
+ The Off Time specifies in ms the amount of time the digital point is to be turned off. The minimal value of the Off Time is 500 ms and the actual value may differ from the specified value
+by up to 10 ms.
+ The Status byte in the response reflects the success or failure of the control operation:
+- Request Accepted (0) will be return if the command was accepted;
+- Request not Accepted due to Formatting Errors (3) will be returned if the Control Code byte was incorrectly formatted or an invalid Code was present in the command;
+- Control Operation not Supported for this Point (4) will be returned if the Control Point was out of control.
+32
+3.8 Device Setup
+Object:Var. Object:Point Description Options/Range Units Type R/W Notes
+Basic Setup
+40:2 (read)
+41:2 (write)
+AO:0 Wiring mode F26 UINT16 R/W
+40:1 (read)
+41:1 (write)
+AO:1 PT ratio (primary to secondary ratio) 10-65000 0.1 UINT16 R/W
+40:2 (read)
+41:2 (write)
+AO:2 PT secondary (Line-to-Line) 500-7000 0.1V UINT16 R/W
+40:2 (read)
+41:2 (write)
+AO:3 V4 PT ratio (primary to secondary ratio) 10-65000 0.1 UINT16 R/W
+40:2 (read)
+41:2 (write)
+AO:4 V4 PT secondary voltage 500-7000 0.1V UINT16 R/W
+40:2 (read)
+41:2 (write)
+AO:5 CT primary current 1-30000 A UINT16 R/W
+40:2 (read)
+41:2 (write)
+AO:6 CT secondary current 1, 5 A UINT16 R/W
+40:2 (read)
+41:2 (write)
+AO:7 I4 CT primary current 1-30000 A UINT16 R/W
+40:2 (read)
+41:2 (write)
+AO:8 I4 CT secondary current 1, 5 A UINT16 R/W
+40:1 (read) AO:9-16 Reserved UINT16 R/W Read as 65535
+40:2 (read)
+41:2 (write)
+AO:17 Nominal line frequency 50, 60 Hz UINT16 R/W
+40:2 (read)
+41:2 (write)
+AO:18 Phase order 0 = ABC, 1 = CBA UINT16 R/W
+40:2 (read) AO:19-23 Reserved UINT16 R/W Read as 65535
+40:2 (read)
+41:2 (write)
+AO:24 I maximum demand load current 0-30000 A UINT16 R/W
+40:2 (read)
+41:2 (write)
+AO:25 I4 maximum demand load current 0-30000 A UINT16 R/W
+40:2 (read) AO:26-31 Reserved UINT16 R/W Read as 65535
+Demand Setup
+40:2 (read)
+41:2 (write)
+AO:32 Power demand period (block interval) 1, 2, 3, 5, 10, 15, 30, 60 min UINT16 R/W
+40:2 (read)
+41:2 (write)
+AO:33 Number of demand periods in a sliding window 1-15 UINT16 R/W
+40:2 (read)
+41:2 (write)
+AO:34 Demand synchronization source input 0 = device clock, 1-48 = DI1-DI48 UINT16 R/W A DI input is considered a pulse or
+KYZ input. The pulse edge restarts
+the power demand accumulation
+interval.
+40:2 (read) AO:35-39 Reserved UINT16 R/W Read as 65535
+40:2 (read) AO:40 Volt demand period 0-9000 sec UINT16 R/W
+33
+Object:Var. Object:Point Description Options/Range Units Type R/W Notes
+41:2 (write)
+40:2 (read)
+41:2 (write)
+AO:41 Ampere demand period 0-9000 sec UINT16 R/W
+40:2 (read)
+41:2 (write)
+AO:42 Harmonic demand period 0-9000 sec UINT16 R/W
+40:2 (read) AO:43-47 Reserved UINT16 R/W Read as 65535
+Device Options Setup
+40:2 (read)
+41:2 (write)
+AO:48 Power calculation mode 0 = using reactive power:
+S = f(P,Q),
+1 = using non-active power:
+Q = f(S,P)
+UINT16 R/W
+40:2 (read)
+41:2 (write)
+AO:49 Energy roll value 0 = 1104, 1 = 1105, 2 = 1106,
+3 = 1107, 4 = 1108, 5 = 1109
+UINT16 R/W
+40:2 (read)
+41:2 (write)
+AO:50 Number of energy decimal places 0-3 UINT16 R/W
+40:2 (read AO:51 Reserved UINT16 R/W Read as 65535
+40:2 (read)
+41:2 (write)
+AO:52 Tariff control 0 = via a calendar scheduler,
+0x4000 = via communications,
+0x0100-0x010F = via tariff inputs
+DI1-DI16 (bits 0:3 denote the first
+digital input index used)
+UINT16 R/W
+40:2 (read)
+41:2 (write)
+AO:53 Number of tariffs 1-16 (does not have effect with a
+calendar tariff control option)
+UINT16 R/W When read with a calendar tariff
+control option, indicates the actual
+number of tariffs selected in TOU
+profiles
+40:2 (read AO:54 Reserved UINT16 R/W Read as 65535
+40:2 (read)
+41:2 (write)
+AO:55 Energy LED test mode 0=disabled, 1=Wh test, 2=varh test UINT16 R/W
+40:2 (read)
+41:2 (write)
+AO:56 Test energy LED pulse rate, Wh/varh per pulse (in
+secondary units)
+1-40 0.01 UINT16 R/W
+Communication Ports Setup
+COM1 Setup
+40:2 (read)
+41:2 (write)
+AO:112 Communication protocol 0 = Modbus RTU, 1 = Modbus
+ASCII, 2 = DNP3.0
+UINT16 R/W
+40:2 (read)
+41:2 (write)
+AO:113 Interface 0 = RS-232, 1 = RS-422, 2 = RS-
+485, 3 = Infrared, 4 = Modem
+UINT16 R/W
+40:2 (read)
+41:2 (write)
+AO:114 Device address Modbus: 1-247
+DNP3.0: 065532
+UINT16 R/W
+40:2 (read)
+41:2 (write)
+AO:115 Baud rate 1 = 300 bps, 2 = 600 bps, 3 = 1200
+bps, 4 = 2400 bps, 5 = 4800 bps,
+6 = 9600 bps, 7 = 19200 bps,
+8 = 38400 bps, 9 = 57600 bps,
+10 = 115200 bps
+UINT16 R/W
+40:2 (read) AO:116 Data format 0 = 7 bits/even parity, UINT16 R/W
+34
+Object:Var. Object:Point Description Options/Range Units Type R/W Notes
+41:2 (write) 1 = 8 bits/no parity,
+2 = 8 bits/even parity
+40:2 (read)
+41:2 (write)
+AO:117 CTS mode 0 = not used, 1 = wait for CTS
+before sending data
+UINT16 R/W N/A for COM2-COM5 (read as
+65535)
+40:2 (read)
+41:2 (write)
+AO:118 RTS mode 0 = not used,
+1 = RTS is asserted during the
+transmission
+UINT16 R/W N/A for COM2-COM5 (read as
+65535)
+40:2 (read)
+41:2 (write)
+AO:119 Minimum delay before sending data 0-1000 (default = 5) ms UINT16 R/W
+40:2 (read)
+41:2 (write)
+AO:120 Inter-character timeout 1-1000 (default = 4) ms UINT16 R/W Added to standard 4-character time
+40:2 (read)
+41:2 (write)
+AO:121-127 Reserved Read as 65535
+COM2 Setup
+AO:128-143 Point descriptions and ranges as for port COM1 R/W
+COM3 Setup
+AO:144-159 Point descriptions and ranges as for port COM1 R/W
+COM4 Setup
+AO:160-175 Point descriptions and ranges as for port COM1 R/W
+COM5 Setup
+AO:176-191 Point descriptions and ranges as for port COM1 R/W
+35
+3.9 DNP Protocol Setup
+Object:Var. Object:Point Description Options/Range Units Type R/W Notes
+DNP Options Setup
+40:2 (read)
+41:2 (write)
+AO:64 Default Binary Input Static object variation F3 (default=0) UINT16 R/W 1
+40:2 (read)
+41:2 (write)
+AO:65 Default Binary Input Change object variation F3 (default=1) UINT16 R/W 1
+40:2 (read)
+41:2 (write)
+AO:66 Default Binary Counter static object variation F3 (default=1) UINT16 R/W 1
+40:2 (read)
+41:2 (write)
+AO:67 Default Frozen Binary Counter object variation F3 (default=1) UINT16 R/W 1
+40:2 (read) AO:68 Reserved Read as 65535 UINT32 R Read as 65535
+40:2 (read)
+41:2 (write)
+AO:69 Default Binary Counter Change Event object
+variation
+F3 (default=2) UINT16 R/W 1
+40:2 (read)
+41:2 (write)
+AO:70 Default Analog Input object variation F3 (default=3) UINT16 R/W 1
+40:2 (read) AO:71 Reserved Read as 65535 UINT32 R/W Read as 65535
+40:2 (read) AO:72 Reserved Read as 65535 UINT32 R/W Read as 65535
+40:2 (read)
+41:2 (write)
+AO:73 Default Analog Input Change Event object
+variation
+F3 (default=2) UINT16 R/W 1
+40:2 (read)
+41:2 (write)
+AO:74 Re-mapping static point indices for event
+objects
+0=disabled (default), 1=enabled UINT16 R/W
+40:1 (read)
+41:2 (write)
+AO:75 16-bit BC scaling 0=1 (default), 1=10, 2=100,
+3=1000
+UINT16 R/W 6
+40:1 (read)
+41:2 (write)
+AO:76 16-bit AI scaling 0=disabled, 1=enabled (default) UINT16 R/W 3
+40:2 (read)
+41:2 (write)
+AO:77 Number of Analog Input change event points 0 to 64 (default=43) UINT16 R/W 2
+40:2 (read)
+41:2 (write)
+AO:78 Number of Binary Input change event points 0 to 64 (default=21) UINT16 R/W 2
+40:2 (read)
+41:2 (write)
+AO:79 Number of Binary Counter change event
+points
+0 to 64 (default=0) UINT16 R/W 2
+40:2 (read)
+41:2 (write)
+AO:80 Select/Operate Timeout 2 to 30 (default=10 sec) sec UINT16 R/W 4
+40:2 (read)
+41:2 (write)
+AO:81 Multi Fragment Interval 50 to 500 (default=50 ms) ms UINT16 R/W
+40:1 (read) AO:82-AO:84 Reserved Read as 65535 UINT32 R Read as 65535
+40:1 (read)
+41:1 (write)
+AO:85 Time Sync Period 1 to 86400 (default=86400 sec)
+0 = disable time requests
+sec UINT32 R/W 5
+40:2 (read)
+41:2 (write)
+AO:86 Voltage scale, secondary volts 60 to 828V (default=144V) V UINT16 R/W
+40:2 (read)
+41:2 (write)
+AO:87 Current scale, secondary amps 10 to 200 (default CT secondary
+CT overload)
+0.1A UINT16 R/W
+36
+Object:Var. Object:Point Description Options/Range Units Type R/W Notes
+40:1 (read)
+41:1 (write)
+AO:256-AO:263 Device location UINT32 R/W Null-terminated string. Each four
+characters are packed into a 32-bit
+word.
+40:2 (read)
+41:2 (write)
+AO:264 Maximum file directory entries 10-200 UINT16 R/W Default = 20
+DNP Events Setup
+40:1(read)
+41:1(write)
++0 Threshold/Deadband UINT32 R/W A hysteresis for the point return
+threshold is 0.05Hz for frequency
+and 2% of the operating threshold
+for other points
+40:1(read)
+41:1(write)
++1 DNP point number DNP point number available for the
+selected object
+UINT32 R/W
+40:2(read)
+41:2(write)
++2 Event scan control field (bitmap) Bits 0-1 - DNP Object:
+0=none, 1=AI, 2=BI, 3=BC
+Bit 2  Object change event scan:
+0= disabled, 1=enabled
+Bits 5-6 - DNP event poll class:
+0=Class 1, 1=Class 2, 2=Class 3
+Bit 7  unused
+Bits 8-9  Threshold/Deadband
+relation:
+0=Delta, 1=more than (over
+threshold), 2=less than (under
+threshold)
+UINT16 R/W If Event log is enabled, the source
+of a DNP event will be recorded to
+the device Event log file as a
+general Setpoint #17.
+AO:896-AO:898 DNP Event #1
+AO:899-AO:901 DNP Event #2
+...
+AO:1085-AO:1087 DNP Event #64
+DNP Class 0 Point Assignments
+40:1(read)
+41:1(write)
++0 DNP object and variation F4 UINT32 R/W
+40:1(read)
+41:1(write)
++1 Start point number Start point number for the selected
+object
+UINT32 R/W
+40:2(read)
+41:2(write)
++2 Number of points in a range 0-128 UINT16 R/W
+AO:1152-AO:1154 DNP Class 0 Points Range 1
+AO:1155-AO:1157 DNP Class 0 Points Range 2
+...
+AO:1245-AO:1247 DNP Class 0 Points Range 32
+NOTES:
+1 The default object variation indicates the variation that is used for requests with qualifier code 06 (variation 0) when no specific variation is requested by a master station.
+2 The sum of all points allocated for change event objects should not exceed 64. If no points are allocated for change events, the report-by-exception mode is not supported.
+37
+3 Scaling 16-bit AI objects (see Section 2.2.5) lets accommodate 32-bit analog input readings to 16-bit object format. Scaling is enabled by default. It is not applied to 32-bit AI objects (object
+30, variations 1 and 3).
+4 The Select Before Operate command causes the device to start a timer. The following Operate command must be sent before the value specified by the Select/Operate Timeout expires.
+5 The device requests time synchronization by bit 4 in the first octet of the internal indication word being set when the time specified by the Time Sync Period elapses. The master should
+synchronize the time in the device by writing the Time and Date object. The device does not request time synchronization if the Time Sync Period is set to 0.
+6 Scaling 16-bit Binary Counters (see Section 2.2.6) allows changing a counter unit in powers of 10 to accommodate a 32-bit counter value to 16-bit BC object format.
+38
+3.10 Generic Data
+Address Point ID Description Options/Range3
+Units3 Type R/W Notes
+Generic Data Point references
+0x7400 V1 voltage 0-Vmax U1 UINT32 1
+0x7401 V2 voltage 0-Vmax U1 UINT32 1
+0x7402 V3 voltage 0-Vmax U1 UINT32 1
+0x7403 V4 voltage 0-V4max U4 UINT32
+0x7404 V12 voltage 0-Vmax U1 UINT32
+0x7405 V23 voltage 0-Vmax U1 UINT32
+0x7406 V31 voltage 0-Vmax U1 UINT32
+0x7407 I1 current 0-Imax U2 UINT32
+0x7408 I2 current 0-Imax U2 UINT32
+0x7409 I3 current 0-Imax U2 UINT32
+0x740A I4 current 0-I4max U2 UINT32
+0x740B In current 0-Imax U2 UINT32
+0x740C I1x current 0-Ixmax U2 UINT32
+0x740D I2x current 0-Ixmax U2 UINT32
+0x740E I3x current 0-Ixmax U2 UINT32
+0x740F I4x current 0-I4xmax U2 UINT32
+0x7410 Inx current 0-Ixmax U2 UINT32
+0x7411 Zero-sequence voltage 0-Vmax U1 UINT32
+0x7412 Zero-sequence current 0-Imax U2 UINT32
+0x7413 Ix Zero-sequence current 0-Ixmax U2 UINT32
+0x7414 Voltage unbalance 0-3000 0.1% UINT32
+0x7415 Current unbalance 0-3000 0.1% UINT32
+0x7416 Ix current unbalance 0-3000 0.1% UINT32
+0x7417 Not used UINT32
+0x7418 Frequency 0-10000 0.01Hz UINT32
+0x7419 V1 THD 0-9999 0.1% UINT32 2
+0x741A V2 THD 0-9999 0.1% UINT32 2
+0x741B V3 THD 0-9999 0.1% UINT32 2
+0x741C V4 THD 0-9999 0.1% UINT32
+0x741D I1 THD 0-9999 0.1% UINT32
+0x741E I2 THD 0-9999 0.1% UINT32
+0x741F I3 THD 0-9999 0.1% UINT32
+0x7420 I4 THD 0-9999 0.1% UINT32
+0x7421 V1 interharmonics THD 0-9999 0.1% UINT32 2
+0x7422 V2 interharmonics THD 0-9999 0.1% UINT32 2
+0x7423 V3 interharmonics THD 0-9999 0.1% UINT32 2
+0x7424 V4 interharmonics THD 0-9999 0.1% UINT32
+0x7425 I1 interharmonics THD 0-9999 0.1% UINT32
+39
+Address Point ID Description Options/Range3
+Units3 Type R/W Notes
+0x7426 I2 interharmonics THD 0-9999 0.1% UINT32
+0x7427 I3 interharmonics THD 0-9999 0.1% UINT32
+0x7428 I4 interharmonics THD 0-9999 0.1% UINT32
+0x7429 I1 TDD 0-1000 0.1% UINT32
+0x742A I2 TDD 0-1000 0.1% UINT32
+0x742B I3 TDD 0-1000 0.1% UINT32
+0x742C I4 TDD 0-1000 0.1% UINT32
+0x742D I1 K-Factor 10-9999 0.1 UINT32
+0x742E I2 K-Factor 10-9999 0.1 UINT32
+0x742F I3 K-Factor 10-9999 0.1 UINT32
+0x7430 I4 K-Factor 10-9999 0.1 UINT32
+0x7431 V1 Crest Factor 0-10000 0.01 UINT32 2
+0x7432 V2 Crest Factor 0-10000 0.01 UINT32 2
+0x7433 V3 Crest Factor 0-10000 0.01 UINT32 2
+0x7434 V4 Crest Factor 0-10000 0.01 UINT32
+0x7435 I1 Crest Factor 0-10000 0.01 UINT32
+0x7436 I2 Crest Factor 0-10000 0.01 UINT32
+0x7437 I3 Crest Factor 0-10000 0.01 UINT32
+0x7438 I4 Crest Factor 0-10000 0.01 UINT32
+0x750A Positive-sequence voltage 0-Vmax U1 UINT32 2
+0x750B Negative-sequence voltage 0-Vmax U1 UINT32 2
+0x750C Zero-sequence voltage 0-Vmax U1 UINT32 2
+0x750D Negative-sequence voltage unbalance 0-3000 0.1% UINT32 2
+0x750E Zero-sequence voltage unbalance 0-3000 0.1% UINT32 2
+0x750F V1 impulsive voltage 0-Vmax U1 UINT32
+0x7510 V2 impulsive voltage 0-Vmax U1 UINT32
+0x7511 V3 impulsive voltage 0-Vmax U1 UINT32
+0x7513 V12 impulsive voltage 0-Vmax U1 UINT32
+0x7514 V23 impulsive voltage 0-Vmax U1 UINT32
+0x7515 V31 impulsive voltage 0-Vmax U1 UINT32
+0x1900 V1 H01 Harmonic voltage, %Un 0-10000 0.01% UINT32 2
+0x1901 V1 H02 Harmonic voltage, %Un 0-10000 0.01% UINT32 2
+...
+0x1931 V1 H50 Harmonic voltage, %Un 0-10000 0.01% UINT32 2
+0x1A00 V2 H01 Harmonic voltage, %Un 0-10000 0.01% UINT32 2
+0x1A01 V2 H02 Harmonic voltage, %Un 0-10000 0.01% UINT32 2
+...
+0x1A31 V2 H50 Harmonic voltage, %Un 0-10000 0.01% UINT32 2
+0x1B00 V3 H01 Harmonic voltage, %Un 0-10000 0.01% UINT32 2
+0x1B01 V3 H02 Harmonic voltage, %Un 0-10000 0.01% UINT32 2
+...
+0x1B31 V3 H50 Harmonic voltage, %Un 0-10000 0.01% UINT32 2
+40
+Address Point ID Description Options/Range3
+Units3 Type R/W Notes
+0x2980 V1 Pst 0-10000 0.01 UINT32 2
+0x2981 V2 Pst 0-10000 0.01 UINT32 2
+0x2982 V3 Pst 0-10000 0.01 UINT32 2
+0x2983 V1 Plt 0-10000 0.01 UINT32 2
+0x2984 V2 Plt 0-10000 0.01 UINT32 2
+0x2985 V3 Plt 0-10000 0.01 UINT32 2
+0x6005 V1 Frq1 %Un, 1st signaling voltage magnitude V1 0-10000 0.01% UINT32 2
+0x6006 V1 Frq2 %Un, 2nd signaling voltage magnitude V1 0-10000 0.01% UINT32 2
+0x6007 V1 Frq3 %Un, 3rd signaling voltage magnitude V1 0-10000 0.01% UINT32 2
+0x6008 V1 Frq4 %Un, 4th signaling voltage magnitude V1 0-10000 0.01% UINT32 2
+0x600A V2 Frq1 %Un, 1st signaling voltage magnitude V2 0-10000 0.01% UINT32 2
+0x600B V2 Frq2 %Un, 2nd signaling voltage magnitude V2 0-10000 0.01% UINT32 2
+0x600C V2 Frq3 %Un, 3rd signaling voltage magnitude V2 0-10000 0.01% UINT32 2
+0x600D V2 Frq4 %Un, 4th signaling voltage magnitude V2 0-10000 0.01% UINT32 2
+0x600F V3 Frq1 %Un, 1st signaling voltage magnitude V3 0-10000 0.01% UINT32 2
+0x6010 V3 Frq2 %Un, 2nd signaling voltage magnitude V3 0-10000 0.01% UINT32 2
+0x6011 V3 Frq3 %Un, 3rd signaling voltage magnitude V3 0-10000 0.01% UINT32 2
+0x6012 V3 Frq4 %Un, 4th signaling voltage magnitude V3 0-10000 0.01% UINT32 2
+0xC481 Voltage change on phase A/AB, %Un 0.01% UINT32
+0xC486 Voltage change on phase B/BC, %Un 0.01% UINT32
+0xC48B Voltage change on phase C/CA, %Un 0.01% UINT32
+NOTES:
+1 When the 4LN3, 4LL3, 3LN3, 3LL3, 3BLN3 or 3BLL3 wiring mode is selected, the voltages will be line-to-neutral; for any other wiring mode, they will be line-to-line.
+2 When the 4LN3, 3LN3 or 3BLN3 wiring mode is selected, the voltages will be line-to-neutral; for any other wiring mode, they will be line-to-line voltages.
+3 For volts, amps, power and frequency scales and units, refer to Section 4 "Data Scales and Units".
+41
+4 Data Scales and Units
+Code Condition Value/Range Notes
+Data Scales
+Vmax Voltage Scale  PT Ratio, V 2
+V4max Voltage Scale  V4 PT Ratio, V 2
+Imax Current Scale  CT Ratio 1, A, 3
+I4max Current Scale  I4 CT Ratio 1, A, 3
+1A secondary 30  CTx Ratio 1, A
+Ixmax
+5A secondary 150  CTx Ratio 1, A
+1A secondary 30  I4x CTx Ratio 1, A
+I4xmax
+5A secondary 150  I4x CTx Ratio 1, A
+PT Ratio = 1 Vmax  Imax  2, W 4
+Pmax
+PT Ratio > 1 (Vmax  Imax  2)/1000, kW
++/-1mA AImin = -AI full scale  2
+AImax = AI full scale  2
+0-20mA AImin = AI zero scale
+AImax = AI full scale
+4-20mA AImin = AI zero scale
+AImax = AI full scale
+0-1mA AImin = AI zero scale
+AImax = AI full scale
+0-50mA AImin = AI zero scale
+AImax = AI full scale
+AImin
+AImax
++/-10V AImin = -AI full scale
+AImax = AI full scale
+Data Units
+PT Ratio = 1 0.1V
+U1
+PT Ratio > 1 1V
+U2 0.01A
+PT Ratio = 1 1W/Var/VA
+U3
+PT Ratio > 1 1kW/kvar/kVA
+V4 PT Ratio = 1 0.1V
+U4
+V4 PT Ratio > 1 1V
+U5 0.001, 0.01, 0.1, 1 kWh/kVAh/kvarh (programmable) 5
+1 CT Ratio = CT primary current/CT secondary current
+2 The default Voltage scale is 144V (120V +20%). You can change it via the DNP Options setup (see Section 3.9) or via the
+Device Options setup in PAS.
+3 The default Current Scale is 4  CT secondary current for devices with a 400% overload (ANSI) or 2  CT secondary current
+for devices with a 200% overload (IEC). You can change it via the DNP Options setup (see Section 3.9) or via the Device
+Options setup in PAS.
+4 Pmax is rounded to whole kilowatts. If Pmax is greater than 9,999,000 W, it is truncated to 9,999,000 W.
+5 See Energy Decimal Places in the Device Options setup.
+42
+5 Data Formats
+Format Code Value Description Notes
+Wiring Mode
+0 3OP2 - 3-wire open delta using 2 CTs (2 element)
+1 4LN3 - 4-wire WYE using 3 PTs (3 element), line-to-neutral
+voltage readings
+2 3DIR2 - 3-wire direct connection using 2 CTs (2 element)
+3 4LL3 - 4-wire WYE using 3 PTs (3 element), line-to-line
+voltage readings
+4 3OP3 - 3-wire open delta using 3 CTs (2 1/2 element)
+5 3LN3 - 4-wire WYE using 2 PTs (2 1/2 element), line-to-
+neutral voltage readings
+6 3LL3 - 4-wire WYE using 2 PTs (2 1/2 element), line-to-line
+voltage readings
+8 3BLN3 - 3-wire broken delta using 2 PTs (2 1/2 element),
+line-to-neutral voltage readings
+F1
+9 3BLL3 - 3-wire broken delta using 2 PTs (2 1/2 element),
+line-to-line voltage readings
+DNP Object Variations
+Static Binary Input Objects
+0 Single-Bit Binary Input
+1 Binary Input With Status
+Binary Input Change Event Objects
+0 Binary Input Change Without Time
+1 Binary Input Change With Time
+Static Binary Counters
+0 32-bit Binary Counter
+1 32-bit Binary Counter Without Flag
+2 16-bit Binary Counter
+3 16-bit Binary Counter Without Flag
+Binary Counter Change Events
+0 32-bit Counter Change Event Without Time
+1 32-bit Counter Change Event With Time
+2 16-bit Counter Change Event Without Time
+3 16-bit Counter Change Event With Time
+Frozen Binary Counters
+0 32-bit Frozen Counter
+1 32-bit Frozen Counter Without Flag
+2 32-bit Frozen Counter With Time of Freeze
+3 16-bit Frozen Counter
+4 16-bit Frozen Counter Without Flag
+5 16-bit Frozen Counter With Time of Freeze
+Static Analog Input Objects
+0 32-bit Analog Input
+1 32-bit Analog Input Without Flag
+2 16-bit Analog Input
+3 16-bit Analog Input Without Flag
+Analog Input Change Events
+0 32-bit Analog Change Event Without Time
+1 32-bit Analog Change Event With Time
+2 16-bit Analog Change Event Without Time
+F3
+3 16-bit Analog Change Event With Time
+DNP Class 0 Objects
+0x1E01 Analog Input 30:01
+0x1E02 Analog Input 30:02
+0x1E03 Analog Input 30:03
+0x1E04 Analog Input 30:04
+0x2801 Analog Output 40:01
+0x2802 Analog Output 40:02
+0x0101 Binary Input 01:01
+0x0102 Binary Input 01:02
+0x1401 Binary Counter 20:01
+0x0A01 Binary Output 10:01
+0x0A01 Binary Output Status 10:02
+F4
+0x1402 Binary Counter 20:02
+43
+Format Code Value Description Notes
+0x1405 Binary Counter 20:05
+0x1406 Binary Counter 20:06
+0x1501 Frozen Counter 21:01
+0x1502 Frozen Counter 21:02
+0x1505 Frozen Counter 21:05
+0x1506 Frozen Counter 21:06
+0x1509 Frozen Counter 21:09
+0x150A Frozen Counter 21:10
+Timestamp
+F5 Local time in a UNIX-style format. Represents the number
+of seconds since midnight (00:00:00), January 1, 1970. The
+time is valid after January 1, 2000.
+Event Source/Point ID
+Setpoint Operation Events
+0x0000-0x59FF Trigger parameter ID (see PM180 Modbus Guide, Section 3)
+0x6400-0xFFFF Trigger parameter ID (see PM180 Modbus Guide, Section 3)
+Setpoint Action Events
+0x5A00-0x5A3F Setpoint #1-#64
+Communications Events
+0x5B00-0x5BFF Data/Function point ID (low byte, see F21)
+Self-Check Diagnostics Events
+0x5D00-0x5DFF Data/Function point ID (low byte, see F21)
+Self-Update Events
+0x5E08 RTC DST/Standard time update 1
+Run-time Error
+0x6014 Library error
+0x6015 RTOS Kernel error
+0x6016 Task error
+Control Events
+0x6100 XSWIn_OpOpn = operation "Open" (n=see F20 Control
+Events)
+0x6101 XSWIn_OpCls = operation "Close" (n=see F20 Control
+Events)
+0x6102 XSWIn_Pos = switch position change (n=see F20 Control
+Events, Value = position)
+0x6103 Remote control (Value: 0=OFF, 1=ON)
+Hardware Diagnostics Events
+0x6201 Permanent fault
+0x6202 RAM/Data error
+0x6203 CPU watchdog reset
+0x6204 DSP/Sampling fault
+0x6205 CPU exception
+0x6206 Reserved
+0x6207 Software watchdog reset
+0x620E Expanded memory fault (Event effect = File ID + 1)
+0x620F CPU EEPROM fault
+0x6210 AC board EEPROM fault
+0x6211 I/O board EEPROM fault
+External Events
+0x6300 Power down
+0x6308 Power up
+0x6309 External reset
+0x6318 IRIG-B signal lost
+0x6319 IRIG-B time unlocked
+0x631A IRIG-B time locked
+0x6320 SNTP server failed 2
+F19
+0x6321 SNTP server reconnected 2
+Event Effect ID
+Communications/Self-check/Self-update Events
+0x0000 None
+0x6000 Total energy registers cleared
+0x6100 All total maximum demands cleared
+0x6101 Power maximum demands cleared
+0x6102 Volt/Ampere maximum demands cleared
+0x6103 Volt maximum demands cleared
+F20
+0x6104 Ampere maximum demands cleared
+44
+Format Code Value Description Notes
+0x6105 Harmonic maximum demands cleared
+0x6200 Billing/TOU registers cleared
+0x6300 Billing/TOU maximum demand registers cleared
+0x6400 All counters cleared
+0x6401-0x641F Counter cleared (low byte = counter ID)
+0x6500 Min/Max log cleared
+0x6A00-0x6A1B Log file cleared (low byte = File ID)
+0x6B00 EN50160 statistics cleared
+0x6B06 Communication counters cleared
+0x6B07 Switch operation counters cleared
+0xF100-0xF11F Setpoint cleared (low byte = setpoint ID)
+0xF200 Setup/Data cleared
+0xF300 Setup reset (set by default)
+0xF400 Setup changed
+0xF500 RTC set 1
+0xF600 Device function/option enabled
+0xF700 Device function/option disabled
+0xF800 Device function restarted
+0xF900 Device function stopped
+Control Events
+0xA0XX Position change (bits 0:7=switch number)
+0xA1XX Operation activated (bits 0:7=switch number)
+0xA2XX Operation terminated (bits 0:7=switch number)
+0xA3XX Operation terminated by timeout (bits 0:7=switch number)
+Setpoint Operation Events
+0xE100-0xE13F Setpoint operated (low byte = setpoint ID)
+0xE200-0xE23F Setpoint released (low byte = setpoint ID)
+Setpoint Action Events
+See F14 Setpoint action ID
+Data/Function Point ID
+Data Location
+0x03 Data memory
+0x04 Factory setup
+0x05 Access/Password setup
+0x06 Basic setup
+0x07 Communications setup
+0x08 Real-time clock
+0x09 Digital inputs setup
+0x0A Pulse counters setup
+0x0B AO setup
+0x0E Timers setup
+0x10 Event/alarm setpoints
+0x11 Pulsing setup
+0x12 User assignable register map
+0x13 Reserved
+0x14 Data log setup
+0x15 File/Memory setup
+0x16 Billing/TOU registers setup
+0x18 TOU daily profiles
+0x19 TOU calendar
+0x1D RO Setup
+0x1C User selectable options
+0x1F DNP 3.0 class 0 map
+0x20 DNP 3.0 options setup
+0x21 DNP 3.0 events setup
+0x22 DNP 3.0 event setpoints
+0x23 Calibration registers
+0x24 Date/Time Setup
+0x25 Net setup
+0x26 AI setup
+0x27 Waveform log setup
+0x28 PQ log setup
+0x29 Fault log setup
+0x2A Device mode control
+0x2B-0x3F Reserved
+F21
+Device Mode/Option
+45
+Format Code Value Description Notes
+0x40 General device operations
+0x41 Energy test mode
+0x42 Setpoints mode
+0x43 PQ recorder
+0x44 Fault recorder
+Device Diagnostics
+0x80 Device diagnostics
+0x81 Critical error
+Event Type ID
+Setpoint Events
+0x0000 SP: Generic setpoint event
+0x0001-0x0040 SP1-SP64: Setpoint #1-#64 event
+IEEE 1159 PQ Events (IEEE 1159 categories)
+0x0100 PQE: Generic IEEE1159 PQ event
+0x0102 PQE11: Impulsive transient
+0x010C PQE211: Sag, instantaneous
+0x010D PQE212: Swell, instantaneous
+0x010F PQE221: Interruption, momentary
+0x0110 PQE222: Sag, momentary
+0x0111 PQE223: Swell, momentary
+0x0113 PQE231: Interruption, temporary
+0x0114 PQE232: Sag, temporary
+0x0115 PQE233: Swell, temporary
+0x0117 PQE31: Interruption, sustained
+0x0118 PQE32: Undervoltage
+0x0119 PQE33: Overvoltage
+0x011A PQE4: Voltage imbalance
+0x011D PQE52: Harmonics
+0x011E PQE53: Interharmonics
+0x0121 PQE6: Voltage fluctuations (flicker)
+0x0122 PQE7: Frequency variation
+Fault Events
+0x0200 FE: Generic fault event
+0x0201 FE1: Zero-sequence current
+0x0202 FE2: Zero-sequence voltage
+0x0203 FE3: Current unbalance
+0x0204 FE4: Voltage unbalance
+0x0205 FE5: Overcurrent and undervoltage
+0x0206 FE6: Undervoltage
+0x0207 FE7: Neutral current (I4)
+DI Events
+0x0300 DI: Generic DI event
+0x0301-0x0380 DI1-DI128: DI1-DI128 event
+RO Events
+0x0400 RO: Generic RO event
+0x0401-0x0440 RO1-RO64: RO1-RO64 event
+EN 50160 PQ Events (EN 50160 categories)
+0x0500 PQE: Generic EN50160 PQ event
+0x0501 PQE1: Frequency variations
+0x0502 PQE2: Voltage variations
+0x0503 PQE3: Rapid voltage changes
+0x0504 PQE4: Flicker
+0x0505 PQE5: Voltage dips
+0x0506 PQE6: Voltage interruptions
+0x0507 PQE7: Temporary overvoltages
+0x0508 PQE8: Transient overvoltages
+0x0509 PQE9: Voltage unbalance
+0x050A PQE10: Harmonic voltage
+0x050B PQE11: Interharmonic voltage
+F22
+0x050C PQE12: Mains signaling voltage
+NOTES:
+1 The event value field shows the present device time in the F5 format.
+2 The event value field shows the server IP address in a network byte order.
+46
+6 Configuring DNP3
+The PAS software supplied with the PM180 provides a configuration tool for customizing your
+device for use with DNP3 client applications. See the PM180 Operation Manual for more information
+on installation and operating PAS on your computer.
+6.1 DNP Options
+From the Meter Setup menu select Protocol Setup and click on the DNP Options tab.
+Available DNP options are described in the following table. Refer to the DNP3 Data Object
+Library document available from the DNP User's Group on the DNP3 object types.
+Parameter Options Default Description
+Binary Inputs (BI)
+Number of BI to Generate events 0-64 3 21 The total number of BI change event points
+for monitoring
+Binary Input Object Single-bit
+With Status
+Single-bit The default BI object variation for requests
+with qualifier code 06 when no specific
+variation is requested
+Binary Input Change Event Object Without Time
+With Time
+With Time The default BI change event object variation
+for requests with qualifier code 06 when no
+specific variation is requested
+Analog Inputs (AI)
+Number of AI to Generate events 0-64 3 43 The total number of AI change event points
+for monitoring
+47
+Parameter Options Default Description
+Analog Input Object 32-bit
+32-bit Flag
+16-bit
+16-bit Flag
+16-bit -Flag The default AI object variation for requests
+with qualifier code 06 when no specific
+variation is requested
+Analog Input Change Event
+Object
+32-bit -Time
+32-bit +Time
+16-bit -Time
+16-bit +Time
+16-bit +Time The default AI change event object variation
+for requests with qualifier code 06 when no
+specific variation is requested
+Binary Counters (BC)
+Number of BC to Generate events 0-64 3 0 The total number of BC change event points
+for monitoring
+Binary Counter Object 32-bit +Flag
+32-bit Flag
+16-bit +Flag
+16-bit Flag
+32-bit -Flag The default BC object variation for requests
+with qualifier code 06 when no specific
+variation is requested
+Binary Counter Change Event
+Object
+32-bit -Time
+32-bit +Time
+16-bit -Time
+16-bit +Time
+32-bit +Time The default BC change event object variation
+for requests with qualifier code 06 when no
+specific variation is requested
+Frozen Binary Counter Object 32-bit +Flag
+32-bit Flag
+32-bit +Time
+16-bit +Flag
+16-bit Flag
+16-bit +Time
+32-bit -Flag The default frozen BC object variation for
+requests with qualifier code 06 when no
+specific variation is requested
+DNP General Options
+16-bit AI Scaling Disabled
+Enabled
+Enabled Allows scaling 16-bit analog input objects
+(see description below)
+16-bit BC Scaling x1, x10, x100,
+x1000
+x1 Allows scaling 16-bit binary counter objects
+(see description below)
+Re-mapping Event Points Disabled
+Enabled
+Disabled Allows re-mapping event points starting with
+point 0.
+SBO Timeout 1 2-30 sec 10 Defines the Select Before Operate (SBO)
+timeout when using the Control-Relay-
+Output-Block object
+Time Sync Period 2 0-86400 sec 86400 Defines the time interval between periodic
+time synchronization requests
+Multi Fragment Interval 50-500 ms 50 Defines the time interval between fragments
+of the response message when it is
+fragmented
+Location 1-31 characters Defines the device location string that is
+reported in the COMTRADE .cfg files.
+Max. Directory Entries 10-100 20 Defines the maximum number of file entries
+the device may include in a directory
+response (the most recent events are always
+reported). The maximum number of entries
+in a disturbance waveform directory is twice
+the number specified.
+1 The Select Before Operate command causes the device to start a timer. The following
+Operate command must be sent before the specified timeout value expires.
+2 The device requests time synchronization by bit 4 in the first octet of the internal
+indication word being set to 1 when the time interval specified by the Time Sync Period
+elapses. The master should synchronize the time in the device by sending the Time and
+Date object to clear this bit. The device does not send time synchronization requests if
+the Time Sync Period is set to 0.
+48
+3 The total number of AI, BI and BC change event points may not exceed 64. When
+you change the number of the change event points in the device, all event setpoints are
+set to defaults (see Configuring DNP Event Classes below).
+Scaling 16-bit AI objects
+Scaling 16-bit AI objects allows accommodating native 32-bit analog input readings to 16-
+bit object format; otherwise it may cause an over-range error if the full-range value
+exceeds a 16-bit point limit.
+Scaling is enabled by default. It is not applied to points that are read using 32-bit AI
+objects.
+Refer to Sections 3 and 4 for information on the data point scales and on a reverse
+conversion that should be applied to the received scaled values.
+Scaling 16-bit Binary Counters
+Scaling 16-bit Binary Counters allows changing a counter unit in powers of 10 to
+accommodate a 32-bit counter value to 16-bit BC object format.
+If the scaling unit is greater than 1, the counter value is reported being divided by the
+selected scaling unit from 10 to 1000. To get the actual value, multiply the counter reading
+by the scaling unit.
+6.2 Configuring DNP Class 0 Response
+The most common method of getting static object information from the device via DNP is
+to issue a read Class 0 request. The device allows you to configure the Class 0 response by
+assigning ranges of points to be polled via Class 0 requests.
+To view the factory-set DNP Class 0 assignments or build your own Class 0 response
+message:
+1. From the Meter Setup menu select Protocol Setup and click on the DNP Class 0
+Points tab
+2. Select the object and variation type for a point range.
+3. Specify the start point index and the number of points in the range. Refer to Section
+3 for available data points.
+4. Repeat these steps for all point ranges you want to be included into the Class 0
+response.
+5. Click Send to download your setup to the device.
+The factory-set Class 0 point ranges are shown in the picture below.
+49
+6.3 Configuring DNP Event Classes
+The device generates object change events for any static analog input, binary input, and
+binary counter point when a corresponding point either exceeds a predefined threshold, or
+the point status changes. A total of 64 change event points are available for monitoring.
+Object change events are normally polled via DNP Class 1, Class 2 or Class 3 requests. You
+can link any change event point to any event class upon the event priority.
+A change event point index is normally the same as for the corresponding static object
+point. To use independent numeration for event points, enable re-mapping event point
+indices via DNP Options setup (see above) so they start with index 0.
+Define a separate event setpoint for each static object point to be monitored for change
+events. To view or change the factory-set DNP event setpoints, select Protocol Setup from
+the Meter Setup menu and click on the DNP Event Setpoints tab.
+The number of event setpoints for each static object type is specified via the DNP Options
+setup.
+NOTE
+The device clears all event buffers and links the default set of static points to each event
+object type every time you change the number of points for one of the objects.
+To define setpoints for selected static points:
+1. Check the "Ext" box if you wish to use the extended point list.
+2. Select a parameter group and then a desired parameter for each event point.
+50
+3. For AI and BC points, select a relation and an operating threshold or a deadband to
+be used for detecting events. All thresholds are specified in primary units. The
+following relations are available:
+ Delta  a new event is generated when the absolute value of the difference
+between the last reported point value and its current value exceeds the specified
+deadband value;
+ More than (over) - a new event is generated when the point value rises over the
+specified threshold, and then when it returns below the threshold minus a
+predefined return hysteresis  applicable for AI objects;
+ Less than (under) - a new event is generated when the point value drops below
+the specified threshold, and then when it returns above the threshold plus a
+predefined return hysteresis  applicable for AI objects.
+Hysteresis for the return threshold is 0.05 Hz for frequency and 2% of the operating
+threshold for all other points.
+4. Check the "Ev On" box for the points you wish to be included into event poll reports.
+5. In the "Ev Class" box, select the event poll class for the change event points.
+6. Repeat these steps for all points you want to be monitored for events.
+7. Click Send to download your setup to the device.
+51
+APPENDIX A DNP Application Messages
+The device is a DNP IED responding to external DNP Master requests. Table A-1 describes
+the PM180 application level responses to external requests, including object variations,
+functions, codes and qualifiers supported by the device. The object and formats are
+detailed in the DNP Basic 4 Documentation Set.
+Table A-1 Application Responses
+Object Request Response
+Object Variation Description Function
+Code
+Qualifier
+Code
+Function
+Code
+Qualifier
+Code
+01 0 Single Bit Binary Input 1 B 129 01
+01 1 Single Bit Binary Input 1 A 129 C
+01 2 Binary Input with Status 1 A 129 C
+02 0 Binary Input Change 1 06 129 17,28
+02 1 Binary Input Change without Time 1 07,08 129 17,28
+02 2 Binary Input Change with Time 1 07,08 129 17,28
+10 0 Binary Output 1 B 129 01
+10 1 Binary Output 1 A 129 C
+10 2 Binary Output Status 1 A 129 C
+12 1 Control Relay Output Block 3,4,5 A 129 C
+12 1 Control Relay Output Block 6 A None N/A
+20 0 Binary Counter 1,
+7,9,
+8,10
+B
+B
+B
+129
+129
+129
+01
+N/R
+N/A
+20 1 32-bit Binary Counter 1 A 129 C
+20 2 16-bit Binary Counter 1 A 129 C
+20 5 32-bit Binary Counter without flag 1 A 129 C
+20 6 16-bit Binary Counter without flag 1 A 129 C
+21 0 Frozen Counter 1 B 129 01
+21 1 32-bit Frozen Counter
+21 2 16-bit Frozen Counter
+21 5 32-bit Frozen Counter with time of freeze
+21 6 16-bit Frozen Counter with time of freeze
+21 9 32-bit Frozen Counter without flag
+21 10 16-bit Frozen Counter without flag
+22 0 Counter Change Event 1 06 129 17
+22 1 32-bit Counter Change Event without Time 1 07,08 129 17
+22 2 16-bit Counter Change Event without Time 1 07,08 129 17
+22 5 32-bit Counter Change Event with Time 1 07,08 129 17
+22 6 16-bit Counter Change Event with Time 1 07,08 129 17
+30 0 Analog Input (respond like 30:3) 1 B 129 01
+30 1 32-bit Analog Input 1 A 129 C
+30 2 16-bit Analog Input 1 A 129 C
+30 3 32-bit Analog Input without flag 1 A 129 C
+30 4 16-bit Analog Input without flag 1 A 129 C
+32 0 Analog Change Event 1 06 129 17
+32 1 32-bit Analog Change Event without Time 1 07,08 129 17
+32 2 16-bit Analog Change Event without Time 1 07,08 129 17
+32 3 32-bit Analog Change Event with Time 1 07,08 129 17
+32 4 16-bit Analog Change Event with Time 1 07,08 129 17
+40 0 Analog Output Status (respond like 40:1) 1 B 129 01
+40 1 32-bit Analog Output Status 1 A 129 C
+40 2 16-bit Analog Output Status 1 A 129 C
+41 1 32-bit Analog Output Block 3,4,5 A 129 C
+41 2 16-bit Analog Output Block 3,4,5 A 129 C
+41 1 32-bit Analog Output Block 6 A None N/A
+41 2 16-bit Analog Output Block 6 A None N/A
+50 1 Time and Date 1 1,2 A 129 C
+60 1 Class 0 1 B 129 01
+60 2 Class 1 1 06,07,08 129 17
+60 3 Class 2 1 06,07,08 129 17
+60 4 Class 3 1 06,07,08 129 17
+52
+Object Request Response
+Object Variation Description Function
+Code
+Qualifier
+Code
+Function
+Code
+Qualifier
+Code
+70 3 File-Control/File command 25 5B 129 5B
+70 4 File-Control/File command status 26 5B 129 5B
+70 5 File-Control/File transport 1 5B 129 5B
+70 6 File-Control/File transport status 1 129 5B
+70 7 File-Control/File descriptor 1 129 5B
+80 1 Internal indication 2 2 D 129
+N/A N/A Cold Restart 3 (respond Obj. 52:2) 13 N/A 129 07
+N/A N/A Delay Measurement (respond Obj. 52:2) 23 N/A 129 07
+1 For this object, the quantity specified in the request must be exactly 1 or an index of 0, as there is only one instance of
+this object defined in the device.
+2 For this object, the qualifier code must specify an index 7 only.
+3 Respond with time object 50 variation 2 indicating time until device availability.
+Qualifier Hex Codes for each category:
+A - 00,01,03,04,07,17,27,08,18,28
+B - 06 only
+C - Qualifier echo
+D - 00,01,03,04,17,27,18,28
+N/A - Not Available
+N/R - Null Response
+53
+Appendix B DNP Device Profile
+DNP3
+DEVICE PROFILE DOCUMENT
+This document must be accompanied by a table having the following
+headings:
+Object Group Request Function Codes Response Function Codes
+Object Variation Request Qualifiers Response Qualifiers
+Object Name (optional)
+Vendor Name: SATEC Ltd.
+Device Name: PM180 Substation Automation Unit
+Highest DNP Level Supported:
+For Requests L2
+For Responses L2
+Device Function:
+ Master Slave
+Device supports READ of each object using either all points (Qualifier = 6) or
+specific points using qualifier defined in Basic 4 Documentation Set: 00, 01,
+03, 04, 07, 17, 27, 08, 18, 28. Control Relay Block requires specific
+parameters described in this manual. Treats range field of qualifier 07 and 08
+to mean point range [0..N-1].
+Maximum Data Link Frame Size
+(octets):
+Transmitted 292
+Received 292
+Maximum Application Fragment Size
+(octets):
+Transmitted 2048
+Received 249
+Maximum Data Link Re-tries:
+ None
+ Fixed
+at____________________
+ Configurable, range ___
+to_____
+Maximum Application Layer Re-tries:
+ None
+ Configurable, range ____ to
+_______
+(Fixed is not permitted)
+Requires Data Link Layer Confirmation:
+ Never
+ Always
+ Sometimes If 'Sometimes', when?
+______________________________
+ Configurable If 'Configurable', how? ______________________________
+Requires Application Layer Confirmation:
+ Never
+ Always (not recommended)
+ When reporting Event Data (Slave devices only)
+ When sending multi-fragment responses (Slave devices only)
+ Sometimes If 'Sometimes', when?
+______________________________
+ Configurable If 'Configurable', how? ______________________________
+54
+Device Profile Document (continued)
+Timeouts while waiting for:
+Data Link Confirm  None  Fixed at ________  Variable
+Configurable
+Complete Appl.
+Fragment  None  Fixed at ________  Variable
+Configurable
+Application Confirm  None  Fixed at _5 sec__  Variable
+Configurable
+Complete Appl.
+Response  None  Fixed at ________  Variable
+Configurable
+Others
+Timeouts between fragments of the multi-fragment responses. Configurable:
+50-500 ms (50 ms by default).
+______________________________________________________________
+_____
+Attach explanation if 'Variable' or 'Configurable' was checked for any timeout
+Sends/Executes Control Operations:
+WRITE Binary Outputs  Never  Always  Sometimes  Configurable
+SELECT/OPERATE  Never  Always  Sometimes  Configurable
+DIRECT OPERATE Never  Always  Sometimes  Configurable
+DIRECT OPERATE -
+NO ACK  Never  Always  Sometimes  Configurable
+Count > 1  Never  Always  Sometimes  Configurable
+Pulse On  Never  Always  Sometimes 1  Configurable
+Pulse Off  Never  Always  Sometimes 4  Configurable
+Latch On  Never  Always  Sometimes 2  Configurable
+Latch Off  Never  Always  Sometimes 3  Configurable
+Queue  Never  Always  Sometimes  Configurable
+Clear Queue  Never  Always  Sometimes  Configurable
+ Select timeout period is configurable : 2s to 30s
+1 used to activate the Reset function associated with points 64 to 101
+1 2 3 4 used to control Relays associated with points 0 to 31
+Reports Binary Input Change
+Events when no specific variation
+requested:
+ Never
+ Only time-tagged
+ Only non-time-tagged
+ Configurable to send both, one
+or the other (attach explanation)
+Reports time-tagged Binary Input
+Change Events when no specific
+variation requested:
+ Never
+ Binary Input Change With Time
+ Binary Input Change With
+Relative Time
+ Configurable (attach explanation)
+55
+Device Profile Document (continued)
+Sends Unsolicited Responses:
+ Never
+ Configurable (attach explanation)
+ Only certain objects
+ Sometimes (attach explanation)
+ ENABLE/DISABLE UNSOLICITED
+Function codes supported
+Sends Static Data in Unsolicited
+Responses:
+ Never
+ When Device Restarts
+ When Status Flags Change
+No other options are permitted.
+Default Counter Object/Variation:
+ No Counters Reported
+ Configurable (attach explanation)
+ Default Object 20
+Default Variation 5
+ Point-by-point list attached
+Counters Roll Over at:
+ No Counters Reported
+ Configurable (attach explanation)
+ 16 Bits
+ 32 Bits
+ Other Value Counters
+-999999999 to 99999999 (point
+2)
+0 to 9999999 (points 0,1,3)
+ Point-by-point list attached
+Sends Multi-Fragment Responses: Yes  No
+

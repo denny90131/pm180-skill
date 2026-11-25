@@ -1,0 +1,1011 @@
+expertmeterTM
+HighPerformanceAnalyzer
+PM180
+IEC 61850 Communications Protocol
+Reference Guide
+BG0523 Rev. A5
+2
+Every effort has been made to ensure that the material herein is complete and accurate.
+However, the manufacturer is not responsible for any mistakes in printing or faulty
+instructions contained in this book. Notification of any errors or misprints will be received
+with appreciation.
+For further information regarding a particular installation, operation or maintenance of
+equipment, contact the manufacturer or your local representative or distributor.
+REVISION HISTORY
+A1 Oct 2012 Initial release
+A2 Feb 2013 Added configurable measurement units, datasets and RCBs, and generating IID/CID
+files.
+A3 May 2019 Added PMU logical device, LTIM and LTMS logical nodes, and IEC 61850-9-5 multicast
+sampled values control block.
+A4 Nov 2019 Added maxMMXU1 maximum/peak measurements node.
+A5 Oct 2020 The IEC 61850 conformance statement is moved to a separate document.
+Updated IEC 61850 configuration instructions for the new Ed1/Ed2 PAS release.
+3
+Table of Contents
+1 General .................................................................................................................................4
+2 Impact of the device settings.................................................................................................5
+2.1 Logical device mode .................................................................................................................................... 5
+2.2 Controls......................................................................................................................................................... 5
+2.3 Measurement units..................................................................................................................................... 5
+2.4 Process MeasurementLimits..................................................................................................................... 5
+2.5 Deadbands.................................................................................................................................................... 6
+2.6 Textual descriptions..................................................................................................................................... 6
+2.7 Preconfigured Datasets............................................................................................................................... 7
+2.8 Preconfigured Reports ..............................................................................................................................11
+3 Configuring IEC 61850.......................................................................................................... 15
+3.1 Licensing IEC 61850....................................................................................................................................15
+3.2 Initializing the IED Site Database..............................................................................................................15
+3.3 Configuring IED Properties........................................................................................................................17
+3.4 Configuring Datasets..................................................................................................................................19
+3.5 Configuring Reports...................................................................................................................................20
+3.6 Configuring the GOOSE Publisher............................................................................................................22
+3.7 Configuring the GOOSE Subscriber..........................................................................................................23
+3.8 Configuring the Sampled Values Publisher.............................................................................................27
+3.9 Configuring ReportDeadbands................................................................................................................28
+3.10 Exporting IEC 61850 IED Configuration Files (CID/IID/ICD)...................................................................31
+3.11 Importing IEC 61850 SCD Configuration .................................................................................................32
+3.12 Downloading the IEC 61850 Configuration to the Device.....................................................................33
+3.13 Resetting the IEC 61850 Configuration in theDevice............................................................................33
+4
+1 General
+This document provides information on setting up and operating an IEC 61850 server in PM180
+devices with IEC 61850-8-1 and IEC 61850-9-2 interfaces compliant with the IEC 61850 set of
+standards.
+See the PM180 IEC 61850 Conformance Statement (PICS, PIXIT, MICS, TICS) for information on
+the device data object model, protocol implementation, and communication capabilities of the
+PM180 IEC 61850 server.
+Refer to the PM180 Operation Manual for basic information on configuring and operating the
+PM180.
+See the PM180 Bay Control Unit application note for information on configuring and operating
+the bay controller.
+IMPORTANT
+Control commands addressed to the CSWI switch controller nodes and to the boGGIO
+general binary output nodes will be rejected until the internal BOOLEAN variable REMOTE
+MODE is set to TRUE via a setpoint logic equation. See Controls in Section 2.2 for details.
+This document applies to PM180 devices with firmware version 31.1Y.XX for IEC 61850 Ed1
+and 31.2Y.XX for IEC 61850 Ed2 releases, where XX indicates the firmware build number and Y
+indicates the PQ standard implemented in the device.
+The IEC 61850 configuration instructions apply to PAS V1.5.4.19 and higher.
+IMPORTANT
+Since PAS V1.5.4.19, a new database format is used to store IEC 61850 settings, so older
+versions of PAS may not recognize your settings in databases created by newer PAS
+versions. However, you still have the option to import IEC 61850 settings from legacy
+databases or continue to use previously created databases, but in each case PAS will
+prompt you to re-save your settings in the new format.
+5
+2 Impact of the device settings
+2.1 Logical device mode
+Logical device mode given by LLN0.Mod is always ON.
+2.2 Controls
+The Loc attribute in logical nodes containing controls indicates the complementary status of
+the internal BOOLEAN variable REMOTE MODE defaulted to FALSE. It is controlled via a
+setpoint logic equation that should normally check the status of an external Local/Remote
+switch.
+Control commands addressed to the CSWI switch controller nodes and to the boGGIO general
+binary output nodes will be rejected with AddCause=2 Blocked-by-switching-hierarchy until
+REMOTE MODE is set to TRUE via a logic equation.
+The PM180 can provide additional protection for control nodes based on client IP addresses by
+enabling control commands for specific clients and disabling or conditional blocking via logic
+equations for others. Commands received from a blocked client port are rejected with
+AddCause=2 Blocked-by-switching-hierarchy.
+2.3 Measurement units
+Voltage, current and power units are selectable (see Section 3.2 for details).
+Units (precision)
+Measurement type
+PT = 1 PT > 1
+Current A/kA (0.01 A) A/kA (0.01 A)
+Voltage AC V/kV (0.1 V) V/kV (1 V)
+Power kW, kVA, kvar or MW, Mvar, MVA
+(0.001 kW/kVA/kvar)
+kW, kVA, kvar or MW, Mvar, MVA
+(1 kW/kVA/kvar)
+Energy 0.001/0.01/0.1/1 kWh, kVAh, kvarh 0.001/0.01/0.1/1 kWh, kVAh, kvarh
+2.4 Process Measurement Limits
+Measurement limits
+Measurement type
+Condition min max
+Current (standard inputs) 0 Current Scale  CT Ratio 1, 2
+(Imax)
+Auxiliary current I4 (standard
+input)
+0 Current Scale  I4 CT Ratio 1, 2
+Current (extended inputs) 0 20  CT Primary current
+Auxiliary current I4x (extended
+input)
+0 20  I4 CT Primary current
+Voltage AC 0 Voltage Scale  PT Ratio 3
+(Vmax)
+Auxiliary voltage V4 0 Voltage Scale  V4 PT Ratio 3
+Power signed (kW, kvar) -Vmax  Imax  2/1000 Vmax  Imax  2/1000 4
+6
+Measurement limits
+Measurement type
+Condition min max
+Power unsigned (kVA, kW
+import/export, kvar
+import/export) and power
+demands
+0 Vmax  Imax  2/1000 4
+Power factor signed -1.000 1.000
+Power factor unsigned (lag,
+lead)
+0 1.000
+Unbalance 0 300.0
+THD 0 999.9
+TDD 0 999.9
+K-Factor 1.0 999.9
+Harmonics 0 100.00
++/-1mA -AI full scale  2 AI full scale  2
+0-20mA AI zero scale AI full scale
+4-20mA AI zero scale AI full scale
+0-1mA AI zero scale AI full scale
+0-50mA AI zero scale AI full scale  2
+Analog inputs
++/-10V -AI full scale AI full scale
+NOTES:
+1. CT Ratio = CT primary current/CT secondary current.
+2. The default Current Scale is 4  CT secondary current for devices with a 400% overload
+(ANSI) or 2  CT secondary current for devices with a 200% overload (IEC). It can be
+changed via the Device Options setup in PAS.
+3. The default Voltage Scale is 828V. It can be changed via the Device Options setup in PAS.
+4. If PT Ratio = 1.0 and Pmax is greater than 9,999 kW, then it is truncated to 9,999 kW.
+2.5 Deadbands
+The db value represents the percentage of difference between max and min process
+measurement limits indicated in the table above. The default db (deadband) attribute values in
+functional constraint CF are defined in the ICD file. They can be changed to provide reasonable
+conditions for generating reportable events.
+2.6 Textual descriptions
+The default d (textual description of the data) attribute values in functional constraint DC are
+defined in the device. They can be changed for descriptions of measured/metered and status
+data.
+7
+2.7 Preconfigured Datasets
+Predefined Datasets
+Item Value/Comments
+Predefined datasets in ICD file Measurand data:
+MET1/LLN0$DSet01Mx
+MET1/LLN0$DSet02Mx
+MET1/LLN0$DSet03Mx
+MET1/LLN0$DSet04St
+MET1/LLN0$DSet05Mx
+Status data:
+MET1/LLN0$DSet01StInd
+MET1/LLN0$DSet02StInd
+MET1/LLN0$DSet03StInd
+MET1/LLN0$DSet04StInd
+MET1/LLN0$DSet04StSPCSO
+MET1/LLN0$DSet05StSPCSO
+MET1/LLN0$DSet06StSPCSO
+MET1/LLN0$DSet07StSPCSO
+MET1/LLN0$DSet08StInd
+MET1/LLN0$DSet09StInd
+MET1/LLN0$DSet09StFltNum
+GOOSE publisher data set:
+CTRL/LLN0$DSetGOOSE1
+MSV publisher data set:
+PMU/LLN0$DSetSV1
+Predefined Dataset Members
+Dataset name Members
+MET1/LLN0$DSet01Mx MET1/osvMMXU1$MX$AvPhV
+MET1/osvMMXU1$MX$AvPPV
+MET1/osvMMXU1$MX$AvA
+MET1/osvMMXU1$MX$TotW
+MET1/osvMMXU1$MX$TotVAr
+MET1/osvMMXU1$MX$TotVA
+MET1/osvMMXU1$MX$TotPF
+MET1/osvMMXU1$MX$Hz
+MET1/LLN0$DSet02Mx MET1/osvMMXU1$MX$PhV$phsA
+MET1/osvMMXU1$MX$PhV$phsB
+MET1/osvMMXU1$MX$PhV$phsC
+MET1/osvMMXU1$MX$PPV$phsAB
+MET1/osvMMXU1$MX$PPV$phsBC
+MET1/osvMMXU1$MX$PPV$phsCA
+MET1/osvMMXU1$MX$A$phsA
+MET1/osvMMXU1$MX$A$phsB
+MET1/osvMMXU1$MX$A$phsC
+MET1/osvMMXU1$MX$A$neut
+MET1/LLN0$DSet03Mx MET1/osvMMXU1$MX$W$phsA
+MET1/osvMMXU1$MX$W$phsB
+MET1/osvMMXU1$MX$W$phsC
+8
+Dataset name Members
+MET1/osvMMXU1$MX$VAr$phsA
+MET1/osvMMXU1$MX$VAr$phsB
+MET1/osvMMXU1$MX$VAr$phsC
+MET1/osvMMXU1$MX$VA$phsA
+MET1/osvMMXU1$MX$VA$phsB
+MET1/osvMMXU1$MX$VA$phsC
+MET1/osvMMXU1$MX$PF$phsA
+MET1/osvMMXU1$MX$PF$phsB
+MET1/osvMMXU1$MX$PF$phsC
+MET1/LLN0$DSet04St MET1/engMMTR1$ST$SupWh
+MET1/engMMTR1$ST$DmdWh
+MET1/engMMTR1$ST$SupVArh
+MET1/engMMTR1$ST$DmdVArh
+MET1/LLN0$DSet05Mx MET1/osvMMXU1$MX$AuxA
+MET1/osvMMXU1$MX$AuxV
+MET1/osvMMXU1$MX$ExtA$phsA
+MET1/osvMMXU1$MX$ExtA$phsB
+MET1/osvMMXU1$MX$ExtA$phsC
+MET1/osvMMXU1$MX$ExtAuxA
+MET1/osvMMXU1$MX$AvExtA
+MET1/LLN0$DSet01StInd MET1/biGGIO1$ST$Ind1
+MET1/biGGIO1$ST$Ind2
+...
+MET1/biGGIO1$ST$Ind16
+MET1/biGGIO2$ST$Ind1
+MET1/biGGIO2$ST$Ind2
+...
+MET1/biGGIO2$ST$Ind16
+MET1/LLN0$DSet02StInd MET1/biGGIO3$ST$Ind1
+MET1/biGGIO3$ST$Ind2
+...
+MET1/biGGIO3$ST$Ind16
+MET1/biGGIO4$ST$Ind1
+MET1/biGGIO4$ST$Ind2
+...
+MET1/biGGIO4$ST$Ind16
+MET1/LLN0$DSet03StInd MET1/biGGIO5$ST$Ind1
+MET1/biGGIO5$ST$Ind2
+...
+MET1/biGGIO5$ST$Ind16
+MET1/biGGIO6$ST$Ind1
+MET1/biGGIO6$ST$Ind2
+...
+MET1/biGGIO6$ST$Ind16
+MET1/LLN0$DSet04StInd MET1/biGGIO7$ST$Ind1
+MET1/biGGIO7$ST$Ind2
+...
+MET1/biGGIO7$ST$Ind16
+MET1/biGGIO8$ST$Ind1
+MET1/biGGIO8$ST$Ind2
+...
+MET1/biGGIO8$ST$Ind16
+MET1/LLN0$DSet04StSPCSO MET1/boGGIO1$ST$SPCSO1
+9
+Dataset name Members
+MET1/boGGIO1$ST$SPCSO2
+...
+MET1/boGGIO1$ST$SPCSO8
+MET1/boGGIO2$ST$SPCSO1
+MET1/boGGIO2$ST$SPCSO2
+...
+MET1/boGGIO2$ST$SPCSO8
+MET1/LLN0$DSet05StSPCSO MET1/boGGIO3$ST$SPCSO1
+MET1/boGGIO3$ST$SPCSO2
+...
+MET1/boGGIO3$ST$SPCSO8
+MET1/boGGIO4$ST$SPCSO1
+MET1/boGGIO4$ST$SPCSO2
+...
+MET1/boGGIO4$ST$SPCSO8
+MET1/LLN0$DSet06StSPCSO MET1/boGGIO5$ST$SPCSO1
+MET1/boGGIO5$ST$SPCSO2
+...
+MET1/boGGIO5$ST$SPCSO8
+MET1/boGGIO6$ST$SPCSO1
+MET1/boGGIO6$ST$SPCSO2
+...
+MET1/boGGIO6$ST$SPCSO8
+MET1/LLN0$DSet07StSPCSO MET1/boGGIO7$ST$SPCSO1
+MET1/boGGIO7$ST$SPCSO2
+...
+MET1/boGGIO7$ST$SPCSO8
+MET1/boGGIO8$ST$SPCSO1
+MET1/boGGIO8$ST$SPCSO2
+...
+MET1/boGGIO8$ST$SPCSO8
+MET1/LLN0$DSet08StInd MET1/spGGIO1$ST$Ind1
+MET1/spGGIO1$ST$Ind2
+...
+MET1/spGGIO1$ST$Ind32
+MET1/LLN0$DSet09StInd MET1/spGGIO2$ST$Ind1
+MET1/spGGIO2$ST$Ind2
+...
+MET1/spGGIO2$ST$Ind32
+MET1/LLN0$DSet09StFltNum MET1/drRDRE1$ST$FltNum
+MET1/drRDRE2$ST$FltNum
+...
+MET1/drRDRE8$ST$FltNum
+CTRL/LLN0$DSetGOOSE1 CTRL/QA1XCBR1$ST$Pos$stVal
+CTRL/QA1XCBR1$ST$Pos$q
+CTRL/QA2XCBR2$ST$Pos$stVal
+CTRL/QA2XCBR2$ST$Pos$q
+CTRL/QB1XSWI1$ST$Pos$stVal
+CTRL/QB1XSWI1$ST$Pos$q
+CTRL/QB2XSWI2$ST$Pos$stVal
+CTRL/QB2XSWI2$ST$Pos$q
+CTRL/QB3XSWI3$ST$Pos$stVal
+CTRL/QB3XSWI3$ST$Pos$q
+10
+Dataset name Members
+CTRL/QB4XSWI4$ST$Pos$stVal
+CTRL/QB4XSWI4$ST$Pos$q
+CTRL/QB5XSWI5$ST$Pos$stVal
+CTRL/QB5XSWI5$ST$Pos$q
+CTRL/QB6XSWI6$ST$Pos$stVal
+CTRL/QB6XSWI6$ST$Pos$q
+CTRL/QE1XSWI7$ST$Pos$stVal
+CTRL/QE1XSWI7$ST$Pos$q
+CTRL/QE2XSWI8$ST$Pos$stVal
+CTRL/QE2XSWI8$ST$Pos$q
+CTRL/QE3XSWI9$ST$Pos$stVal
+CTRL/QE3XSWI9$ST$Pos$q
+CTRL/QE4XSWI10$ST$Pos$stVal
+CTRL/QE4XSWI10$ST$Pos$q
+CTRL/QE5XSWI11$ST$Pos$stVal
+CTRL/QE5XSWI11$ST$Pos$q
+CTRL/QE6XSWI12$ST$Pos$stVal
+CTRL/QE6XSWI12$ST$Pos$q
+CTRL/QE71XSWI13$ST$Pos$stVal
+CTRL/QE7XSWI13$ST$Pos$q
+CTRL/QE8XSWI14$ST$Pos$stVal
+CTRL/QE8XSWI14$ST$Pos$q
+MET1/osvMMXU1$MX$PhV$phsA$cVal
+MET1/osvMMXU1$MX$PhV$phsA$q
+MET1/osvMMXU1$MX$PhV$phsB$cVal
+MET1/osvMMXU1$MX$PhV$phsB$q
+MET1/osvMMXU1$MX$PhV$phsC$cVal
+MET1/osvMMXU1$MX$PhV$phsC$q
+PMU/LLN0$DSetSV1 PMU/MMXU1$MX$PhV$phsA$cVal$mag
+PMU/MMXU1$MX$PhV$phsA$cVal$ang
+PMU/MMXU1$MX$PhV$phsA$q
+PMU/MMXU1$MX$PhV$phsA$t
+PMU/MMXU1$MX$PhV$phsB$cVal$mag
+PMU/MMXU1$MX$PhV$phsB$cVal$ang
+PMU/MMXU1$MX$PhV$phsB$q
+PMU/MMXU1$MX$PhV$phsB$t
+PMU/MMXU1$MX$PhV$phsC$cVal$mag
+PMU/MMXU1$MX$PhV$phsC$cVal$ang
+PMU/MMXU1$MX$PhV$phsC$q
+PMU/MMXU1$MX$PhV$phsC$t
+PMU/MMXU1$MX$A$phsA$cVal$mag
+PMU/MMXU1$MX$A$phsA$cVal$ang
+PMU/MMXU1$MX$A$phsA$q
+PMU/MMXU1$MX$A$phsA$t
+PMU/MMXU1$MX$A$phsB$cVal$mag
+PMU/MMXU1$MX$A$phsB$cVal$ang
+PMU/MMXU1$MX$A$phsB$q
+PMU/MMXU1$MX$A$phsB$t
+PMU/MMXU1$MX$A$phsC$cVal$mag
+PMU/MMXU1$MX$A$phsC$cVal$ang
+PMU/MMXU1$MX$A$phsC$q
+PMU/MMXU1$MX$A$phsC$t
+PMU/MMXU1$MX$Hz$mag
+PMU/MMXU1$MX$Hz$q
+11
+Dataset name Members
+PMU/MMXU1$MX$Hz$t
+PMU/MMXU1$MX$HzRte$mag
+PMU/MMXU1$MX$HzRte$q
+PMU/MMXU1$MX$HzRte$t
+PMU/MMXU1$ST$Health$stVal
+PMU/MMXU1$ST$Health$q
+PMU/MMXU1$ST$Health$t
+PMU/LPHD$ST$PhyHealth$stVal
+PMU/LPHD$ST$PhyHealth$q
+PMU/LPHD$ST$PhyHealth$t
+2.8 Preconfigured Reports
+Predefined RCB
+See Section 3.2 on configuring the number of RCB instances in the device.
+Number of Instances Report ID
+Number of RCB instances = 1 (non-indexed
+RCBs)
+16 URCBs:
+CTRL/LLN0$RP$URep01
+CTRL/LLN0$RP$URep02
+CTRL/LLN0$RP$URep03
+CTRL/LLN0$RP$URep04
+CTRL/LLN0$RP$URep05
+CTRL/LLN0$RP$URep06
+CTRL/LLN0$RP$URep07
+CTRL/LLN0$RP$URep08
+MET1/LLN0$RP$URep01
+MET1/LLN0$RP$URep02
+MET1/LLN0$RP$URep03
+MET1/LLN0$RP$URep04
+MET1/LLN0$RP$URep05
+MET1/LLN0$RP$URep06
+MET1/LLN0$RP$URep07
+MET1/LLN0$RP$URep08
+16 BRCBs:
+CTRL/LLN0$BR$BRep01
+CTRL/LLN0$BR$BRep02
+CTRL/LLN0$BR$BRep03
+CTRL/LLN0$BR$BRep04
+CTRL/LLN0$BR$BRep05
+CTRL/LLN0$BR$BRep06
+CTRL/LLN0$BR$BRep07
+CTRL/LLN0$BR$BRep08
+MET1/LLN0$BR$BRep01
+MET1/LLN0$BR$BRep02
+MET1/LLN0$BR$BRep03
+MET1/LLN0$BR$BRep04
+MET1/LLN0$BR$BRep05
+MET1/LLN0$BR$BRep06
+MET1/LLN0$BR$BRep07
+MET1/LLN0$BR$BRep08
+12
+Number of Instances Report ID
+Number of RCB instances = 1 (indexed RCBs,
+RptEnabled max=1)
+16 URCBs:
+CTRL/LLN0$RP$URepA01
+CTRL/LLN0$RP$URepB01
+CTRL/LLN0$RP$URepC01
+CTRL/LLN0$RP$URepD01
+CTRL/LLN0$RP$URepE01
+CTRL/LLN0$RP$URepF01
+CTRL/LLN0$RP$URepG01
+CTRL/LLN0$RP$URepH01
+MET1/LLN0$RP$URepA01
+MET1/LLN0$RP$URepB01
+MET1/LLN0$RP$URepC01
+MET1/LLN0$RP$URepD01
+MET1/LLN0$RP$URepE01
+MET1/LLN0$RP$URepF01
+MET1/LLN0$RP$URepG01
+MET1/LLN0$RP$URepH01
+16 BRCBs:
+CTRL/LLN0$BR$BRepA01
+CTRL/LLN0$BR$BRepB01
+CTRL/LLN0$BR$BRepC01
+CTRL/LLN0$BR$BRepD01
+CTRL/LLN0$BR$BRepE01
+CTRL/LLN0$BR$BRepF01
+CTRL/LLN0$BR$BRepG01
+CTRL/LLN0$BR$BRepH01
+MET1/LLN0$BR$BRepA01
+MET1/LLN0$BR$BRepB01
+MET1/LLN0$BR$BRepC01
+MET1/LLN0$BR$BRepD01
+MET1/LLN0$BR$BRepE01
+MET1/LLN0$BR$BRepF01
+MET1/LLN0$BR$BRepG01
+MET1/LLN0$BR$BRepH01
+Number of RCB instances = 2 (indexed RCBs,
+RptEnabled max=2)
+8 URCBs x 2 clients:
+CTRL/LLN0$RP$URepA01
+CTRL/LLN0$RP$URepA02
+CTRL/LLN0$RP$URepB01
+CTRL/LLN0$RP$URepB02
+CTRL/LLN0$RP$URepC01
+CTRL/LLN0$RP$URepC02
+CTRL/LLN0$RP$URepD01
+CTRL/LLN0$RP$URepD02
+MET1/LLN0$RP$URepA01
+MET1/LLN0$RP$URepA02
+MET1/LLN0$RP$URepB01
+MET1/LLN0$RP$URepB02
+MET1/LLN0$RP$URepC01
+MET1/LLN0$RP$URepC02
+MET1/LLN0$RP$URepD01
+MET1/LLN0$RP$URepD02
+8 BRCBs x 2 clients:
+CTRL/LLN0$BR$BRepA01
+CTRL/LLN0$BR$BRepA02
+13
+Number of Instances Report ID
+CTRL/LLN0$BR$BRepB01
+CTRL/LLN0$BR$BRepB02
+CTRL/LLN0$BR$BRepC01
+CTRL/LLN0$BR$BRepC02
+CTRL/LLN0$BR$BRepD01
+CTRL/LLN0$BR$BRepD02
+MET1/LLN0$BR$BRepA01
+MET1/LLN0$BR$BRepA02
+MET1/LLN0$BR$BRepB01
+MET1/LLN0$BR$BRepB02
+MET1/LLN0$BR$BRepC01
+MET1/LLN0$BR$BRepC02
+MET1/LLN0$BR$BRepD01
+MET1/LLN0$BR$BRepD02
+Number of RCB instances = 4 (indexed RCBs,
+RptEnabled max=4)
+4 URCBs x 4 clients:
+CTRL/LLN0$RP$URepA01
+CTRL/LLN0$RP$URepA02
+CTRL/LLN0$RP$URepA03
+CTRL/LLN0$RP$URepA04
+CTRL/LLN0$RP$URepB01
+CTRL/LLN0$RP$URepB02
+CTRL/LLN0$RP$URepB03
+CTRL/LLN0$RP$URepB04
+MET1/LLN0$RP$URepA01
+MET1/LLN0$RP$URepA02
+MET1/LLN0$RP$URepA03
+MET1/LLN0$RP$URepA04
+MET1/LLN0$RP$URepB01
+MET1/LLN0$RP$URepB02
+MET1/LLN0$RP$URepB03
+MET1/LLN0$RP$URepB04
+4 BRCBs x 4 clients:
+CTRL/LLN0$BR$BRepA01
+CTRL/LLN0$BR$BRepA02
+CTRL/LLN0$BR$BRepA03
+CTRL/LLN0$BR$BRepA04
+CTRL/LLN0$BR$BRepB01
+CTRL/LLN0$BR$BRepB02
+CTRL/LLN0$BR$BRepB03
+CTRL/LLN0$BR$BRepB04
+MET1/LLN0$BR$BRepA01
+MET1/LLN0$BR$BRepA02
+MET1/LLN0$BR$BRepA03
+MET1/LLN0$BR$BRepA04
+MET1/LLN0$BR$BRepB01
+MET1/LLN0$BR$BRepB02
+MET1/LLN0$BR$BRepB03
+MET1/LLN0$BR$BRepB04
+Predefined RCB Attributes
+Report ID Dataset
+CTRL/LLN0$RP$URep01 Not defined
+CTRL/LLN0$RP$URep02 Not defined
+14
+Report ID Dataset
+CTRL/LLN0$RP$URep03 Not defined
+CTRL/LLN0$RP$URep04 Not defined
+CTRL/LLN0$RP$URep05 Not defined
+CTRL/LLN0$RP$URep06 Not defined
+CTRL/LLN0$RP$URep07 Not defined
+CTRL/LLN0$RP$URep08 Not defined
+CTRL/LLN0$BR$BRep01 Not defined
+CTRL/LLN0$BR$BRep02 Not defined
+CTRL/LLN0$BR$BRep03 Not defined
+CTRL/LLN0$BR$BRep04 Not defined
+CTRL/LLN0$BR$BRep05 Not defined
+CTRL/LLN0$BR$BRep06 Not defined
+CTRL/LLN0$BR$BRep07 Not defined
+CTRL/LLN0$BR$BRep08 Not defined
+MET1/LLN0$RP$URep01 MET1/LLN0$DSet01Mx
+MET1/LLN0$RP$URep02 MET1/LLN0$DSet02Mx
+MET1/LLN0$RP$URep03 MET1/LLN0$DSet03Mx
+MET1/LLN0$RP$URep04 MET1/LLN0$DSet05Mx
+MET1/LLN0$RP$URep05 Not defined
+MET1/LLN0$RP$URep06 Not defined
+MET1/LLN0$RP$URep07 Not defined
+MET1/LLN0$RP$URep08 Not defined
+MET1/LLN0$BR$BRep01 Not defined
+MET1/LLN0$BR$BRep02 Not defined
+MET1/LLN0$BR$BRep03 Not defined
+MET1/LLN0$BR$BRep04 Not defined
+MET1/LLN0$BR$BRep05 Not defined
+MET1/LLN0$BR$BRep06 MET1/LLN0$DSet08StInd
+MET1/LLN0$BR$BRep07 MET1/LLN0$DSet09StFltNum
+MET1/LLN0$BR$BRep08 Not defined
+Report service information
+Any predefined RCB attribute value may be written when RptEna is FALSE. Only existing data
+sets (see Dataset model table) may be used for DatSet attribute changing. Internal events,
+caused by data-change and quality-change trigger options only, result in immediate sending of
+reports or buffering events for transmission (limited by a buffer size of 64 Kbytes per report).
+15
+3 Configuring IEC 61850
+The PAS software supplied with the PM180 provides an IED configuration tool for customizing
+your device settings and exporting IED configuration description files (CID/IID/ICD) for use with
+IEC 61850 client applications. See the PM180 Operation Manual for general information on
+installing and operating PAS.
+NOTE
+When you select an IEC 61850 configuration tab while the On-line checkbox on the PAS
+toolbar is checked, the currently displayed configuration settings show the online settings
+from the connected device. In case the On-line checkbox on the PAS toolbar is not checked,
+the currently displayed configuration settings show the offline settings from the IED
+database, or default IED settings if the setup is not present in the IED database.
+Click the Open button on the configuration tab to display IED database settings.
+Click the Receive button on the configuration tab to display online device settings.
+3.1 Licensing IEC 61850
+A valid license key must be provided in the PM180 for IEC 61850 communications. The device
+is normally shipped with a temporary license, which is valid for a 30-day operation and then
+can be extended for an additional month.
+A permanent license can be obtained from your local distributor for an additional fee. A device
+serial number must be provided in the license request. The device may also be shipped with
+the permanent license in the event of a pre-paid fee.
+To program a license key in you device:
+1. Select Administration->Update License from the Monitor menu.
+2. Type in the license code and click Send.
+3.2 Initializing the IED Site Database
+IEC 61850 configuration settings for an IED are stored in the IED site database, from where
+they can be downloaded to your device online or exported to an IED configuration file. See the
+PM180 Operation Manual for information on how to create a site database for your device.
+The IED database can be initialized with default settings applicable to your device, or settings
+imported from another IED's database, or settings uploaded directly from the IED online.
+16
+To initialize the IED site database for your device:
+1. Select IEC 61850 Setup from the Meter Setup menu and click on the IED Configurator tab.
+The settings shown on the tab indicate the communication parameters of the IED stored in
+the IED database.
+2. Select one of the following options to initialize the IED database:
+ To initialize the database with default settings, click the "Initialize" button.
+ To import IEC 61850 settings from another IED's database, click the "Import from..."
+button, and then select the source IED database file.
+ To import the settings from the connected device, make sure the On-line checkbox on
+the PAS toolbar is checked, and then click the "Save from IED" button.
+In case the IED database is initialized with default settings, the IED site name is used as a
+temporary name for the IED. The figure below shows what the IED database settings might
+look like after initialization with default values.
+See the following sections in this manual for information on how to configure IEC 61850
+parameters for your specific application.
+17
+3.3 Configuring IED Properties
+To configure the IED identification parameters and general IEC 61850 protocol options for your
+IED:
+1. Select IEC 61850 Setup from the Meter Setup menu and click on the IED Properties tab.
+2. Select the IEC 61850 edition implemented in your device and configure other IED
+parameters to suit your application. Note that the actual IEC 61850 edition supported by
+the device is always indicated when receiving the IED settings online.
+NOTES
+ The configured IED name will be concatenated with logical device instances' names in
+IEC 61850 object references.
+ The device location will also identify the substation location in COMTRADE
+configuration files as the station_name attribute.
+ Attributes marked with the asterisk cannot be changed in the device via this setup but
+you can define and store them to the device database when working offline for later
+updating a device CID/IID/ICD configuration file.
+ The number of RCB instances defines how pre-defined RCBs are arranged in the device
+for use in multi-client applications. The RCBs are automatically pre-configured in the
+device in the way indicated in Section "Reporting model". The RCB names and report
+18
+IDs are set to defaults as the number of RCB instances changes. If you intend to change
+the default setting, setup the number of RCB instances first before configuring report
+control blocks.
+ The TCP_KEEPALIVE interval can be configured in the device from 1 to 60 seconds
+(default 20 s) or can be set to 0 to inactivate keepalive probes.
+ Client connection idle timeout can be used with keepalive probes or separately to
+terminate a TCP connection if the connection is idle for too long. The idle timeout can
+be set between 1 and 10 minutes or set to 0 to inactivate the idle timer. The timer is
+disabled in the device by default.
+3. Click on "Save as ..." to save your setup to the IED database.
+4. To update the device's online settings right now, send your new setting to the device.
+NOTE
+The network IP address and subnet settings received online from the device always indicate
+the actual device's network settings and may not match your settings in the IDE database,
+unless they are imported from the device or you have changed them via the device network
+setup (see note in Section 3.12).
+19
+3.4 Configuring Datasets
+This setup dialog allows you to create, reconfigure, or delete any deletable dataset. Pre-
+defined datasets are non-deletable and are not listed in this dialog.
+NOTES
+1. A dataset cannot be deleted or its attributes changed if it is referenced by any currently
+enabled report, GOOSE, or sampled values control block.
+2. Create your new datasets before configuring your reports; otherwise you may see an
+incomplete dataset list in your reports setup dialog.
+To review or configure deletable IEC 61850 datasets:
+1. Select IEC 61850 Setup from the Meter Setup menu, and then click on the IEC 61850
+Datasets tab.
+2. Select a dataset you wish to view or configure in the "Dataset Reference" box. Select "New
+Dataset" to create a new dataset.
+3. To delete dataset members, uncheck the appropriate "Included" boxes. Uncheck all
+dataset members to delete the entire dataset.
+4. To add or change dataset members, you need to use a preconfigured CID or IID
+configuration description file for your IED. See Section 3.10 "Exporting IEC 61850 IED
+20
+Configuration Files" for instructions on creating a CID/IID file for your device. Click "Edit
+from file", select the type of the IED configuration file, locate the file, and then click Open.
+A full list of the available data objects and data attributed is displayed, where included
+dataset members are checked.
+To create a new dataset, select a logical device where the dataset to be located and type a
+dataset name in the "Dataset Name" box.
+Check the "Included" boxes for items you wish to be members of the dataset and click OK.
+To make easy selection of items across the list, use filters for functional constraints or/and
+a selected logical device/logical node. Click "Filter checked" to see and revise a list of the
+selected items.
+5. Click on "Save as ..." to save your setup to the IED database.
+6. To update the device's online settings right now, send the new setting to the device.
+3.5 Configuring Reports
+NOTES:
+1. No change of attribute values of the report control block is allowed while the report is
+enabled by a client.
+2. If you have created new datasets previously, make sure they have been saved in the
+IED database if you are working offline, or updated in the device if you are connected to
+the device online; otherwise, the list of dataset references may be incomplete.
+21
+To configure Report Control Blocks (RCB) for your IED:
+1. Select IEC 61850 Setup from the Meter Setup menu, and then click on the IEC 61850
+Reports tab.
+2. Select an RCB you wish to view or configure in the "RCB Reference" box.
+3. Configure the RCB attributes as required for your application. The following items can be
+configured:
+ Report ID
+ Dataset reference (can be selected from the available datasets list)
+ Configuration revision
+ Optional fields
+ Trigger options
+ Buffer time
+ Integrity period for periodic reports with the integrity trigger option selected
+To change the Optional fields or Trigger options, click the arrow button to the right of the
+item, check the appropriate options and click OK.
+22
+NOTES:
+ The dataset list shows only datasets located in the same logical node as the selected
+report control block.
+ In case you change the dataset reference while the configuration revision is still
+unchanged, the device will automatically increment the configuration revision when
+you download your new settings to the device. Keep this in mind when validating
+your device settings.
+4. Click on "Save as ..." to save your setup to the IED database.
+5. To update the device's online settings right now, send your new setting to the device.
+3.6 Configuring the GOOSE Publisher
+NOTE
+No change of attribute values of the GOOSE publisher control block is allowed while the
+GOOSE publisher is enabled.
+To configure the GOOSE publisher:
+1. Select IEC 61850 Setup from the Meter Setup menu, and then click on the GOOSE
+Publisher Setup tab.
+23
+2. You can configure the destination MAC address, GOOSE ID, application ID and the
+maximum message retransmission interval for your application. You can also preset the
+configuration revision if needed. Other attributes are indicated for information only.
+The default GOOSE dataset reference is preconfigured in your device for GOOSE
+communications. The dataset variables list can be modified via the IEC 61850 Datasets
+setup (see Section 3.4).
+In Ed2 versions, a GOOSE dataset can also be selected from the supplied list. Note that
+only datasets located in the same logical device as the GOOSE publisher are displayed. In
+case you change the GOOSE dataset reference while the configuration revision is still
+unchanged, the device will automatically increment the configuration revision when you
+download your new settings to the device.
+3. Select Yes in the Publisher Enabled box to enable publisher operation.
+4. Click on "Save as ..." to save your setup to the IED database.
+5. To update the device's online settings right now, send the new setting to the device.
+3.7 Configuring the GOOSE Subscriber
+The PM180 can subscribe to messages sent by any GOOSE network device including both
+PM180 and non-SATEC devices.
+The GOOSE subscriber supports up to 20 subscriptions with up to 16 data elements in each
+subscription. The location of the subscribed elements in GOOSE data sets and mapping to the
+PM180 internal variables are configurable. The subscribed elements can be selected from a
+publishing device's CID/IID IED configuration description file or a SCD substation configuration
+description. See Section 3.10 "Exporting IEC 61850 IED Configuration File" for instructions on
+creating a CID/IID file for your device.
+The PM180 provides a set of internal variables for mapping external GOOSE data:
+ a 128-bit binary string composed of 128 binary variables ExtInd1...ExtInd128 of type
+BOOLEAN called external indication and intended for mapping single-point BOOLEAN
+and integer elements and double-point Dbpos data;
+ 32 variables ExtiVal1...ExtiVal32 of type INT32 for mapping signed and unsigned integer
+numbers of any size;
+ 32 variables ExtfVal1...ExtfVal32 of type FLOAT32 for mapping single-precision floating
+point numbers.
+When the subscriber receives GOOSE message updates, the subscribed data is copied to the
+internal variables that can be monitored and recorded in the device like any other measured
+value. When the subscriber does not receive updates, or the declared message live time has
+expired, or the data set differs from the subscriber setup, the internal variables are zeroed and
+the non-active status is indicated in the subscription status.
+The subscription status can be monitored from an IEC 61850 client via the GOOSE subscriber
+logical nodes CTRL/sbsLGOS1-CTRL/sbsLGOS20, or from a Modbus client application via the
+GOOSE subscriber status register (see the PM180 Modbus Reference Guide for the register
+location).
+24
+NOTE
+No change of attribute values of the GOOSE subscriber control block is allowed while the
+GOOSE subscriber is enabled.
+To configure the GOOSE subscriber:
+1. Select IEC 61850 Setup from the Meter Setup menu, and then click on the GOOSE
+Subscriber Setup tab.
+2. In the Subscription Number box, select the subscription you wish to configure.
+3. Click the "Open SCL File" button and open a CID, IID or SCD file of the publishing device
+you wish to subscribe to. PAS shows you a list of all datasets linked to GOOSE publisher
+control blocks that are found in the IED or SCD configuration file.
+4. Check the Subscribe box for the dataset you wish to subscribe to.
+25
+5. The publisher attributes and a list of dataset members for the selected dataset are
+displayed as shown in the picture below. PAS also indicates a basic IEC 61850 data element
+type and a physical MMS type for dataset members. Check the Subscribe boxes for
+elements you want to subscribe to, and then click OK.
+You are allowed to select no more than 16 elements. Elements with incompatible data
+types cannot be selected.
+The publisher attributes of the selected dataset and the selected data elements are copied
+to the current subscription.
+For your convenience, PAS automatically maps the selected elements to the compatible
+input variables. If desired, you can change the mapping of the selected elements using the
+compatible types listed in the table below.
+26
+Basic Data Type MMS Data Type Compatible Input Variables
+BitString32 Bstring32 ExtInd, ExtiVal
+Dbpos Bstring8 ExtInd, ExtiVal
+Enum INT8 ExtInd, ExtiVal
+INT32 INT32 ExtInd, ExtiVal
+INT32U INT32U ExtInd, ExtiVal
+INT16 INT16 ExtInd, ExtiVal
+INT16U INT16U ExtInd, ExtiVal
+INT8 INT8 ExtInd, ExtiVal
+INT8U INT8U ExtInd, ExtiVal
+BOOLEAN BOOLEAN ExtInd, ExtiVal
+FLOAT32 FLOAT32 ExtfVal
+NOTES:
+ Mapping integer data to a BOOLEAN ExtInd variable results in copying a least-
+significant bit of the dataset member only.
+ Mapping double-point data of type Dbpos to a BOOLEAN ExtInd variable causes a
+high-order bit of the dataset member to be copied to the following BOOLEAN
+ExtInd variable.
+27
+6. Check the application ID, configuration revision and destination MAC address imported
+from the IED configuration file to meet the requirements of your application.
+7. Select Yes in the Subscription Enabled box to activate the subscription.
+8. Repeat the setup for other subscriptions you wish to configure.
+9. Click on "Save as ..." to save your setup to the IED database.
+The dataset member references are only stored in the IED database and are not sent to
+the device, so they may not be displayed when reading the device settings online if you
+have not saved the settings in the IED database.
+10. To update the device's online settings right now, send your new setting to the device.
+3.8 Configuring the Sampled Values Publisher
+The multicast sampled values (SV) publisher is responsible for publishing of the synchrophasor
+data over Ethernet at configured reporting rates.
+Synchrophasor data transfer uses IEEE C37.118 to IEC 61850 mapping mechanism defined in
+IEC 61850-90-5 to map IEEE C37.118.2 synchrophasor data stream to IEC 61850-9-2 sampled
+values APDU.
+The APDU contains a single ASDU, which is encoded using ISO/IEC 8825-1 ASN.1 basic encoding
+rules (BER) with context-specific field tag octets listed in IEC 61850-9-2, Table 14. Unlike other
+PDU attributes, a sequence of sampled phasor data is encoded as a compact block without
+ASN.1 tag triplets. The dataset members are encoded in their basic forms using fixed-length
+basic data type encoding rules listed in IEC 61850-9-2 Table 15.
+NOTE
+No change of attribute values of the SV control block is allowed while the SV publisher is
+enabled.
+To configure the SV publisher:
+1. Select IEC 61850 Setup from the Meter Setup menu, and then click on the SV Publisher
+Setup tab.
+2. Configure the destination multicast MAC address, application ID, sampled values ID and
+VLAN attributes (if used). You can also preset the configuration revision if needed.
+The referenced SV publisher dataset is pre-configured in your device for streaming
+synchrophasor data and can be modified via the IEC 61850 Datasets setup (see Section
+3.3). In Ed2 versions, the dataset reference can also be selected from the supplied list.
+Note that only datasets located in the same logical device as the SV publisher are
+displayed.
+The multicast MAC address can be selected from the range 01:0C:CD:04:00:00 to
+01:0C:CD:04:01:FF.
+The IEC 61850-90-5 recommended format for the multicast sampled values ID is as follows:
+C37.118-<Station Name>-<IDCode>
+where the IDCode is the C37.118-2 data stream ID number in the range of 1 to 65534.
+In case you change the dataset reference or any other attribute value while the
+configuration revision is still unchanged, the device will automatically increment the
+configuration revision when you download your new settings to the device.
+28
+3. To configure the optional fields to be sent in the sampled values messages, click on the
+right arrow and then check the required boxes.
+4. Select the required sample rate in frames per second at which messages will be sent. The
+PM180 will automatically adjust it to the closest available reporting rate if the selected
+rate does not match the nominal network frequency setting.
+5. Select YES in the SV Transmission Enabled box to enable publisher operation.
+6. Click on "Save as ..." to save your setup to the device database.
+7. To update the device's online settings right now, send your new setting to the device.
+3.9 Configuring Report Deadbands
+Generic deadbands for reporting measured analog values can be configured via PAS without
+the need to setup individual deadbands for every data element via IEC 61850 services. If
+required, you can then change deadbands for individual variables via your IEC 61850
+application.
+Downloading new report deadbands to the device changes deadbands for all analog data of
+the same type in all logical nodes, so it is recommended to do that before you make your
+individual deadband adjustments.
+29
+NOTE
+The process measurement scales for most analog values depend on your external PT and CT
+settings and on the voltage and current scales defined in the device. Configure them in your
+device and save to the device site database before changing report deadbands. See Basic
+Setup and Device Options Setup in the PM180 Operation Manual on how to configure these
+parameters in the device. See Programming Analog Inputs in the PM180 Operation Manual
+on how to setup the measurement scales for analog inputs.
+To configure the deadbands for measured analog values:
+1. Select IEC 61850 Setup from the Meter Setup menu, and then click on the Report
+Deadbands tab.
+For your convenience, PAS shows the deadbands both in percent and in engineering units,
+and indicates the minimum and maximum process measurements from which the percent
+deadband is taken.
+2. Adjust the default percent deadbands to the desired values as required for your
+application. The allowable range is 0.001% to 50.000%. Press Enter or click elsewhere on
+the dialog window with the left mouse button to update the engineering deadbands.
+3. Click on "Save as ..." to save your setup to the IED database.
+4. To update the device's online settings right now, send your new setting to the device.
+30
+The following table shows the default factory-set deadbands for measured analog values.
+Measured Value Default Deadband, %
+Phase voltage 1.000
+Auxiliary voltage V4 1.000
+Phase currents 1.000
+Neutral current 1.000
+Auxiliary current I4 1.000
+Phase currents (extended inputs) 0.133
+Neutral current (extended inputs) 0.133
+Auxiliary current I4 (extended inputs) 0.133
+Voltage sequence 1.000
+Current sequence 1.000
+Current sequence (extended inputs) 0.133
+Voltage unbalance 0.333
+Current unbalance 0.333
+Active power 0.500
+Reactive power 0.500
+Active power import/export 1.000
+Reactive power import/export 1.000
+Apparent power 1.000
+Active power demand 1.000
+Reactive power demand 1.000
+Apparent power demand 1.000
+Power factor 5.000
+Power factor lag/lead 10.000
+Frequency 0.100
+Voltage THD 0.100
+Current THD 0.500
+Voltage interharmonic THD 0.100
+Current interharmonic THD 0.500
+Current TDD 1.000
+Current K-factor 0.100
+Analog input #1 1.000
+Analog input #2 1.000
+Analog input #3 1.000
+Analog input #4 1.000
+Analog input #5 1.000
+Analog input #6 1.000
+Analog input #7 1.000
+Analog input #8 1.000
+Analog input #9 1.000
+Analog input #10 1.000
+Analog input #11 1.000
+Analog input #12 1.000
+Analog input #13 1.000
+Analog input #14 1.000
+Analog input #15 1.000
+Analog input #16 1.000
+31
+3.10 Exporting IEC 61850 IED Configuration Files (CID/IID/ICD)
+Generating a new or updating a preconfigured CID/IID/ICD file for your device is done from the
+IED Configurator tab. A template ICD file or a preconfigured CID/IID is used as a source for
+creating a new SCL file.
+Make sure the IED database is up to date and all configuration settings are consistent with
+the device before exporting the IED configuration.
+To create or update a device CID/IID/ICD file:
+1. Click on the IED Configurator tab.
+2. Click the "Export SCL file" button.
+3. Select the type of the source template file in the "Files of type" box, locate the PM180 IED
+template ICD file or a preconfigured CID/IID/ICD file for your device you wish to update
+and click Open.
+Use the basic template ICD file provided with your device (PM180_2003_RevXX.icd for
+Ed1 or PM180_2007B_RevXX.icd for Ed2) as a primary template for creating new
+CID/IID/ICD files.
+4. Select the type of the output file in the "Files of type" box, locate the folder and type the
+name of the target CID/IID/ICD file where to store your new IED configuration description,
+and then click Open. You can point to the same CID/IID/ICD file you used as the source if
+32
+you intend to update the existing IED configuration. In case that the *.icd file extension is
+selected for the output file, the generic "TEMPLATE" name will be written in place of the
+actual IED name.
+NOTES
+ In the event an RCB reference is used as the Report ID (the default setting for non-
+indexed RCBs), update the IED configuration file after changing the IED name even if
+no changes to RCBs have been made to keep consistency with your device.
+ Breaker/switch nodes prefixes are configured in a CID/IID file as they are defined in the
+device database while updating the IED properties. If you change the default
+breaker/switch prefixes in your device via the Bay Control setup, update the setup in
+the device database, and then update the IED properties in an IED configuration file
+even if no other properties have been changed.
+3.11 Importing IEC 61850 SCD Configuration
+Basic IED communication settings can be imported from the communication part of an SCD
+substation configuration file to the IED database. These include the IED name, IED network and
+subnet parameters, access point name, and communication and configuration settings of the
+GOOSE and sampled values publishers.
+To import the IED settings from an SCD file:
+1. Click on the IED Configurator tab.
+2. Click the "Import SCD file" button.
+3. Locate an SCD substation configuration file and click Open.
+4. The list of IEDs found in the SCD file is displayed. IEDs of incompatible types will have a
+shaded Select box.
+5. Check the "Select" box for the IED whose configuration description you want to import.
+33
+3.12 Downloading the IEC 61850 Configuration to the Device
+Make sure the IED database is up to date and all configuration settings are consistent with
+the device before downloading the IED configuration to the device.
+To download the IED configuration settings to the device:
+1. Make sure the On-line checkbox on the PAS toolbar is checked.
+2. Click on the IED Configurator tab.
+3. Click the "Download to IED" button.
+NOTE
+The IP network settings are not changed in the device online by downloading the IEC 61850
+configuration, as this could immediately affect communication with other parts of the
+PM180 device. To change the device's IP address and subnet settings, select Communication
+Setup from the Meter Setup menu, make the required changes in the Network Setup dialog
+tab, and then send your new network settings to the device.
+3.13 Resetting the IEC 61850 Configuration in the Device
+If required, the IEC 61850 configuration settings in your device can be reset to the factory
+defaults.
+To reset the IEC 61850 configuration settings in the device:
+1. Select Administration->Master Reset from the Monitor menu.
+2. Click the "Reset IEC 61850 Configuration" button, and then confirm the command.
+After the command is executed, the device's network restarts, so communication with the
+device may be lost for a while if you are connected to the device through the network port.
+
