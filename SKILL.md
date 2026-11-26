@@ -59,7 +59,3 @@ PM180_SOURCE_DIR = C:\Users\denny.chuang\OneDrive - Intelligent Cloud Plus Corp\
 - **61850 遙控**：REMOTE CONTROL 旗標預設 FALSE，必須用 setpoint 邏輯設為 ON，否則 CSWI/boGGIO 控制會被拒 (AddCause=2)。
 - **韌體升級**：只能走 Modbus (RTU/ASCII/TCP)，PAS → Monitor → Flash Downloader；USB 約 20 秒、115200 序列埠約 9–10 分鐘。
 - **PAS 一定先存 Basic Setup** 到 site database，其他設定以它為參考。
-
-## 相關 skill
-
-- 若要用 ICP DAS MDC-700 (MDC-714 等) 把多台 PM180 的 RS-485 Modbus RTU 集中成 Modbus TCP，搭配 `mdc-700-config` skill 產生 config.csv；PM180 端的點表用 `references/04-modbus.md`。
