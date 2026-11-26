@@ -59,7 +59,3 @@ git add -A
 git commit -m "更新說明"
 git push
 ```
-
-## 相關 skill
-
-- `mdc-700-config`：用 ICP DAS MDC-700 把多台 PM180 的 RS-485 Modbus RTU 集中成 Modbus TCP。
